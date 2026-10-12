@@ -1,0 +1,39 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Dedicated runtime, upstream checkouts, inputs and weights
+environment/venvs/*
+!environment/venvs/.gitkeep
+src/*
+!src/.gitkeep
+models/*
+!models/.gitkeep
+assets/*
+!assets/.gitkeep
+
+# Generated outputs: track only summaries and placeholder
+results/*
+!results/.gitkeep
+!results/README.md
+!results/summaries/
+results/summaries/*
+!results/summaries/.gitkeep
+!results/summaries/*.md
+!results/summaries/*.json
+!results/summaries/*.csv
+
+# Temporary and caches
+.cache/
+tmp/
+*.tmp

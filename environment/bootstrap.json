@@ -1,0 +1,63 @@
+{
+  "created_at_utc": "2026-10-12T11:52:55.770436+00:00",
+  "created_at_asia_shanghai": "2026-10-12T19:52:55.770436+08:00",
+  "workspace": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing",
+  "platform": "Linux-6.8.0-85-generic-x86_64-with-glibc2.35",
+  "scope": "Workspace bootstrap only; no environment installation or model experiment",
+  "probes": {
+    "hostname": {
+      "command": [
+        "hostname"
+      ],
+      "exit_code": 0,
+      "stdout": "cci-5578a768-8405-487c-a141-f0ae9881c626-0\n",
+      "stderr": ""
+    },
+    "identity": {
+      "command": [
+        "id"
+      ],
+      "exit_code": 0,
+      "stdout": "uid=0(root) gid=0(root) groups=0(root)\n",
+      "stderr": ""
+    },
+    "git": {
+      "command": [
+        "git",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "git version 2.34.1\n",
+      "stderr": ""
+    },
+    "python": {
+      "command": [
+        "python3",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "Python 3.11.13\n",
+      "stderr": ""
+    },
+    "gpu": {
+      "command": [
+        "nvidia-smi",
+        "--query-gpu=index,name,memory.total,driver_version",
+        "--format=csv,noheader"
+      ],
+      "exit_code": 0,
+      "stdout": "0, NVIDIA H100 80GB HBM3, 81559 MiB, 595.71.05\n1, NVIDIA H100 80GB HBM3, 81559 MiB, 595.71.05\n2, NVIDIA H100 80GB HBM3, 81559 MiB, 595.71.05\n3, NVIDIA H100 80GB HBM3, 81559 MiB, 595.71.05\n4, NVIDIA H100 80GB HBM3, 81559 MiB, 595.71.05\n5, NVIDIA H100 80GB HBM3, 81559 MiB, 595.71.05\n6, NVIDIA H100 80GB HBM3, 81559 MiB, 595.71.05\n7, NVIDIA H100 80GB HBM3, 81559 MiB, 595.71.05\n",
+      "stderr": ""
+    },
+    "disk": {
+      "command": [
+        "df",
+        "-h",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing"
+      ],
+      "exit_code": 0,
+      "stdout": "Filesystem                                                  Size  Used Avail Use% Mounted on\n192.168.0.101:6789,192.168.0.102:6789,192.168.0.103:6789:/  4.8P  2.1P  2.8P  43% /root/userdata\n",
+      "stderr": ""
+    }
+  }
+}

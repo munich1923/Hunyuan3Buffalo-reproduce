@@ -696,30 +696,52 @@
       "ended_utc": "2026-10-13T08:51:15.339224+00:00",
       "elapsed_seconds": 1505.470614159014,
       "timed_out": false
+    },
+    {
+      "experiment_commit": "ee8c14a09630fbae2b59ec25e63e6c935113a05e",
+      "started_shanghai": "2026-10-13T16:51:15.481180+08:00",
+      "name": "connector",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/train_editor.py",
+        "--stage",
+        "connector",
+        "--seconds",
+        "6800"
+      ],
+      "started_utc": "2026-10-13T08:51:15.481191+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_connector.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3511666,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T09:31:43.233403+00:00",
+      "elapsed_seconds": 2427.74926856393,
+      "timed_out": false
     }
   ],
-  "gpu_seconds": 7556.345474170521,
+  "gpu_seconds": 9984.09474273445,
   "status": "running",
   "waiting_for": [
     "download"
   ],
-  "updated_utc": "2026-10-13T08:51:15.481199+00:00",
+  "updated_utc": "2026-10-13T09:31:43.392503+00:00",
   "current": {
-    "experiment_commit": "ee8c14a09630fbae2b59ec25e63e6c935113a05e",
-    "started_shanghai": "2026-10-13T16:51:15.481180+08:00",
-    "name": "connector",
+    "experiment_commit": "acf71d96bc95586b1e977940bd7db4ee420b6bc3",
+    "started_shanghai": "2026-10-13T17:31:43.392480+08:00",
+    "name": "lora",
     "command": [
       "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
       "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/train_editor.py",
       "--stage",
-      "connector",
+      "lora",
       "--seconds",
-      "6800"
+      "21000"
     ],
-    "started_utc": "2026-10-13T08:51:15.481191+00:00",
+    "started_utc": "2026-10-13T09:31:43.392495+00:00",
     "gpu": 0,
-    "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_connector.log",
+    "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_lora.log",
     "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
-    "pid": 3511666
+    "pid": 3539717
   }
 }

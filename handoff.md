@@ -117,3 +117,10 @@
 - 正式MLP初始train前16探针loss0.9658027，val全部128条loss0.9231679；训练4720640参数，DiT/VAE/VLM冻结。
 - scripts/audit_full_cache.py正在CPU检查所有Shape/VLM缓存；日志logs/full_cache_integrity.log。
 - results/checkpoints/connector_initial.pt已保存，同初始化作为random对照；过拟合诊断不作为正式训练初始化。
+
+## Connector正式训练完成，LoRA启动
+- connector500步：train前16探针0.9658027 -> 0.6386403；完整128val loss0.9231679 -> 0.6159285（下降33.3%）。
+- 最佳val探针0.6408666，500步检查点为best；正式connector未从overfit初始化，random对照保存相同初始MLP。
+- 完整Shape/VLM缓存CPU审计通过，六个目录条目数量正确，tensor形状与有限性通过。
+- LoRA<=2000steps已启动，从connector_best初始化；冻结主干、训练MLP和attention rank8/alpha16 LoRA。
+- 累计至connector结束9984.09秒（2.773h）。尚无生成几何/benchmark结果，不得从loss推断编辑有效。

@@ -1,0 +1,192 @@
+{
+  "stage": "connector",
+  "steps": 500,
+  "initial_train": 0.9658027291297913,
+  "final_train": 0.6386402957141399,
+  "initial_val": 0.9231679112417623,
+  "final_val": 0.6159285367466509,
+  "elapsed_seconds": 2222.745052997954,
+  "best_validation": 0.6408665738999844,
+  "train_entries": 1024,
+  "validation_probe_entries": 16,
+  "validation_split_entries": 128,
+  "final_validation_entries": 128,
+  "history": [
+    {
+      "step": 20,
+      "loss": 0.9586788713932037,
+      "elapsed_seconds": 151.06940547423437,
+      "train_probe": 0.9179916195571423,
+      "validation": 0.9624033868312836
+    },
+    {
+      "step": 40,
+      "loss": 0.7438454180955887,
+      "elapsed_seconds": 241.2037641191855,
+      "train_probe": 0.8788045942783356,
+      "validation": 0.9085806496441364
+    },
+    {
+      "step": 60,
+      "loss": 0.6802504733204842,
+      "elapsed_seconds": 323.1230910778977,
+      "train_probe": 0.8162097800523043,
+      "validation": 0.8285627327859402
+    },
+    {
+      "step": 80,
+      "loss": 0.7735685408115387,
+      "elapsed_seconds": 400.558077710215,
+      "train_probe": 0.7716863602399826,
+      "validation": 0.7919584214687347
+    },
+    {
+      "step": 100,
+      "loss": 0.7823938429355621,
+      "elapsed_seconds": 475.2103744992055,
+      "train_probe": 0.7495687007904053,
+      "validation": 0.7604999653995037
+    },
+    {
+      "step": 120,
+      "loss": 0.6968255639076233,
+      "elapsed_seconds": 548.2094112420455,
+      "train_probe": 0.7487001791596413,
+      "validation": 0.7530537229031324
+    },
+    {
+      "step": 140,
+      "loss": 0.7304503172636032,
+      "elapsed_seconds": 626.446400590241,
+      "train_probe": 0.746993362903595,
+      "validation": 0.7496132608503103
+    },
+    {
+      "step": 160,
+      "loss": 0.9415300041437149,
+      "elapsed_seconds": 707.5925706652924,
+      "train_probe": 0.7287426181137562,
+      "validation": 0.7374663203954697
+    },
+    {
+      "step": 180,
+      "loss": 0.7939726412296295,
+      "elapsed_seconds": 796.7165587530471,
+      "train_probe": 0.7012590859085321,
+      "validation": 0.7121958676725626
+    },
+    {
+      "step": 200,
+      "loss": 0.6227354966104031,
+      "elapsed_seconds": 879.9944907939062,
+      "train_probe": 0.6988477557897568,
+      "validation": 0.7095897570252419
+    },
+    {
+      "step": 220,
+      "loss": 0.5120720639824867,
+      "elapsed_seconds": 960.0138348112814,
+      "train_probe": 0.7126967161893845,
+      "validation": 0.7148764636367559
+    },
+    {
+      "step": 240,
+      "loss": 0.9622255265712738,
+      "elapsed_seconds": 1044.187084261328,
+      "train_probe": 0.6847362592816353,
+      "validation": 0.6934597175568342
+    },
+    {
+      "step": 260,
+      "loss": 0.42253196984529495,
+      "elapsed_seconds": 1124.2885664012283,
+      "train_probe": 0.6773783266544342,
+      "validation": 0.6855162270367146
+    },
+    {
+      "step": 280,
+      "loss": 0.6380062848329544,
+      "elapsed_seconds": 1213.4953618282452,
+      "train_probe": 0.6810843292623758,
+      "validation": 0.6852499265223742
+    },
+    {
+      "step": 300,
+      "loss": 0.5401774123311043,
+      "elapsed_seconds": 1295.9773830319755,
+      "train_probe": 0.6795677617192268,
+      "validation": 0.683113019913435
+    },
+    {
+      "step": 320,
+      "loss": 0.46970808506011963,
+      "elapsed_seconds": 1385.711897760164,
+      "train_probe": 0.6734635103493929,
+      "validation": 0.679656021296978
+    },
+    {
+      "step": 340,
+      "loss": 0.5635161399841309,
+      "elapsed_seconds": 1478.2572952359915,
+      "train_probe": 0.6682870462536812,
+      "validation": 0.6687480844557285
+    },
+    {
+      "step": 360,
+      "loss": 0.6118346229195595,
+      "elapsed_seconds": 1563.9452893012203,
+      "train_probe": 0.6631661728024483,
+      "validation": 0.6728209313005209
+    },
+    {
+      "step": 380,
+      "loss": 0.681276485323906,
+      "elapsed_seconds": 1649.0203102850355,
+      "train_probe": 0.6760641522705555,
+      "validation": 0.6779963709414005
+    },
+    {
+      "step": 400,
+      "loss": 0.6575814858078957,
+      "elapsed_seconds": 1732.6981369559653,
+      "train_probe": 0.6732251439243555,
+      "validation": 0.6758792847394943
+    },
+    {
+      "step": 420,
+      "loss": 1.0495859235525131,
+      "elapsed_seconds": 1819.970004973933,
+      "train_probe": 0.6623216457664967,
+      "validation": 0.6643675360828638
+    },
+    {
+      "step": 440,
+      "loss": 0.6098018363118172,
+      "elapsed_seconds": 1903.0704594929703,
+      "train_probe": 0.6442822031676769,
+      "validation": 0.6509113181382418
+    },
+    {
+      "step": 460,
+      "loss": 0.6100675016641617,
+      "elapsed_seconds": 1984.768702218309,
+      "train_probe": 0.661959458142519,
+      "validation": 0.657618798315525
+    },
+    {
+      "step": 480,
+      "loss": 0.6026195213198662,
+      "elapsed_seconds": 2063.127630446106,
+      "train_probe": 0.6505428422242403,
+      "validation": 0.6480724290013313
+    },
+    {
+      "step": 500,
+      "loss": 0.5183249711990356,
+      "elapsed_seconds": 2140.9473507171497,
+      "train_probe": 0.6386402957141399,
+      "validation": 0.6408665738999844
+    }
+  ],
+  "note": "Velocity loss is a fitting diagnostic, not a geometry editing success metric."
+}

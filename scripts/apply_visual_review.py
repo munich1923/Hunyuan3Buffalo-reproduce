@@ -9,6 +9,8 @@ def apply():
     for split in ["train","val","test"]:
         target=snapshot/(split+".jsonl")
         if not target.exists():target.write_bytes((folder/(split+".jsonl")).read_bytes())
+    for split in ["val","test"]:
+        (folder/(split+".jsonl")).write_bytes((snapshot/(split+".jsonl")).read_bytes())
     rows=[json.loads(x) for x in (snapshot/"train.jsonl").read_text().splitlines()]
     val=[json.loads(x) for x in (snapshot/"val.jsonl").read_text().splitlines()]
     candidates=[json.loads(x) for x in (folder/"accepted_candidates.jsonl").read_text().splitlines()]

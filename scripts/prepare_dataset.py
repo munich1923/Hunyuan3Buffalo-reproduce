@@ -121,7 +121,7 @@ def main():
     (out/"test.jsonl").write_text("".join(json.dumps(x)+"\n" for x in bench))
     dest=extract()
     info={x["uid"]:x for x in map(json.loads,(ROOT/"assets/Nano3D-Edit-100k/v1_100k/info/v1_100k_info.jsonl").open())}
-    candidates=list(dest.glob("uid_*"));random.Random(SEED).shuffle(candidates)
+    candidates=sorted(dest.glob("uid_*"),key=lambda path:path.name);random.Random(SEED).shuffle(candidates)
     accepted=[];rejects=[];seen=set()
     for folder in candidates:
         uid=folder.name;row=info.get(uid,{})

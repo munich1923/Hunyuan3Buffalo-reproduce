@@ -64,3 +64,7 @@
 
 ## 追加训练几何诊断
 主流程完成后运行environment/venvs/shape/bin/python scripts/run_training_geometry.py，使用同一pilot锁和GPU累计预算，对overfit_best和lora_best各生成8个原始独立add训练样本（单seed/50步）。这是几何拟合检查，不修改已通过的velocity-loss gate，也不替代独立benchmark。
+
+## 自动收尾进程
+- environment/finalizer_pid.txt记录scripts/finalize_experiment.py进程；等待pilot退出后才执行。不会同时运行GPU。
+- 收尾包含预算内训练几何诊断、CPU检查点/评估审计、模式比较、指令敏感性、比较图、训练曲线和final_report.md。AI视觉解释和最终Git提交仍需主agent完成。

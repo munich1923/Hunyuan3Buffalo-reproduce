@@ -27,7 +27,16 @@ def main():
         result={"first":first,"second":second,"shared_attempted":len(keys),"both_valid":len(valid),"note":"Negative CD delta and positive F-score delta favor first against the edited target; noop is also separately assessed against source."}
         if valid:
             for metric in ["cd_squared_sum","fscore_005"]:
-                result["mean_delta_"+metric]=float(np.mean([records[first][k]["target_metrics"][metric]-records[second][k]["target_metrics"][metric] for k in valid]))
+                groups={}
+                for k in valid:
+                    groups.setdefault(k[0],[]).append(records[first][k]["target_metrics"][metric]-records[second][k]["target_metrics"][metric])
+                delta=np.array([np.mean(v) for v in groups.values()])
+                result["mean_delta_"+metric]=float(delta.mean())
+                result["paired_objects"]=len(delta)
+                if len(delta)>1:
+                    rng=np.random.default_rng(20261013)
+                    boot=delta[rng.integers(0,len(delta),size=(1000,len(delta)))].mean(axis=1)
+                    result["object_bootstrap_95ci_"+metric]=[float(x) for x in np.quantile(boot,[.025,.975])]
         report["paired_comparisons"].append(result)
     (ROOT/"results/summaries/controlled_comparisons.json").write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps(report,indent=2))

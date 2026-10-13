@@ -1,0 +1,44 @@
+{
+  "reviewer": "AI agent",
+  "scope": "Six preselected benchmark source/target pairs, all four views; generated predictions not yet reviewed.",
+  "updated_utc": "2026-10-13T11:21:49.808115+00:00",
+  "records": [
+    {
+      "id": "bench_add_45d32f8e2df34ce0b9a71cca74f79078",
+      "operation": "add",
+      "instruction": "Add a power cord extending from the base",
+      "observation": "Lamp: target includes a cord from base; target body has visible pose/shape differences."
+    },
+    {
+      "id": "bench_add_8ca6b76e676b4504b5f9c5580a751ec3",
+      "operation": "add",
+      "instruction": "Add a crafted lid with a small knob on top of the vase",
+      "observation": "Vase: target has lid and knob; some views show tilt/body deformation."
+    },
+    {
+      "id": "bench_add_9bc76559bccb409d9a8e6dc69b50977b",
+      "operation": "add",
+      "instruction": "Add a roof luggage rack on top of the limousine",
+      "observation": "Limousine: target has roof rack, source body mostly retained in silhouette."
+    },
+    {
+      "id": "bench_remove_81615480737c495785a6aecee0184e10",
+      "operation": "remove",
+      "instruction": "Remove topknot hair",
+      "observation": "Sumo figure: topknot absent in target; body largely retained."
+    },
+    {
+      "id": "bench_remove_dd841d02b6164337a486de13c545b15d",
+      "operation": "remove",
+      "instruction": "Remove the grip",
+      "observation": "Stylized object: grip absent, other body details/pose differ slightly."
+    },
+    {
+      "id": "bench_remove_82d7a79c62f94c979f02c2ced6126780",
+      "operation": "remove",
+      "instruction": "Remove lid from the container",
+      "observation": "Container: lid absent and interior exposed; rim/interior has artifacts."
+    }
+  ],
+  "limitations": "Target body/pose differences may contribute to global distances; no independent alignment or ICP will be applied."
+}

@@ -8,7 +8,9 @@ def apply():
     snapshot=folder/"before_visual_review";snapshot.mkdir(exist_ok=True)
     for split in ["train","val","test"]:
         target=snapshot/(split+".jsonl")
-        if not target.exists():target.write_bytes((folder/(split+".jsonl")).read_bytes())
+        if not target.exists():
+            tracked=out/("original_"+split+"_manifest.jsonl")
+            target.write_bytes((tracked if tracked.exists() else folder/(split+".jsonl")).read_bytes())
     for split in ["val","test"]:
         (folder/(split+".jsonl")).write_bytes((snapshot/(split+".jsonl")).read_bytes())
     rows=[json.loads(x) for x in (snapshot/"train.jsonl").read_text().splitlines()]

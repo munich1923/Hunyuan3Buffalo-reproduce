@@ -37,3 +37,9 @@ results/summaries/*
 .cache/
 tmp/
 *.tmp
+
+# Runtime process and lock state
+environment/*_pid.txt
+environment/*.lock
+logs/downloads/*.lock
+logs/downloads/*.log

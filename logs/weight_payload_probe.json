@@ -1,0 +1,42 @@
+[
+  {
+    "name": "shape",
+    "status": 206,
+    "headers": {
+      "Content-Length": "128",
+      "ETag": "\"93b9db9e3dcb19268a5cd91f8e5414b3ea85d334310ca91968be68b317fc5704\"",
+      "Content-Range": "bytes 0-127/7366389768"
+    },
+    "prefix": "504b03040000080800000000000000000000000000000000000013000f006d6f"
+  },
+  {
+    "name": "vae",
+    "status": 206,
+    "headers": {
+      "Content-Length": "128",
+      "ETag": "\"2cc40a552ba05cb465049ad21c27a9554fa4184f4bf5cfa8c3febc159290fd65\"",
+      "Content-Range": "bytes 0-127/655648152"
+    },
+    "prefix": "504b03040000080800000000000000000000000000000000000013000f006d6f"
+  },
+  {
+    "name": "qwen",
+    "status": 206,
+    "headers": {
+      "Content-Length": "128",
+      "ETag": "\"d999d3c330c49ea66c37be6d108e20e1ddcf5af848546a6cb8f72b91c4c6798e\"",
+      "Content-Range": "bytes 0-127/3900233256"
+    },
+    "prefix": "20ba0000000000007b225f5f6d657461646174615f5f223a7b22666f726d6174"
+  },
+  {
+    "name": "nano",
+    "status": 206,
+    "headers": {
+      "Content-Length": "128",
+      "ETag": "\"579b7f70191187eff9066bd9ee42d89eb5daaea16f4d48d83d37cd2d4d8d5c05\"",
+      "Content-Range": "bytes 0-127/6746002652"
+    },
+    "prefix": "1f8b0800000000000003e4bc6b588dd1f736ba7452e9a4d2914ad18190940eeb"
+  }
+]

@@ -1,36 +1,41 @@
 # 实验交接
 
 ## 当前阶段
-工作区初始化已完成。尚未安装实验依赖、下载模型、获取上游源码或运行编辑实验。
+用户已授权执行近似复现。源码已拉取并固定；独立环境安装和模型/数据下载正在准备。
+尚未运行完整模型、训练或评估。脚本已经写入，但除语法检查外尚待环境和实际权重验证。
 
-## 目标
-在 H100 服务器复现 Hunyuan 3D buffalo-1.0 声称的编辑能力；官方来源、模型版本和具体编辑任务仍需核验。
+## 工作区
+/root/userdata/zc/hunyuan3d-buffalo-1.0-editing；本地通过 ssh h100 操作。
+工作约定见 agent.md。所有环境、数据、权重、日志和结果保存在本目录。
 
-## 位置与连接
-- 本地控制端：D:\hunyuan3Dbuffalo
-- 连接命令：ssh h100
-- 远端工作区：/root/userdata/zc/hunyuan3d-buffalo-1.0-editing
-- Git：工作区内的远端本地仓库，默认分支 main，无远程地址。
-- 工作约定：agent.md；自动发现入口：AGENTS.md。
+## 固定路线
+- 官方 Hunyuan3D 2.1 提交：82920d643c0dc2f7bfd7255f45f62d386edfe60c。
+- Qwen2.5-VL-7B-Instruct + 四视角几何渲染 + 隐藏状态 MLP。
+- 冻结 VLM/VAE/DiT 主干；先训练 MLP，后训练 MLP + 注意力 LoRA。
+- 几何添加/删除；不安装 Paint 流程。
+- 训练 1024 条、验证 128 条；来自分别 512/64 个原始添加配对及其反向删除条目。
+- Nano3D v1 实际没有直接 remove 标注；只使用 add，反向构造 remove 并保留 provenance。
+- 独立测试 Edit3D-Bench 添加/删除各20例，排除训练几何重复。
+- 单卡累计 24 GPU 小时封顶；VAE 重建与8样本拟合门槛失败则停止。
+- 本实验是开源替代的小规模机制检验，不是官方权重或指标复现。
 
-## 已完成
-- 验证免密 SSH 连接，远端用户 root。
-- 确认服务器主机名 cci-5578a768-8405-487c-a141-f0ae9881c626-0。
-- 只读探测发现 8 张 NVIDIA H100 80GB HBM3，驱动版本 595.71.05。
-- 确认 Git 2.34.1 可用，建立实验目录结构及初始 Git 仓库。
-- 保存初始化环境快照至 environment/bootstrap.json，原始探测日志至 logs/bootstrap.log。
-- 建立 Git 忽略规则，排除权重、虚拟环境、缓存及大型原始结果。
+## 已完成与证据
+- src/Hunyuan3D-2.1 源码干净，提交固定；environment/hunyuan3d21_source.json 和 logs/source_*.log。
+- 镜像 API 与真实 payload Range 请求已验证；直连 Hugging Face 失败。
+- 权重、数据集的官方 repo 身份和 revision 已固定；下载完成后逐项 SHA-256/大小验证。
+- Shape config 已核验：4096x64 latent，1024 条件宽度，1370 条件 tokens。
+- 编写下载、数据筛选、EGL渲染、缓存、模型适配、训练、评估和GPU预算脚本。
+- 当前只确认 Python 脚本可编译，不能视为模型或训练测试通过。
+
+## 进程与状态
+- environment/install_pid.txt：实验环境安装进程。
+- environment/download_pid.txt：模型/数据下载进程；environment/data_download_pid.txt 为额外数据下载进程。
+- logs/install_launcher.log、logs/download_launcher.log、logs/data_download_launcher.log。
+- 成功状态分别记录 environment/install_status.json、download_status.json。
+- models/ 中的 *.partial 可能为分段稀疏文件；文件大小不能用作完成百分比，必须以下载收据的 verified 状态为准。
 
 ## 下一步
-1. 确认 buffalo-1.0 的官方项目、对应版本、论文/说明及编辑能力声明。
-2. 设计最小可复现实验与成功判据，确定输入样例、编辑类型和对照方案。
-3. 结合官方依赖要求，在本目录建立独立环境并记录版本与安装日志。
-4. 获取准确的源码与权重，记录来源、提交 SHA 和校验值。
-5. 检查 GPU 使用情况后运行实验，归档结果与失败记录。
-
-## 未决与运行状态
-- 当前没有本实验启动的后台任务或 GPU 作业。
-- 尚未验证 CUDA 工具链、PyTorch、上游依赖兼容性或模型可运行性。
-- GPU 列表仅证明硬件可见，不说明资源当前空闲。
-- 无初始化阻碍；后续实验方案尚未执行。
-- 最近初始化时间见 environment/bootstrap.json；当前提交与工作区状态通过 git log -1 和 git status 查看。
+1. 检查并修复安装和下载，获得两个环境的 pip check 与依赖快照。
+2. 运行 scripts/run_pilot.py --prepare-only，完成数据QC和渲染；检查 results/data_review/ 的30个独立物体配对。
+3. 用 scripts/run_pilot.py 运行张量合同检查、VAE门槛、缓存、8样本拟合、连接器、LoRA、对照评估。
+4. 根据实际状态更新此文档并提交。完整命令和假设见 environment/README.md、method_notes.md。

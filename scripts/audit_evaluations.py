@@ -35,8 +35,7 @@ def main():
             report["errors"].append(mode+":summary count mismatch")
         report["modes"][mode]={"available":True,"attempted":len(records),"unique_attempted":len(seen),"valid":valid,"complete":seen==expected,"render_errors":sum(bool(r.get("render_error")) for r in records),"mesh_receipts":receipts}
     report["ok"]=not report["errors"]
-    (ROOT/"results/summaries/evaluation_integrity.json").write_text(json.dumps(report,indent=2)+"
-")
+    (ROOT/"results/summaries/evaluation_integrity.json").write_text(json.dumps(report,indent=2)+chr(10))
     print(json.dumps({"ok":report["ok"],"errors":report["errors"],"counts":{k:{a:b for a,b in v.items() if a!="mesh_receipts"} for k,v in report["modes"].items()}},indent=2))
     if not report["ok"]:raise RuntimeError("Evaluation audit failed")
 if __name__=="__main__":main()

@@ -600,28 +600,68 @@
       "ended_utc": "2026-10-13T07:26:01.266841+00:00",
       "elapsed_seconds": 589.3599536600523,
       "timed_out": false
+    },
+    {
+      "experiment_commit": "115ad12924e7ebc94a56e7cc40e4d27a2d3a8572",
+      "started_shanghai": "2026-10-13T15:26:01.400833+08:00",
+      "name": "render_train_full",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/render_views.py",
+        "--split",
+        "train"
+      ],
+      "started_utc": "2026-10-13T07:26:01.400847+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_render_train_full.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3491109,
+      "exit_code": 1,
+      "ended_utc": "2026-10-13T07:49:37.997946+00:00",
+      "elapsed_seconds": 1416.5923425839283,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9189f56874e3054acb79598e329cbe5cc64b1312",
+      "started_shanghai": "2026-10-13T15:51:46.946928+08:00",
+      "name": "render_train_full",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/render_views.py",
+        "--split",
+        "train"
+      ],
+      "started_utc": "2026-10-13T07:51:46.946944+00:00",
+      "gpu": 5,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_render_train_full.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3493904,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T07:53:07.188217+00:00",
+      "elapsed_seconds": 80.23424780508503,
+      "timed_out": false
     }
   ],
-  "gpu_seconds": 2571.9334712373093,
+  "gpu_seconds": 4068.7600616263226,
   "status": "running",
   "waiting_for": [
     "download"
   ],
-  "updated_utc": "2026-10-13T07:26:01.400855+00:00",
+  "updated_utc": "2026-10-13T07:53:07.291517+00:00",
   "current": {
-    "experiment_commit": "115ad12924e7ebc94a56e7cc40e4d27a2d3a8572",
-    "started_shanghai": "2026-10-13T15:26:01.400833+08:00",
-    "name": "render_train_full",
+    "experiment_commit": "9189f56874e3054acb79598e329cbe5cc64b1312",
+    "started_shanghai": "2026-10-13T15:53:07.291496+08:00",
+    "name": "render_val_full",
     "command": [
       "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
       "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/render_views.py",
       "--split",
-      "train"
+      "val"
     ],
-    "started_utc": "2026-10-13T07:26:01.400847+00:00",
-    "gpu": 0,
-    "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_render_train_full.log",
+    "started_utc": "2026-10-13T07:53:07.291509+00:00",
+    "gpu": 5,
+    "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_render_val_full.log",
     "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
-    "pid": 3491109
+    "pid": 3494279
   }
 }

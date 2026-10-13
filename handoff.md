@@ -97,3 +97,9 @@
 - 检查点results/checkpoints/overfit_{best,latest}.pt；逐步日志logs/train_overfit.jsonl，报告environment/training_overfit.json。
 - runner正在render_train_full；后续full shape/VLM缓存、connector<=500steps、LoRA<=2000steps、9种对照。
 - 若connector验证loss无提升，不扩大LoRA；所有阶段按24h GPU分配预算硬停止。
+
+## 全量准备继续
+- render_train_full第999条uid_349_remove遇到持续全黑EGL帧，脚本主动失败并保留原日志。重新启动新渲染进程，从已有record缓存恢复后所有1024条完成。
+- 两次渲染时间均计入预算，累计至train渲染完成4068.76秒；正在val全量渲染。
+- 没有排除该配对或修改其几何，故清单哈希不变。黑帧失败归因尚不能确证，重启后恢复。
+- 正式connector和LoRA前后验证loss覆盖全部128条；20步趋势/最佳检查点采用固定16条探针。字段已明确区分。

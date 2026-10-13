@@ -65,6 +65,16 @@ class Editor(nn.Module):
         return {k:v.detach().cpu() for k,v in self.state_dict().items() if k.startswith("connector.") or ".a.weight" in k or ".b.weight" in k}
     def load_adapter(self,path):
         state=torch.load(path,map_location="cpu",weights_only=True)
+        expected=set(self.adapter_state());actual=set(state["adapter"])
+        # Connector checkpoint initializes a LoRA model before LoRA training.
+        expected_connector={k for k in expected if k.startswith("connector.")}
+        if state.get("stage")=="connector" and self.lora_names:
+            required=expected_connector
+        else:required=expected
+        if not required<=actual:raise RuntimeError("Missing adapter tensors: "+str(sorted(required-actual)))
+        if not actual<=expected:raise RuntimeError("Unexpected adapter tensors: "+str(sorted(actual-expected)))
+        if state.get("source_commit")!="82920d643c0dc2f7bfd7255f45f62d386edfe60c":
+            raise RuntimeError("Adapter source commit mismatch")
         result=self.load_state_dict(state["adapter"],strict=False)
         if result.unexpected_keys:raise RuntimeError(result.unexpected_keys)
         return state

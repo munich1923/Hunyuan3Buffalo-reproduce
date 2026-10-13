@@ -12,6 +12,7 @@ def configure():
         "HUGGINGFACE_HUB_CACHE": ROOT/"models/cache/huggingface/hub",
         "TORCH_HOME": ROOT/"models/cache/torch",
         "XDG_CACHE_HOME": ROOT/".cache",
+        "MPLCONFIGDIR": ROOT/".cache/matplotlib",
         "CUDA_CACHE_PATH": ROOT/".cache/nvidia/compute",
         "__GL_SHADER_DISK_CACHE_PATH": ROOT/".cache/nvidia/shaders",
         "TRITON_CACHE_DIR": ROOT/".cache/triton",

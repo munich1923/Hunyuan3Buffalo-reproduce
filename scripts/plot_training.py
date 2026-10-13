@@ -1,5 +1,7 @@
 """Standalone scientific figure from recorded velocity loss probes."""
-import json
+import json,os
+from pathlib import Path
+os.environ["MPLCONFIGDIR"]=str(Path(__file__).resolve().parents[1]/".cache/matplotlib")
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt

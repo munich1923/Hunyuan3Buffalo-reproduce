@@ -129,3 +129,7 @@
 - benchmark运行顺序改为add/remove交替、seed优先，保留原manifest索引的shuffled指令映射。每模式protocol.json记录manifest哈希及采样对照。
 - scripts/build_comparison_sheets.py在CPU拼接已有四视角图；缺失输出标pending，不创建新GPU工作。
 - LoRA仍运行中，尚无benchmark生成证据。
+
+## 源几何参照诊断
+- CPU全部40例首seed源网格与编辑目标比较：F-score@0.05 add0.604/remove0.833/all0.719。删除集整体相似度高，最终必须结合removed-source residual与指令控制判断。
+- 该诊断不替代正式三seed源基线；results/summaries/source_identity_diagnostic.json。LoRA训练仍在进行。

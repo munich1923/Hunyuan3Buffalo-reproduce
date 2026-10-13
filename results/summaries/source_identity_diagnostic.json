@@ -1,0 +1,972 @@
+{
+  "note": "CPU identity-source baseline at first seed; final 3-seed benchmark is separate.",
+  "count": 40,
+  "by_operation": {
+    "add": {
+      "cd_squared_sum": 0.02318034818466576,
+      "fscore_005": 0.6039973488342808
+    },
+    "remove": {
+      "cd_squared_sum": 0.005155285005734466,
+      "fscore_005": 0.8334587167230951
+    },
+    "all": {
+      "cd_squared_sum": 0.014167816595200111,
+      "fscore_005": 0.718728032778688
+    }
+  },
+  "records": [
+    {
+      "id": "bench_add_45d32f8e2df34ce0b9a71cca74f79078",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.10011996951142896,
+        "cd_l1_mean": 0.18539074979872947,
+        "sample_points": 16384,
+        "fscore_001": 0.030004982056656505,
+        "fscore_0025": 0.10243877357480638,
+        "fscore_005": 0.1856994177536976
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 1694,
+        "unchanged_region_distance_mean": 0.007157581406407659,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 14721,
+        "removed_source_points": 14690,
+        "changed_target_coverage_005": 0.0932001902044698,
+        "changed_target_distance_mean": 0.20000101143291793,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_8ca6b76e676b4504b5f9c5580a751ec3",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.013374653727508436,
+        "cd_l1_mean": 0.06826254733749518,
+        "sample_points": 16384,
+        "fscore_001": 0.032427524914746,
+        "fscore_0025": 0.15410255654227725,
+        "fscore_005": 0.396512212153735
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 2333,
+        "unchanged_region_distance_mean": 0.008224199666736638,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 13633,
+        "removed_source_points": 14051,
+        "changed_target_coverage_005": 0.31130345485219685,
+        "changed_target_distance_mean": 0.07173939320707258,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_9bc76559bccb409d9a8e6dc69b50977b",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.001735293461443719,
+        "cd_l1_mean": 0.026366561282459053,
+        "sample_points": 16384,
+        "fscore_001": 0.13436400646845212,
+        "fscore_0025": 0.4694691827623907,
+        "fscore_005": 0.9725923100490196
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 8163,
+        "unchanged_region_distance_mean": 0.00641889608759648,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 9112,
+        "removed_source_points": 8221,
+        "changed_target_coverage_005": 0.9321773485513608,
+        "changed_target_distance_mean": 0.03726739345631627,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_9e4c9175cee346babaaf3c187db52c8d",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.0007203776183761772,
+        "cd_l1_mean": 0.015970695816768393,
+        "sample_points": 16384,
+        "fscore_001": 0.3370360886001449,
+        "fscore_0025": 0.8396679999818287,
+        "fscore_005": 0.9874913748396891
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 13868,
+        "unchanged_region_distance_mean": 0.00952272119383335,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 2736,
+        "removed_source_points": 2516,
+        "changed_target_coverage_005": 0.8940058479532164,
+        "changed_target_distance_mean": 0.03268108051449333,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_b5753ab691134b3898df8bd2d501c759",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.03713788331870124,
+        "cd_l1_mean": 0.10630464087522945,
+        "sample_points": 16384,
+        "fscore_001": 0.056249692582633785,
+        "fscore_0025": 0.15783038879155803,
+        "fscore_005": 0.28538139993768824
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 3199,
+        "unchanged_region_distance_mean": 0.004874138843718413,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 14214,
+        "removed_source_points": 13185,
+        "changed_target_coverage_005": 0.12994231039819895,
+        "changed_target_distance_mean": 0.14395649314860673,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_1807676ed2b74d33a7d23449768db84b",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.007785626958787487,
+        "cd_l1_mean": 0.050184425551720244,
+        "sample_points": 16384,
+        "fscore_001": 0.1079985960016954,
+        "fscore_0025": 0.3353979223608396,
+        "fscore_005": 0.5743995507262734
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 5345,
+        "unchanged_region_distance_mean": 0.007767891189042176,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 10730,
+        "removed_source_points": 11039,
+        "changed_target_coverage_005": 0.3664492078285182,
+        "changed_target_distance_mean": 0.06773423923274846,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_adc93c8e59fd4abdb95378c7ef86143c",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.02179394164570543,
+        "cd_l1_mean": 0.08427930195265218,
+        "sample_points": 16384,
+        "fscore_001": 0.05482497329245414,
+        "fscore_0025": 0.1860038739945188,
+        "fscore_005": 0.35111505957123784
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 2793,
+        "unchanged_region_distance_mean": 0.007101444907816724,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 13031,
+        "removed_source_points": 13591,
+        "changed_target_coverage_005": 0.23037372419614766,
+        "changed_target_distance_mean": 0.08846092401242671,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_92d4f7e1c8a659b30e2f7d16c4b89a53",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.013120053372351967,
+        "cd_l1_mean": 0.061267384753468726,
+        "sample_points": 16384,
+        "fscore_001": 0.08413296693643453,
+        "fscore_0025": 0.2721946675654626,
+        "fscore_005": 0.6455165581802339
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 4057,
+        "unchanged_region_distance_mean": 0.008357324791835841,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 11433,
+        "removed_source_points": 12327,
+        "changed_target_coverage_005": 0.5126388524446777,
+        "changed_target_distance_mean": 0.08166305537013448,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_5dcf349d01c5494787b65827452d672f",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.002726622283957676,
+        "cd_l1_mean": 0.031122059509714087,
+        "sample_points": 16384,
+        "fscore_001": 0.14332132690895014,
+        "fscore_0025": 0.43915950029430095,
+        "fscore_005": 0.8282838455161443
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 6793,
+        "unchanged_region_distance_mean": 0.005543406392788837,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 8736,
+        "removed_source_points": 9591,
+        "changed_target_coverage_005": 0.7285943223443223,
+        "changed_target_distance_mean": 0.04307468786914211,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_b1f5730271a94f7ab3fef93bf5e3a489",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.0010161894378770524,
+        "cd_l1_mean": 0.019234232045726614,
+        "sample_points": 16384,
+        "fscore_001": 0.21058632235221675,
+        "fscore_0025": 0.7608423101134997,
+        "fscore_005": 0.9813780544564845
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 12765,
+        "unchanged_region_distance_mean": 0.008849519458796803,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 4204,
+        "removed_source_points": 3619,
+        "changed_target_coverage_005": 0.890104662226451,
+        "changed_target_distance_mean": 0.03802851738831346,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_dc168b1d23aa4f208d493329ebf2203d",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.0066472127913190515,
+        "cd_l1_mean": 0.04828028362416934,
+        "sample_points": 16384,
+        "fscore_001": 0.12440828854141217,
+        "fscore_0025": 0.30348287740865865,
+        "fscore_005": 0.5393450817813894
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 5332,
+        "unchanged_region_distance_mean": 0.004779792349915758,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 11726,
+        "removed_source_points": 11052,
+        "changed_target_coverage_005": 0.3222752856899198,
+        "changed_target_distance_mean": 0.06588326814675347,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_e1be35c462a94cd48b2964a8e5ead4e3",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.001336349211138749,
+        "cd_l1_mean": 0.019992842920110103,
+        "sample_points": 16384,
+        "fscore_001": 0.27069024362316796,
+        "fscore_0025": 0.7667529831312189,
+        "fscore_005": 0.9323338897586209
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 12578,
+        "unchanged_region_distance_mean": 0.007194393526503503,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 3837,
+        "removed_source_points": 3806,
+        "changed_target_coverage_005": 0.7013291634089132,
+        "changed_target_distance_mean": 0.04313338163303109,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_23c3aa8f5df34cd1b9b68810cddd7f48",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.01022550601335854,
+        "cd_l1_mean": 0.05659187511898864,
+        "sample_points": 16384,
+        "fscore_001": 0.09760969614527977,
+        "fscore_0025": 0.2958294959744998,
+        "fscore_005": 0.5183089668627184
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 4774,
+        "unchanged_region_distance_mean": 0.005650363619419616,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 11462,
+        "removed_source_points": 11610,
+        "changed_target_coverage_005": 0.3325772116559065,
+        "changed_target_distance_mean": 0.07024968348148612,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_f4ad252d962a4a6bae2d76eba804ced4",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.017607740347209994,
+        "cd_l1_mean": 0.0777515653950876,
+        "sample_points": 16384,
+        "fscore_001": 0.0473927221977229,
+        "fscore_0025": 0.18261207293371523,
+        "fscore_005": 0.38072355690709975
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 2616,
+        "unchanged_region_distance_mean": 0.009192220525997155,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 12890,
+        "removed_source_points": 13768,
+        "changed_target_coverage_005": 0.2920868890612878,
+        "changed_target_distance_mean": 0.08630289568407709,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_c5566014f735482980d909d958f9146d",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.002673099674938028,
+        "cd_l1_mean": 0.0347909419134915,
+        "sample_points": 16384,
+        "fscore_001": 0.05492994520399305,
+        "fscore_0025": 0.1458131032250471,
+        "fscore_005": 0.9302355188935786
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 2355,
+        "unchanged_region_distance_mean": 0.009323586851440236,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 13960,
+        "removed_source_points": 14029,
+        "changed_target_coverage_005": 0.9194126074498568,
+        "changed_target_distance_mean": 0.03858086339210588,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_67ee3ee874904ceb8627541b34045ca5",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.18595155701782573,
+        "cd_l1_mean": 0.2635748265308689,
+        "sample_points": 16384,
+        "fscore_001": 0.0025106660017730495,
+        "fscore_0025": 0.00579494557317998,
+        "fscore_005": 0.01060338097889233
+      },
+      "preservation_metrics": {
+        "available": false,
+        "unchanged_points": 50
+      }
+    },
+    {
+      "id": "bench_add_0da6104a838a4c32a067fc2d0a8b566b",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.01633301742056182,
+        "cd_l1_mean": 0.07656688991188876,
+        "sample_points": 16384,
+        "fscore_001": 0.04900394268889925,
+        "fscore_0025": 0.161113369103634,
+        "fscore_005": 0.33410833908445886
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 2611,
+        "unchanged_region_distance_mean": 0.004875451638566833,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 13715,
+        "removed_source_points": 13773,
+        "changed_target_coverage_005": 0.19212541013488882,
+        "changed_target_distance_mean": 0.09248967490538168,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_e0bd59c70a8f44a08e227f99c29fef81",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.0047318797938089765,
+        "cd_l1_mean": 0.036774558513770164,
+        "sample_points": 16384,
+        "fscore_001": 0.09155639282592408,
+        "fscore_0025": 0.4582350489592682,
+        "fscore_005": 0.8173351427396945
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 7205,
+        "unchanged_region_distance_mean": 0.00974990100391018,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 8547,
+        "removed_source_points": 9179,
+        "changed_target_coverage_005": 0.6732186732186732,
+        "changed_target_distance_mean": 0.052297207634842045,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_65880617586342db903f9236c014aeab",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.0018799087470371487,
+        "cd_l1_mean": 0.023970834624095595,
+        "sample_points": 16384,
+        "fscore_001": 0.23220215164607702,
+        "fscore_0025": 0.655115901005031,
+        "fscore_005": 0.8932744733481944
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 10704,
+        "unchanged_region_distance_mean": 0.0076306154755366225,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 5621,
+        "removed_source_points": 5680,
+        "changed_target_coverage_005": 0.6970289983988615,
+        "changed_target_distance_mean": 0.04501199602600709,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_add_445b5a9c131d482fad76bf5b6c2f8271",
+      "operation": "add",
+      "target_metrics": {
+        "cd_squared_sum": 0.016690081339979033,
+        "cd_l1_mean": 0.06721879861892405,
+        "sample_points": 16384,
+        "fscore_001": 0.11962481242854421,
+        "fscore_0025": 0.3195637226731094,
+        "fscore_005": 0.5153088431467655
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 4624,
+        "unchanged_region_distance_mean": 0.005990102399360206,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 10350,
+        "removed_source_points": 11760,
+        "changed_target_coverage_005": 0.35594202898550725,
+        "changed_target_distance_mean": 0.07679419329660919,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_81615480737c495785a6aecee0184e10",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.00034273292046994516,
+        "cd_l1_mean": 0.010930553239029214,
+        "sample_points": 16384,
+        "fscore_001": 0.5496747827836997,
+        "fscore_0025": 0.9584043223735274,
+        "fscore_005": 0.9963920128254211
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 15695,
+        "unchanged_region_distance_mean": 0.005986468111539907,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 674,
+        "removed_source_points": 689,
+        "changed_target_coverage_005": 0.8471810089020771,
+        "changed_target_distance_mean": 0.036554066711198575,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_dd841d02b6164337a486de13c545b15d",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.010244030518852674,
+        "cd_l1_mean": 0.03538230603220026,
+        "sample_points": 16384,
+        "fscore_001": 0.318786673664944,
+        "fscore_0025": 0.6775552821471561,
+        "fscore_005": 0.835194796456463
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 10771,
+        "unchanged_region_distance_mean": 0.006967566853252676,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 4932,
+        "removed_source_points": 5613,
+        "changed_target_coverage_005": 0.5525141930251419,
+        "changed_target_distance_mean": 0.05559574086140236,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_82d7a79c62f94c979f02c2ced6126780",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.017218705029833282,
+        "cd_l1_mean": 0.07190329778407001,
+        "sample_points": 16384,
+        "fscore_001": 0.01962602508734472,
+        "fscore_0025": 0.23242378034721767,
+        "fscore_005": 0.4340526778768189
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 3935,
+        "unchanged_region_distance_mean": 0.009209122706662133,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 12695,
+        "removed_source_points": 12449,
+        "changed_target_coverage_005": 0.3007483261126428,
+        "changed_target_distance_mean": 0.08522935773682982,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_d117b1afb1d44946b0c1784730cbe3ed",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.0029548533540245123,
+        "cd_l1_mean": 0.0305097519028692,
+        "sample_points": 16384,
+        "fscore_001": 0.17688676861415387,
+        "fscore_0025": 0.5834937889705643,
+        "fscore_005": 0.7328643328701391
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 9579,
+        "unchanged_region_distance_mean": 0.008091594737047621,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 6843,
+        "removed_source_points": 6805,
+        "changed_target_coverage_005": 0.338740318573725,
+        "changed_target_distance_mean": 0.056520989936841945,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_628fc3d2fcef4d9fbd42119d0fb6dbd1",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.013565977158506888,
+        "cd_l1_mean": 0.06790412153633504,
+        "sample_points": 16384,
+        "fscore_001": 0.03905782699584961,
+        "fscore_0025": 0.20652563577566305,
+        "fscore_005": 0.433981663279877
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 3415,
+        "unchanged_region_distance_mean": 0.011050354854052351,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 13031,
+        "removed_source_points": 12969,
+        "changed_target_coverage_005": 0.2780293147110736,
+        "changed_target_distance_mean": 0.08384774721275177,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_4d14272e44bd4bb6898d91b223296606",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.004025463355454747,
+        "cd_l1_mean": 0.03952410126474008,
+        "sample_points": 16384,
+        "fscore_001": 0.08183060517028513,
+        "fscore_0025": 0.23268715852226307,
+        "fscore_005": 0.6702272367878668
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 3605,
+        "unchanged_region_distance_mean": 0.009996558043999222,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 12339,
+        "removed_source_points": 12779,
+        "changed_target_coverage_005": 0.5917011103006726,
+        "changed_target_distance_mean": 0.04662534503829514,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_4946d101bb6e4a34bf125a8c7c1113a0",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.013558559715077823,
+        "cd_l1_mean": 0.04599732141415665,
+        "sample_points": 16384,
+        "fscore_001": 0.32922429727695546,
+        "fscore_0025": 0.6265171410835244,
+        "fscore_005": 0.6992099102251071
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 7559,
+        "unchanged_region_distance_mean": 0.0033823674780064463,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 396,
+        "removed_source_points": 8825,
+        "changed_target_coverage_005": 0.9949494949494949,
+        "changed_target_distance_mean": 0.02999118556873744,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_54911296afa045749c645ca9c22f2a56",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.0009144978834483553,
+        "cd_l1_mean": 0.017204488277495086,
+        "sample_points": 16384,
+        "fscore_001": 0.2681266148233897,
+        "fscore_0025": 0.8470424115936914,
+        "fscore_005": 0.959578140247144
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 13675,
+        "unchanged_region_distance_mean": 0.009770645036133214,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 2297,
+        "removed_source_points": 2709,
+        "changed_target_coverage_005": 0.6325642141924249,
+        "changed_target_distance_mean": 0.04372426290748208,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_e9d1b916e651466ab989df1829189633",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.008480220987127408,
+        "cd_l1_mean": 0.02678905122785554,
+        "sample_points": 16384,
+        "fscore_001": 0.511681569321169,
+        "fscore_0025": 0.8782738223822906,
+        "fscore_005": 0.9111197426649262
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 12998,
+        "unchanged_region_distance_mean": 0.005070112619567622,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 269,
+        "removed_source_points": 3386,
+        "changed_target_coverage_005": 1.0,
+        "changed_target_distance_mean": 0.02918082676346669,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_e848ec12d707473ea7b2da565f29aa07",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.0010972656689270288,
+        "cd_l1_mean": 0.013398971858296199,
+        "sample_points": 16384,
+        "fscore_001": 0.4539725910626807,
+        "fscore_0025": 0.9580190080448697,
+        "fscore_005": 0.9834295847262728
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 15426,
+        "unchanged_region_distance_mean": 0.008267204198405669,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 408,
+        "removed_source_points": 958,
+        "changed_target_coverage_005": 0.8872549019607843,
+        "changed_target_distance_mean": 0.03669799383673366,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_16700b27484f46d3a418f025808fedf0",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.005042972057749506,
+        "cd_l1_mean": 0.03733521727319712,
+        "sample_points": 16384,
+        "fscore_001": 0.24564739494536578,
+        "fscore_0025": 0.4962321228379628,
+        "fscore_005": 0.6950437152435349
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 8465,
+        "unchanged_region_distance_mean": 0.0048593934500314444,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 8563,
+        "removed_source_points": 7919,
+        "changed_target_coverage_005": 0.36225621861497137,
+        "changed_target_distance_mean": 0.06483373144756102,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_91b5a0e1b87e4b3185d2c3e599da963c",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.002755578771194074,
+        "cd_l1_mean": 0.022735853483801284,
+        "sample_points": 16384,
+        "fscore_001": 0.3791918113873839,
+        "fscore_0025": 0.7901952826826771,
+        "fscore_005": 0.8578200704102618
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 10751,
+        "unchanged_region_distance_mean": 0.004163382174969299,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 115,
+        "removed_source_points": 5633,
+        "changed_target_coverage_005": 1.0,
+        "changed_target_distance_mean": 0.03637417256320901,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_2d970c3fd0904ae6b5bbaffd007255b9",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.000313807701963425,
+        "cd_l1_mean": 0.00974484412818354,
+        "sample_points": 16384,
+        "fscore_001": 0.6531537498028898,
+        "fscore_0025": 0.9745151019692813,
+        "fscore_005": 0.991505601378801
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 15749,
+        "unchanged_region_distance_mean": 0.004242227686789362,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 194,
+        "removed_source_points": 635,
+        "changed_target_coverage_005": 1.0,
+        "changed_target_distance_mean": 0.02819770078302703,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_7ff84e7e989141a6869c7afc12a5e398",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.000916873353493155,
+        "cd_l1_mean": 0.018338920563334984,
+        "sample_points": 16384,
+        "fscore_001": 0.20850695397095406,
+        "fscore_0025": 0.7970498975100965,
+        "fscore_005": 0.9800699223615328
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 12876,
+        "unchanged_region_distance_mean": 0.011131980196493318,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 3137,
+        "removed_source_points": 3508,
+        "changed_target_coverage_005": 0.9123366273509723,
+        "changed_target_distance_mean": 0.03401350796510285,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_dfdde6f725b642f296c89755fc29271b",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.0007718338075473838,
+        "cd_l1_mean": 0.01605638924947643,
+        "sample_points": 16384,
+        "fscore_001": 0.33709500195560044,
+        "fscore_0025": 0.8632501466448973,
+        "fscore_005": 0.9876200040603853
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 14264,
+        "unchanged_region_distance_mean": 0.007785056016335512,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 2359,
+        "removed_source_points": 2120,
+        "changed_target_coverage_005": 0.8825773632895295,
+        "changed_target_distance_mean": 0.040204889668065284,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_5a9670307f8f4b02b08203ae1944de80",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.0017238088676086818,
+        "cd_l1_mean": 0.023543971367175343,
+        "sample_points": 16384,
+        "fscore_001": 0.1878652392927124,
+        "fscore_0025": 0.634661180283636,
+        "fscore_005": 0.9354357774787997
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 10485,
+        "unchanged_region_distance_mean": 0.009513883039088762,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 6071,
+        "removed_source_points": 5899,
+        "changed_target_coverage_005": 0.78767913029155,
+        "changed_target_distance_mean": 0.03977655895079374,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_fd206aec08014884a5c707e31dc4b7c5",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.011690531193034284,
+        "cd_l1_mean": 0.042728317937485515,
+        "sample_points": 16384,
+        "fscore_001": 0.12392357270157325,
+        "fscore_0025": 0.5126922753163508,
+        "fscore_005": 0.8412780484960505
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 9307,
+        "unchanged_region_distance_mean": 0.011682872485976175,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 8730,
+        "removed_source_points": 7077,
+        "changed_target_coverage_005": 0.7029782359679266,
+        "changed_target_distance_mean": 0.05515521063149936,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_32540354f8ff4e0784c3c6f97023732d",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.0013323833954750272,
+        "cd_l1_mean": 0.01455542118377499,
+        "sample_points": 16384,
+        "fscore_001": 0.6755139512884402,
+        "fscore_0025": 0.8272487730690264,
+        "fscore_005": 0.9461335132529309
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 12654,
+        "unchanged_region_distance_mean": 0.002568805841433011,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 1793,
+        "removed_source_points": 3730,
+        "changed_target_coverage_005": 0.9938650306748467,
+        "changed_target_distance_mean": 0.035899932765753186,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_9d357edddc534431b5699e542c96bbcd",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.00393364376096096,
+        "cd_l1_mean": 0.036788666888490654,
+        "sample_points": 16384,
+        "fscore_001": 0.12805427621828314,
+        "fscore_0025": 0.3104768228156223,
+        "fscore_005": 0.8177385274679523
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 5745,
+        "unchanged_region_distance_mean": 0.004918949865010905,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 11820,
+        "removed_source_points": 10639,
+        "changed_target_coverage_005": 0.7516920473773265,
+        "changed_target_distance_mean": 0.0482255704348815,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    },
+    {
+      "id": "bench_remove_ce6062a92993463eac26cb68e579cec0",
+      "operation": "remove",
+      "target_metrics": {
+        "cd_squared_sum": 0.002221960613940145,
+        "cd_l1_mean": 0.019189743007599173,
+        "sample_points": 16384,
+        "fscore_001": 0.43070711716925164,
+        "fscore_0025": 0.7604585599859331,
+        "fscore_005": 0.9604790563516176
+      },
+      "preservation_metrics": {
+        "available": true,
+        "unchanged_points": 11592,
+        "unchanged_region_distance_mean": 0.00336353389501548,
+        "unchanged_region_coverage_005": 1.0,
+        "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+        "changed_target_points": 2917,
+        "removed_source_points": 4792,
+        "changed_target_coverage_005": 0.9602331162152897,
+        "changed_target_distance_mean": 0.03405551056323917,
+        "removed_source_still_present_fraction_005": 1.0
+      }
+    }
+  ]
+}

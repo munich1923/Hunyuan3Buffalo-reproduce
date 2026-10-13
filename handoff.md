@@ -61,3 +61,6 @@
 - 失败后修复实现问题，保留原日志/预算，确认runner退出后再运行environment/venvs/shape/bin/python scripts/run_pilot.py；成功阶段自动跳过。
 - 已发布清单为权威；不要重划分已复核数据。data_review.json批准的是固定manifest SHA。
 - 正式权重、VAE gate或8样本拟合失败停止扩大；connector完整val无提升不继续LoRA；预算不可绕过。
+
+## 追加训练几何诊断
+主流程完成后运行environment/venvs/shape/bin/python scripts/run_training_geometry.py，使用同一pilot锁和GPU累计预算，对overfit_best和lora_best各生成8个原始独立add训练样本（单seed/50步）。这是几何拟合检查，不修改已通过的velocity-loss gate，也不替代独立benchmark。

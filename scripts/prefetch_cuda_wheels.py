@@ -1,6 +1,6 @@
 """Fetch pinned CUDA dependencies from PyPI with segmented transfers and hash verification."""
 import concurrent.futures,email,hashlib,json,pathlib,re,subprocess,urllib.request,urllib.parse,zipfile,html
-from remote_runtime import ROOT,configure
+from remote_runtime import ROOT,configure,network_proxy
 configure()
 folder=ROOT/".cache/wheels";folder.mkdir(parents=True,exist_ok=True)
 torchwheel=folder/"torch-2.5.1+cu124-cp310-cp310-linux_x86_64.whl"
@@ -29,7 +29,7 @@ def get(pair):
     if not path.exists() or path.with_name(path.name+".aria2").exists() or not zipfile.is_zipfile(path):
         log=ROOT/"logs/install"/("prefetch_"+package+".log");log.parent.mkdir(parents=True,exist_ok=True)
         with log.open("a") as f:
-            subprocess.run(["aria2c","--continue=true","--auto-file-renaming=false","--file-allocation=none","--max-connection-per-server=8","--split=8","--min-split-size=8M","--max-tries=3","--timeout=60","--summary-interval=30","--console-log-level=warn","--dir",str(folder),"--out",path.name,*urls],stdout=f,stderr=subprocess.STDOUT,check=True)
+            subprocess.run(["aria2c",*(["--all-proxy="+network_proxy()] if network_proxy() else []),"--continue=true","--auto-file-renaming=false","--file-allocation=none","--max-connection-per-server=8","--split=8","--min-split-size=8M","--max-tries=3","--timeout=60","--summary-interval=30","--console-log-level=warn","--dir",str(folder),"--out",path.name,*urls],stdout=f,stderr=subprocess.STDOUT,check=True)
     h=hashlib.sha256()
     with path.open("rb") as f:
         for block in iter(lambda:f.read(8*1024*1024),b""):h.update(block)

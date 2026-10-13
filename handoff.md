@@ -2,7 +2,7 @@
 
 ## 当前阶段
 用户已授权执行近似复现。源码已拉取并固定；独立环境安装和模型/数据下载正在准备。
-尚未运行完整模型、训练或评估。脚本已经写入，但除语法检查外尚待环境和实际权重验证。
+尚未运行完整模型、训练或评估。Python语法检查、基础环境中的数据合同测试通过；专用环境模型接口检查待执行。
 
 ## 工作区
 /root/userdata/zc/hunyuan3d-buffalo-1.0-editing；本地通过 ssh h100 操作。
@@ -39,3 +39,16 @@
 2. 运行 scripts/run_pilot.py --prepare-only，完成数据QC和渲染；检查 results/data_review/ 的30个独立物体配对。
 3. 用 scripts/run_pilot.py 运行张量合同检查、VAE门槛、缓存、8样本拟合、连接器、LoRA、对照评估。
 4. 根据实际状态更新此文档并提交。完整命令和假设见 environment/README.md、method_notes.md。
+
+
+## 2026-10-13 14:02 Asia/Shanghai 更新
+- Shape DiT（7,366,389,768 bytes）、VAE及Qwen全部5个分片均已LFS SHA-256校验通过；下载收据在logs/downloads/。
+- Nano元数据100,000条校验完成。分片0/33/66仍续传，尚未生成1024清洗清单。
+- Shape专用环境torch2.5.1+cu124安装成功，依赖安装及torch_cluster安装成功。
+- pip check发现ninja1.11.1.1旧manylinux1 tag不兼容新pip检查，改为ninja1.13.0并重试。尚未声称环境检查通过。
+- 增加固定revision API、严格DINO state加载、缩放/平移不变的身份哈希。
+- 8样本诊断改为8个独立add原始配对；先只缓存诊断训练/验证子集，通过后再完整渲染/缓存。
+- 多视角EGL渲染计入GPU预算，采用同一张空闲卡。目前GPU累计0秒。
+- 大数据传输采用远端直连、180秒连接刷新和aria2续传；Python依赖预取全部校验保存远端。国外PyPI元数据和wheel使用临时SSH中继。
+- data_review.json尚未创建；不得未看图即批准。
+- 临时中继仍需在准备结束后关闭；见environment/network_relay.json。

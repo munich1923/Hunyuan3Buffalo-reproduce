@@ -30,7 +30,8 @@ def mesh(path):
     return obj
 def geometry_hash(m):
     # Order-independent vertex-set fingerprint; conservative identity grouping.
-    v=np.unique(np.round(m.vertices,6),axis=0).astype("<f8")
+    extent=np.ptp(m.vertices,axis=0).max()
+    v=np.unique(np.round((m.vertices-m.bounds.mean(axis=0))/extent,5),axis=0).astype("<f8")
     return hashlib.sha256(v.tobytes()).hexdigest()
 def normalize_pair(src,tar):
     # One source-derived transform, NEVER separately fit the target.
@@ -138,7 +139,7 @@ def main():
             # Reversed pair uses its own source-derived common transform later.
             records.append(inverse)
         (out/(split+".jsonl")).write_text("".join(json.dumps(x)+"\n" for x in records))
-    sample=random.Random(SEED).sample(accepted[:576],30)
+    sample=accepted[:30]
     (out/"visual_review.jsonl").write_text("".join(json.dumps(x)+"\n" for x in sample))
     print("Prepared 1024 train, 128 validation, 40 test entries",flush=True)
 if __name__=="__main__":main()

@@ -13,3 +13,9 @@
 - Dataset and benchmark currently advertise MIT in their cards; retain cards and provenance.
 - All mirrors retain official repository identity and pinned revision. Large payloads must pass expected LFS SHA-256 and size checks when supplied by the API.
 - No official Buffalo score comparison until its exact evaluation protocol has been recovered.
+
+- All edited-model sampling uses 50-step forward Euler without classifier-free guidance; native image-to-shape baseline uses the official default guidance 5.0. This is a documented difference, not a claim of exact inference parity.
+- LoRA weights are optimized in FP32 while frozen base weights and activations use BF16.
+- VAE source reconstruction gate uses F-score at 0.05 >= 0.5 in the shared 1.5 source extent frame; 8-sample gate requires a 10% reduction of deterministic-noise training loss. These are diagnostic stop rules, not final success criteria.
+
+- Ninja is 1.13.0 (manylinux2014): original 1.11.1.1 installs and runs but pip 26.2 rejects its old manylinux1 platform tag. No upstream source is patched.

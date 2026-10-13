@@ -44,7 +44,8 @@ def main():
     if a.stage=="lora":rates.append({"params":[p for n,p in editor.dit.named_parameters() if p.requires_grad],"lr":1e-4})
     opt=torch.optim.AdamW(rates,weight_decay=0.01)
     rows=load_records("train");val=load_records("val")
-    if a.stage=="overfit":rows=rows[:8]
+    if a.stage=="overfit":rows=[x for x in rows if x["operation"]=="add"][:8]
+    if a.stage=="overfit":assert len({x["group"] for x in rows})==8,"Require 8 independent original pairs"
     maxsteps={"overfit":200,"connector":500,"lora":2000}[a.stage]
     start=time.monotonic();history=[];initial=validation(editor,rows,"train");best=float("inf")
     log=ROOT/"logs"/("train_"+a.stage+".jsonl")

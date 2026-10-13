@@ -31,13 +31,20 @@ def render(m,folder):
     finally:r.delete()
     return paths
 def main():
-    p=argparse.ArgumentParser();p.add_argument("--split",default="all");a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument("--split",default="all");p.add_argument("--limit",type=int);a=p.parse_args()
     splits=["train","val","test"] if a.split=="all" else [a.split]
     for split in splits:
         rows=[json.loads(l) for l in (ROOT/"assets/manifests"/(split+".jsonl")).read_text().splitlines()]
+        if a.limit:rows=rows[:a.limit]
         outputs=[]
         for i,row in enumerate(rows):
             folder=ROOT/"assets/prepared"/split/row["id"]
+            cached=folder/"record.json"
+            if cached.exists():
+                record=json.loads(cached.read_text())
+                required=[record["source_normalized"],record["target_normalized"],*record["source_views"]]
+                if record.get("instruction")==row["instruction"] and all(Path(p).exists() for p in required):
+                    outputs.append(record);continue
             src,tar,center,scale=normalize_pair(mesh(row["source"]),mesh(row["target"]))
             folder.mkdir(parents=True,exist_ok=True)
             src.export(folder/"source.glb");tar.export(folder/"target.glb")

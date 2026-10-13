@@ -15,6 +15,8 @@ def main():
     report1=paired_qc(source,target,3);report2=paired_qc(source,target,3)
     assert report1==report2,"QC must be deterministic"
     assert geometry_hash(source)==geometry_hash(source.copy())
+    transformed=source.copy();transformed.apply_scale(2.7);transformed.apply_translation([9,-1,2])
+    assert geometry_hash(source)==geometry_hash(transformed),"Identity grouping must tolerate translation and scale"
     scene=trimesh.Scene();scene.add_geometry(trimesh.creation.box(),transform=trimesh.transformations.translation_matrix([2,0,0]))
     with tempfile.TemporaryDirectory(dir=ROOT/"tmp") as d:
         path=pathlib.Path(d)/"scene.glb";scene.export(path)

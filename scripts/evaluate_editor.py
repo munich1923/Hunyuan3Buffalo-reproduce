@@ -36,7 +36,8 @@ def main():
     for i,row in enumerate(rows):
         for seed in [20261013,20261014,20261015]:
             if (row["id"],seed) in existing:continue
-            if time.monotonic()-start>a.seconds:print("Evaluation time cap",flush=True);return
+            if time.monotonic()-start>a.seconds:
+                print("Evaluation time cap",flush=True);summarize(out,rows,a.mode);return
             record={"id":row["id"],"seed":seed,"mode":a.mode,"operation":row["operation"],"instruction":row["instruction"]}
             path=out/(row["id"]+"_"+str(seed)+".glb")
             try:
@@ -71,8 +72,10 @@ def main():
                 if isinstance(e,torch.cuda.OutOfMemoryError):raise
             with (out/"metrics.jsonl").open("a") as f:f.write(json.dumps(record)+"\n")
             print(json.dumps(record),flush=True)
-    results=[json.loads(l) for l in (out/"metrics.jsonl").read_text().splitlines()]
-    summary={"mode":a.mode,"attempted":len(results),"valid_rate":sum(x["valid"] for x in results)/len(results)}
+    summarize(out,rows,a.mode)
+def summarize(out,rows,mode):
+    results=[json.loads(l) for l in (out/"metrics.jsonl").read_text().splitlines()] if (out/"metrics.jsonl").exists() else []
+    summary={"mode":mode,"attempted":len(results),"expected":len(rows)*3,"complete":len(results)==len(rows)*3,"valid_rate":sum(x["valid"] for x in results)/max(1,len(results))}
     for op in ["add","remove","all"]:
         valid=[x for x in results if x["valid"] and (op=="all" or x["operation"]==op)]
         if valid:summary[op]={key:float(np.mean([x["target_metrics"][key] for x in valid])) for key in ["cd_squared_sum","fscore_001","fscore_0025","fscore_005"]}

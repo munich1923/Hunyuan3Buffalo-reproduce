@@ -16,7 +16,8 @@ def main():
     vae=ShapeVAE.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float16).eval()
     for x in vae.parameters():x.requires_grad_(False)
     splits=["train","val","test"] if a.split=="all" else [a.split]
-    gate=False
+    gatepath=ROOT/"environment/vae_gate.json"
+    gate=gatepath.exists() and json.loads(gatepath.read_text()).get("passed",False)
     for split in splits:
         rows=[json.loads(l) for l in (ROOT/"assets/manifests"/(split+"_prepared.jsonl")).read_text().splitlines()]
         if a.limit:rows=rows[:a.limit]
@@ -36,8 +37,8 @@ def main():
                 folder=ROOT/"results/vae_gate";folder.mkdir(parents=True,exist_ok=True);recon.export(folder/"source_reconstruction.glb")
                 from metrics import compare
                 report=compare(recon,trimesh.load(row["source_normalized"],force="mesh"))
-                report["source"]=row["source_normalized"];report["latent_shape"]=list(src.shape)
-                # Gross failure gate in coordinates with typical source extent 1.8.
+                report["id"]=row["id"];report["scale_factor"]=float(vae.scale_factor);report["source"]=row["source_normalized"];report["latent_shape"]=list(src.shape)
+                # Gross failure gate in coordinates with source extent 1.5.
                 report["passed"]=report["fscore_005"]>=0.5
                 (ROOT/"environment/vae_gate.json").write_text(json.dumps(report,indent=2)+"\n")
                 if not report["passed"]:raise RuntimeError("VAE reconstruction gate failed: "+str(report))

@@ -1,12 +1,19 @@
 """Version-pinned downloads with payload checks and durable receipts."""
 import fcntl,functools
-import argparse,concurrent.futures,datetime,hashlib,json,pathlib,subprocess,time,urllib.request
-from remote_runtime import ROOT,configure
+import argparse,concurrent.futures,datetime,hashlib,json,pathlib,subprocess,time,urllib.request,urllib.parse
+from remote_runtime import ROOT,configure,network_proxy
 configure()
 LOGS=ROOT/"logs/downloads";LOGS.mkdir(parents=True,exist_ok=True)
+PINNED_REVISIONS={
+ "tencent/Hunyuan3D-2.1":"0b94677654c57bb9a6b6845cd7b704ccf551d327",
+ "Qwen/Qwen2.5-VL-7B-Instruct":"cc594898137f460bfe9f0759e9844b3ce807cfb5",
+ "yejunliang23/Nano3D-Edit-100k":"d6686ff82ea14c2dfa4fdd55db332309a0241495",
+ "ziqima/Edit3D-Bench":"30ace7d3b0e834189b514cf3753cd832825b6922",
+}
 def api(repo,kind="models"):
-    url="https://hf-mirror.com/api/"+kind+"/"+repo+"?blobs=true"
+    url="https://hf-mirror.com/api/"+kind+"/"+repo+"/revision/"+PINNED_REVISIONS[repo]+"?blobs=true"
     with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0"}),timeout=45) as r:meta=json.load(r)
+    if meta["sha"]!=PINNED_REVISIONS[repo]:raise RuntimeError("Unexpected repository revision: "+repo)
     name=repo.replace("/","--")
     (ROOT/"environment"/("manifest-"+name+".json")).write_text(json.dumps(meta,indent=2)+"\n")
     return meta
@@ -29,8 +36,43 @@ def _download(repo,kind,revision,item,base):
     save();partial=path.with_name(path.name+".partial")
     prefix="datasets/" if kind=="datasets" else ""
     url="https://hf-mirror.com/"+prefix+repo+"/resolve/"+revision+"/"+name
-    cmd=["aria2c","--continue=true","--allow-overwrite=true","--auto-file-renaming=false","--file-allocation=none","--max-connection-per-server=8","--split=8","--min-split-size=16M","--max-tries=3","--retry-wait=5","--connect-timeout=20","--timeout=60","--summary-interval=30","--console-log-level=warn","--dir",str(partial.parent),"--out",partial.name,url]
-    with log.open("a") as f:p=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT)
+    urls=[url]
+    if kind=="models" and expected:
+        ms_repo="Tencent-Hunyuan/Hunyuan3D-2.1" if repo=="tencent/Hunyuan3D-2.1" else repo
+        mf=ROOT/"environment"/("modelscope_files_"+ms_repo.replace("/","--")+".json")
+        if mf.exists():
+            ms=json.loads(mf.read_text())
+            matched=next((x for x in ms.get("Data",{}).get("Files",[]) if x.get("Path")==name and x.get("Sha256")==expected),None)
+            if matched:
+                alternative="https://modelscope.cn/api/v1/models/"+ms_repo+"/repo?Revision="+matched["Revision"]+"&FilePath="+urllib.parse.quote(name)
+                urls.insert(0,alternative)
+                data["alternative_source"]={"repo":ms_repo,"revision":matched["Revision"],"sha256":expected}
+    save()
+    cmd=["aria2c","--continue=true","--allow-overwrite=true","--auto-file-renaming=false","--file-allocation=none","--max-connection-per-server=8","--split=8","--min-split-size=16M","--max-tries=3","--retry-wait=5","--connect-timeout=20","--timeout=60","--summary-interval=30","--console-log-level=warn","--dir",str(partial.parent),"--out",partial.name,*urls]
+    transfer_env=__import__("os").environ.copy()
+    if network_proxy() and kind=="datasets" and __import__("os").environ.get("EXPERIMENT_DATA_RELAY")=="1":cmd.insert(1,"--all-proxy="+network_proxy())
+    else:
+        for key in ["http_proxy","https_proxy","HTTP_PROXY","HTTPS_PROXY"]:transfer_env.pop(key,None)
+    with log.open("a") as f:
+        attempts=[]
+        # Large cross-border transfers sometimes lose throughput on long-lived connections.
+        # Periodic graceful restarts preserve aria2's completed ranges and renew connections.
+        for attempt in range(60 if kind=="datasets" and size and size>1024**3 else 1):
+            started=time.monotonic()
+            p=subprocess.Popen(cmd,stdout=f,stderr=subprocess.STDOUT,env=transfer_env)
+            try:
+                p.wait(timeout=180 if kind=="datasets" and size and size>1024**3 else None)
+            except subprocess.TimeoutExpired:
+                p.terminate()
+                try:p.wait(timeout=15)
+                except subprocess.TimeoutExpired:p.kill();p.wait()
+                attempts.append({"attempt":attempt+1,"elapsed_seconds":time.monotonic()-started,"restart":"renew_connections","exit_code":p.returncode})
+                data["transfer_attempts"]=attempts;save()
+                f.write("\nCONNECTION_REFRESH "+str(attempt+1)+"\n");f.flush()
+                continue
+            attempts.append({"attempt":attempt+1,"elapsed_seconds":time.monotonic()-started,"exit_code":p.returncode})
+            data["transfer_attempts"]=attempts;save()
+            break
     data["exit_code"]=p.returncode
     if p.returncode:
         data["status"]="failed";save();print("FAILED",repo,name,p.returncode,flush=True);return False

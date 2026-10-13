@@ -1,0 +1,7 @@
+{
+  "aliyun_1MiB_direct_seconds": 2.49,
+  "aliyun_1MiB_relay_seconds": 16.45,
+  "dataset_1MiB_direct_seconds": 10.12,
+  "dataset_1MiB_relay_seconds": 21.43,
+  "note": "Small range probes only; sustained transfer may differ."
+}

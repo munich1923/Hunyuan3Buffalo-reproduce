@@ -1,4 +1,4 @@
-import datetime,json,os,subprocess,sys,zipfile
+import datetime,json,os,subprocess,sys,zipfile,re
 from remote_runtime import ROOT,configure
 configure()
 logdir=ROOT/"logs/install";logdir.mkdir(parents=True,exist_ok=True)
@@ -7,7 +7,10 @@ def run(name,cmd):
     start=datetime.datetime.now(datetime.timezone.utc)
     with (logdir/(name+".log")).open("a") as f:
         f.write("\nSTART "+start.isoformat()+" command="+repr(cmd)+"\n");f.flush()
-        p=subprocess.run(cmd,cwd=ROOT,env=os.environ,stdout=f,stderr=subprocess.STDOUT)
+        env=os.environ.copy()
+        if any("mirrors.aliyun.com" in x or "mirrors.tuna.tsinghua.edu.cn" in x for x in cmd):
+            for key in ["http_proxy","https_proxy","HTTP_PROXY","HTTPS_PROXY"]:env.pop(key,None)
+        p=subprocess.run(cmd,cwd=ROOT,env=env,stdout=f,stderr=subprocess.STDOUT)
     record={"name":name,"command":cmd,"exit_code":p.returncode,"started_utc":start.isoformat(),"ended_utc":datetime.datetime.now(datetime.timezone.utc).isoformat()}
     status["steps"].append(record)
     (ROOT/"environment/install_status.json").write_text(json.dumps(status,indent=2)+"\n")
@@ -28,8 +31,21 @@ for name in ["shape","vlm"]:
             run("wheel_"+pkg,["aria2c","--continue=true","--auto-file-renaming=false","--file-allocation=none","--split=8","--max-connection-per-server=8","--min-split-size=8M","--max-tries=3","--timeout=60","--console-log-level=warn","--summary-interval=30","--dir",str(wheel_dir),"--out",fn,url])
         wheels.append(str(path))
     run("prefetch_cuda_"+name,["/opt/conda/bin/python",str(ROOT/"scripts/prefetch_cuda_wheels.py")])
+    wheels += [str(p) for p in sorted(wheel_dir.glob("*.whl")) if p.name.startswith(("nvidia_","triton-"))]
     run("torch_"+name,[python,"-m","pip","install","--timeout","60","--retries","2",*wheels,"--find-links",str(wheel_dir),"--index-url","https://mirrors.aliyun.com/pypi/simple/"])
-    run("deps_"+name,[python,"-m","pip","install","--timeout","60","--retries","2","-r",str(ROOT/"environment"/("requirements-"+name+".txt")),"--index-url","https://mirrors.aliyun.com/pypi/simple/"])
+    reqfile=ROOT/"environment"/("requirements-"+name+".txt")
+    receiptfile=ROOT/"environment/requirements_wheel_receipts.json"
+    if not receiptfile.exists() or not any(x.get("package")=="ninja" and x.get("version")=="1.13.0" for x in json.loads(receiptfile.read_text())):
+        run("prefetch_requirements",["/opt/conda/bin/python",str(ROOT/"scripts/prefetch_requirements.py")])
+    receipts=json.loads(receiptfile.read_text())
+    pinned=[]
+    for line in reqfile.read_text().splitlines():
+        match=re.fullmatch(r"([A-Za-z0-9_.-]+)==([^ #]+)",line.strip())
+        if not match:continue
+        pkg,version=match.groups()
+        item=next((x for x in receipts if x["package"].lower().replace("_","-")==pkg.lower().replace("_","-") and x["version"]==version and x["status"]=="verified"),None)
+        if item:pinned.append(item["path"])
+    run("deps_"+name,[python,"-m","pip","install","--timeout","60","--retries","2",*pinned,"-r",str(reqfile),"--index-url","https://pypi.org/simple/"])
     if name=="shape":
         run("torch_cluster_shape",[python,"-m","pip","install","torch-cluster==1.6.3","--no-index","--find-links","https://data.pyg.org/whl/torch-2.5.0+cu124.html"])
     run("pip_check_"+name,[python,"-m","pip","check"])

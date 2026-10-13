@@ -103,3 +103,10 @@
 - 两次渲染时间均计入预算，累计至train渲染完成4068.76秒；正在val全量渲染。
 - 没有排除该配对或修改其几何，故清单哈希不变。黑帧失败归因尚不能确证，重启后恢复。
 - 正式connector和LoRA前后验证loss覆盖全部128条；20步趋势/最佳检查点采用固定16条探针。字段已明确区分。
+
+## 全量几何准备完成
+- 全量渲染train1024、val128、test40均完成；RGBA四视角source数据与共有坐标source/target网格位于assets/prepared/。
+- Shape latent缓存train1024、val128、test40均完成。FP32 VAE权重与输入、FP16 autocast编码，4096x64，全部有限值。
+- 累计截至Shape缓存完成6050.87秒（1.681h）。正在全量Qwen隐藏状态缓存，正确/no-op各一份；测试集另有打乱指令。
+- 8样本拟合门槛已通过。正式connector/LoRA与benchmark推断尚未开始。
+- 原始和最终完整清单均提交results/summaries/*_manifest.jsonl，修改代码和文档有连续Git提交；上游官方源码保持原提交无补丁。

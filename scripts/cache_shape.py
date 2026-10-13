@@ -43,6 +43,8 @@ def main():
                 (ROOT/"environment/vae_gate.json").write_text(json.dumps(report,indent=2)+"\n")
                 if not report["passed"]:raise RuntimeError("VAE reconstruction gate failed: "+str(report))
                 gate=True
-            torch.save({"source":src[0].cpu(),"target":tar[0].cpu(),"scale_factor":float(vae.scale_factor)},out)
+            temp=out.with_suffix(".tmp")
+            torch.save({"source":src[0].cpu(),"target":tar[0].cpu(),"scale_factor":float(vae.scale_factor)},temp)
+            temp.replace(out)
             if i%10==0:print("VAE",split,i,list(src.shape),flush=True)
 if __name__=="__main__":main()

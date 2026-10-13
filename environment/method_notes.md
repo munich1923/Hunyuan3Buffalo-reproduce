@@ -36,3 +36,5 @@
 - Benchmark iteration alternates add/remove and covers every object at the first seed before later seeds. Original indices and cyclic shuffled instructions remain unchanged. This limits operation/order bias if the time cap produces partial coverage.
 
 - Controlled comparisons use deterministic sorted object IDs for bootstrap resampling, report separate add/remove deltas and ground-truth-assisted surface proxies, and include a scoreboard restricted to jointly valid meshes in every mode.
+
+- Evaluation time cap includes model loading, leaving a100-second safety margin before the orchestrator hard limit. This prevents model initialization from consuming the time reserved for durable partial summaries.

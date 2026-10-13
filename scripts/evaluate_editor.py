@@ -17,6 +17,7 @@ def decode(vae,z,scale):
     return export_to_trimesh(meshes)[0]
 def main():
     p=argparse.ArgumentParser();p.add_argument("--mode",choices=["source","vae","native","random","connector","lora","no_source","noop","shuffled"],required=True);p.add_argument("--seconds",type=float,default=3600);a=p.parse_args()
+    start=time.monotonic()
     rows=load_records("test");out=ROOT/"results/evaluation"/a.mode;out.mkdir(parents=True,exist_ok=True)
     random.seed(20261013);torch.manual_seed(20261013)
     editor=None;vae=None;pipeline=None
@@ -30,7 +31,6 @@ def main():
             else:
                 checkpoint="connector" if a.mode=="connector" else "lora"
                 editor.load_adapter(ROOT/"results/checkpoints"/(checkpoint+"_best.pt"))
-    start=time.monotonic()
     existing=set()
     if (out/"metrics.jsonl").exists():
         existing={(x["id"],x["seed"]) for x in map(json.loads,(out/"metrics.jsonl").read_text().splitlines())}

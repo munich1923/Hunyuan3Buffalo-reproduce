@@ -1,0 +1,60 @@
+{
+  "updated_utc": "2026-10-13T07:16:26.114483+00:00",
+  "status": "running",
+  "current_stage": "overfit",
+  "stop_reason": null,
+  "gpu_allocated_seconds_completed_stages": 1982.573517577257,
+  "gpu_budget_seconds": 86400,
+  "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+  "evidence": {
+    "vae_gate": {
+      "cd_squared_sum": 0.00040559630407727696,
+      "cd_l1_mean": 0.01016899646790552,
+      "sample_points": 16384,
+      "fscore_001": 0.5736990924134927,
+      "fscore_0025": 0.9945851285870716,
+      "fscore_005": 0.9963859111791731,
+      "id": "uid_66677_add",
+      "scale_factor": 1.0039506158752403,
+      "source": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/prepared/train/uid_66677_add/source.glb",
+      "latent_shape": [
+        1,
+        4096,
+        64
+      ],
+      "passed": true
+    },
+    "training_overfit": null,
+    "training_connector": null,
+    "training_lora": null,
+    "data_review": {
+      "approved_for_pilot": true,
+      "reviewer": "AI agent visual inspection of source/target four-view renders (not user confirmation)",
+      "checked_original_pairs": 46,
+      "retained_reviewed_training_pairs": 30,
+      "excluded_reviewed_pairs": 16,
+      "review_images": "results/data_review/train",
+      "manifest_sha256": {
+        "train": "0ef15d45e6b677753f2ad62d3e8c0cadccdb903e9e7dc248563de9477006d789",
+        "val": "c3a5e5bf119002cdf76bfccb8cc9ea6b38f98fca430271230d524c8d03154921",
+        "test": "d10ada25667428bffa2eaa6f0d82804fe17409dbac1f0bc6138b5c4f9dc08f92"
+      },
+      "renderer": "neutral_geometry_v2",
+      "artifact_check": "All diagnostic prepared source/target PNGs checked; no all-black frames remain.",
+      "scope": "Sampled visual QC, not full-dataset semantic certification. Fine details unresolved where annotated.",
+      "approved_utc": "2026-10-13T07:05:51.975453+00:00"
+    }
+  },
+  "evaluation": {},
+  "conclusions": {
+    "interface": "Official-weight VAE/Qwen/MLP/source-latent DiT forward and backward passed; see interface_diagnostics.json.",
+    "training_fit": "Overfit report absent: not tested.",
+    "unseen_editing": "No complete controlled evaluation: effectiveness is unproven."
+  },
+  "paths": {
+    "logs": "logs/",
+    "results": "results/",
+    "weight_receipts": "logs/downloads/",
+    "manifests": "results/summaries/*_manifest.jsonl"
+  }
+}

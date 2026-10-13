@@ -89,3 +89,11 @@
 - 当前进程以environment/pilot_pid.txt与run_state.json为准；GPU0。不要重复启动runner或绕过pilot.lock运行GPU。
 - 启动日志logs/pilot_launcher.log；scripts/summarize_pilot.py可生成证据驱动当前摘要。
 - 原始Hunyuan基线只输入源物体单视角，忽略编辑指令；编辑模型输入四视角+指令。此基线检验原生生成，不等同公平的指令编辑模型。
+
+## 8独立配对诊断通过
+- overfit运行200步，训练velocity loss 0.9926369 -> 0.6293402（下降36.6%）；独立val前16条loss 1.0304584 -> 0.6628609。
+- 通过预先规定的固定噪声训练loss下降10%门槛；这不是几何生成成功，也不证明未见物体编辑有效。
+- 运行耗时459.2秒，含加载的GPU分配589.36秒。累计截至诊断结束2571.93秒（0.714小时）。
+- 检查点results/checkpoints/overfit_{best,latest}.pt；逐步日志logs/train_overfit.jsonl，报告environment/training_overfit.json。
+- runner正在render_train_full；后续full shape/VLM缓存、connector<=500steps、LoRA<=2000steps、9种对照。
+- 若connector验证loss无提升，不扩大LoRA；所有阶段按24h GPU分配预算硬停止。

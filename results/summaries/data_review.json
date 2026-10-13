@@ -1,0 +1,17 @@
+{
+  "approved_for_pilot": true,
+  "reviewer": "AI agent visual inspection of source/target four-view renders (not user confirmation)",
+  "checked_original_pairs": 46,
+  "retained_reviewed_training_pairs": 30,
+  "excluded_reviewed_pairs": 16,
+  "review_images": "results/data_review/train",
+  "manifest_sha256": {
+    "train": "0ef15d45e6b677753f2ad62d3e8c0cadccdb903e9e7dc248563de9477006d789",
+    "val": "c3a5e5bf119002cdf76bfccb8cc9ea6b38f98fca430271230d524c8d03154921",
+    "test": "d10ada25667428bffa2eaa6f0d82804fe17409dbac1f0bc6138b5c4f9dc08f92"
+  },
+  "renderer": "neutral_geometry_v2",
+  "artifact_check": "All diagnostic prepared source/target PNGs checked; no all-black frames remain.",
+  "scope": "Sampled visual QC, not full-dataset semantic certification. Fine details unresolved where annotated.",
+  "approved_utc": "2026-10-13T07:05:51.975453+00:00"
+}

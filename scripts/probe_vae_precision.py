@@ -15,11 +15,11 @@ bench.export(folder/"bench_source.glb")
 box=mesh(ROOT/"results/interface_smoke/source.glb")
 vae=ShapeVAE.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float32).eval()
 reports=[]
-for label,obj,extent in [("box_float32_autocast",box,1.5),("bench_float32_autocast",bench,1.5),("bench_extent1_9_diagnostic",bench,1.9)]:
+for label,obj,extent in [("box_float32_autocast",box,1.5),("bench_float32_autocast",bench,1.5),("bench_extent1_9_diagnostic",bench,1.9),("bench_sample_posterior_diagnostic",bench,1.5)]:
  m=obj.copy();m.apply_scale(extent/1.5);p=folder/(label+"_source.glb");m.export(p);render(m,folder/(label+"_source_views"))
  try:
   with torch.no_grad(),torch.autocast("cuda",dtype=torch.float16):
-   z=vae.encode(surface(p,777,dtype=torch.float32),sample_posterior=False)
+   z=vae.encode(surface(p,777,dtype=torch.float32),sample_posterior="sample_posterior" in label)
    decoded=vae.decode(z)
    recon=export_to_trimesh(vae.latents2mesh(decoded,bounds=1.01,mc_level=0,num_chunks=10000,octree_resolution=256,mc_algo="mc",enable_pbar=False))[0]
   assert recon is not None and len(recon.faces)>0

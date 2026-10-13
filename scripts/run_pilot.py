@@ -1,5 +1,5 @@
 """Resumable remote orchestration, one GPU and cumulative 24h allocation budget."""
-import argparse,datetime,fcntl,json,os,pathlib,subprocess,sys,time,traceback
+import argparse,hashlib,datetime,fcntl,json,os,pathlib,subprocess,sys,time,traceback
 from remote_runtime import ROOT,configure
 configure()
 STATE=ROOT/"environment/run_state.json"
@@ -83,9 +83,11 @@ def main():
         wait_preparation(state,("download",))
         run(state,"data_contracts",shape,"test_data_contracts.py")
         run(state,"data",shape,"prepare_dataset.py")
-        run(state,"render_train_diagnostic",shape,"render_views.py",["--split","train","--limit","60"],gpu=True,cap=1800)
-        run(state,"render_val_diagnostic",shape,"render_views.py",["--split","val","--limit","16"],gpu=True,cap=900)
-        run(state,"render_test",shape,"render_views.py",["--split","test"],gpu=True,cap=1800)
+        review_key=hashlib.sha256((ROOT/"results/summaries/visual_review_decisions.json").read_bytes()).hexdigest()[:8]
+        run(state,"visual_review_apply_"+review_key,shape,"apply_visual_review.py")
+        run(state,"render_train_diagnostic_v2_"+review_key,shape,"render_views.py",["--split","train","--limit","60"],gpu=True,cap=1800)
+        run(state,"render_val_diagnostic_v2",shape,"render_views.py",["--split","val","--limit","16"],gpu=True,cap=900)
+        run(state,"render_test_v2",shape,"render_views.py",["--split","test"],gpu=True,cap=1800)
         if a.prepare_only:state.update(status="prepared_only",updated_utc=utc());atomic(state);return
         review=ROOT/"environment/data_review.json"
         if not review.exists() or not json.loads(review.read_text()).get("approved_for_pilot"):
@@ -106,6 +108,9 @@ def main():
         run(state,"shape_cache",shape,"cache_shape.py",gpu=True,cap=14400)
         run(state,"vlm_cache",vlm,"cache_vlm.py",gpu=True,cap=21600)
         run(state,"connector",shape,"train_editor.py",["--stage","connector","--seconds","6800"],gpu=True,cap=7200)
+        connector_report=json.loads((ROOT/"environment/training_connector.json").read_text())
+        if connector_report["final_val"]>=connector_report["initial_val"]:
+            raise RuntimeError("Connector validation did not improve; report overfitting and stop scale-up")
         run(state,"lora",shape,"train_editor.py",["--stage","lora","--seconds","21000"],gpu=True,cap=21600)
         for mode in ["source","vae","native","random","connector","lora","no_source","noop","shuffled"]:
             run(state,"eval_"+mode,shape,"evaluate_editor.py",["--mode",mode,"--seconds","3500"],gpu=True,cap=3600)

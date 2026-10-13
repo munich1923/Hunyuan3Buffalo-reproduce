@@ -71,3 +71,12 @@
 - 合成盒子纯FP16 VAE重建F-score@0.05=0.2475，明显较差。已排队真实Nano源网格/FP32+autocast/尺度诊断；尚未运行真实数据VAE门槛或训练。
 - 当前prepare-only在CPU数据提取/QC，完成后渲染30个训练配对；精度诊断等待同一pilot锁，绝不同时运行两张GPU。
 - 临时SSH中继已关闭，environment/network_relay.json enabled=false，本地forward会话退出。
+
+## 2026-10-13 视觉复核及正式训练前更新
+- 两个独立环境安装、pip check、环境快照已完成；112份下载收据verified，中继已关闭。
+- 官方权重完整接口通过；真实Nano uid_0 VAE FP32/autocast F-score@0.05=0.995，合成box重建较差。正式训练首样本VAE gate仍待执行。
+- 3000候选自动清洗：1798独立add配对通过，1202排除。固定512/64个独立训练/验证配对各包含add与反向remove；测试40条。
+- AI agent查看30个独立配对四视角图（不代表用户亲自人工确认），排除10个语义不符/难以确认配对，并保持其他训练位置和验证集不变、确定性补入10对。
+- 原始清单保存在assets/manifests/before_visual_review；替换与观察见results/summaries/visual_review_*.json，完整清单可追溯。
+- 正在重新渲染低光照v2图像并复核替换样本，尚未批准pilot。不会把样本语义抽查解释成整套数据语义保证。
+- 评估VAE使用与正式缓存相同的FP32/autocast精度；connector验证loss无提升时停止扩大训练。

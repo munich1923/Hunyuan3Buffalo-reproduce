@@ -13,7 +13,7 @@ def surface(path,seed,dtype=torch.float16):
     return torch.tensor(np.concatenate([pts,m.face_normals[faces],np.zeros((len(pts),1))],axis=1),dtype=dtype,device="cuda")[None]
 def main():
     p=argparse.ArgumentParser();p.add_argument("--split",default="all");p.add_argument("--limit",type=int);a=p.parse_args()
-    vae=ShapeVAE.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float16).eval()
+    vae=ShapeVAE.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float32).eval()
     for x in vae.parameters():x.requires_grad_(False)
     splits=["train","val","test"] if a.split=="all" else [a.split]
     gatepath=ROOT/"environment/vae_gate.json"
@@ -24,12 +24,12 @@ def main():
         for i,row in enumerate(rows):
             out=ROOT/"assets/cache/shape"/split/(row["id"]+".pt");out.parent.mkdir(parents=True,exist_ok=True)
             if out.exists():continue
-            with torch.no_grad():
-                src=vae.encode(surface(row["source_normalized"],int(hashlib.sha256((row["id"]+"/source").encode()).hexdigest()[:8],16)),sample_posterior=False)
-                tar=vae.encode(surface(row["target_normalized"],int(hashlib.sha256((row["id"]+"/target").encode()).hexdigest()[:8],16)),sample_posterior=False)
+            with torch.no_grad(),torch.autocast("cuda",dtype=torch.float16):
+                src=vae.encode(surface(row["source_normalized"],int(hashlib.sha256((row["id"]+"/source").encode()).hexdigest()[:8],16),dtype=torch.float32),sample_posterior=False)
+                tar=vae.encode(surface(row["target_normalized"],int(hashlib.sha256((row["id"]+"/target").encode()).hexdigest()[:8],16),dtype=torch.float32),sample_posterior=False)
             if not torch.isfinite(src).all() or not torch.isfinite(tar).all():raise RuntimeError("Nonfinite VAE latent")
             if not gate:
-                with torch.no_grad():
+                with torch.no_grad(),torch.autocast("cuda",dtype=torch.float16):
                     decoded=vae.decode(src)
                     output=vae.latents2mesh(decoded,bounds=1.01,mc_level=0,num_chunks=10000,octree_resolution=256,mc_algo="mc",enable_pbar=False)
                 recon=export_to_trimesh(output)[0]

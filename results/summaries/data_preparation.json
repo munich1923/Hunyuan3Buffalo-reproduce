@@ -1,0 +1,69 @@
+{
+  "qc": {
+    "candidates": 3000,
+    "accepted_original_pairs": 1798,
+    "rejected": 1202,
+    "required_original_pairs": 576,
+    "seed": 20261013,
+    "thresholds": {
+      "max_extent_ratio": 4,
+      "min_extent_ratio": 0.2,
+      "max_center_shift": 2,
+      "preserved_surface_distance": 0.05,
+      "min_preserved_fraction": 0.1
+    },
+    "note": "QC gates detect gross anomalies; semantic correctness requires sampled visual review."
+  },
+  "splits": {
+    "train": {
+      "entries": 1024,
+      "groups": 512,
+      "sha256": "770ece38c720fcf42907f1f4bad5ef07d1c9662d5b1a71680a4f6028091e45bb",
+      "categories": {
+        "Animal": 134,
+        "Vehicle": 98,
+        "Personal Item": 96,
+        "Human": 58,
+        "Building": 134,
+        "Weapon": 126,
+        "Musical Instrument ": 36,
+        "Furniture": 110,
+        "Food": 74,
+        "Electronic Device": 72,
+        "Plant": 86
+      }
+    },
+    "val": {
+      "entries": 128,
+      "groups": 64,
+      "sha256": "c3a5e5bf119002cdf76bfccb8cc9ea6b38f98fca430271230d524c8d03154921",
+      "categories": {
+        "Musical Instrument ": 6,
+        "Building": 20,
+        "Animal": 14,
+        "Plant": 6,
+        "Furniture": 16,
+        "Human": 8,
+        "Vehicle": 4,
+        "Personal Item": 24,
+        "Food": 12,
+        "Weapon": 12,
+        "Electronic Device": 6
+      }
+    },
+    "test": {
+      "entries": 40,
+      "groups": 40,
+      "sha256": "d10ada25667428bffa2eaa6f0d82804fe17409dbac1f0bc6138b5c4f9dc08f92",
+      "categories": {
+        "benchmark": 40
+      }
+    }
+  },
+  "rejections": {
+    "not_add_instruction": 1177,
+    "target exceeds fixed VAE extraction bounds": 23,
+    "no substantial preserved surface": 1,
+    "extreme scale change": 1
+  }
+}

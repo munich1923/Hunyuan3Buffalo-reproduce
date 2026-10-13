@@ -1,0 +1,243 @@
+{
+  "_id": "684c4d5a7fa15e011e81d56e",
+  "id": "tencent/Hunyuan3D-2.1",
+  "private": false,
+  "pipeline_tag": "image-to-3d",
+  "library_name": "hunyuan3d-2",
+  "tags": [
+    "hunyuan3d-2",
+    "diffusers",
+    "safetensors",
+    "image-to-3d",
+    "text-to-3d",
+    "en",
+    "zh",
+    "arxiv:2506.15442",
+    "arxiv:2501.12202",
+    "arxiv:2411.02293",
+    "license:other",
+    "region:us"
+  ],
+  "downloads": 63342,
+  "likes": 1267,
+  "modelId": "tencent/Hunyuan3D-2.1",
+  "author": "tencent",
+  "sha": "0b94677654c57bb9a6b6845cd7b704ccf551d327",
+  "lastModified": "2025-10-17T10:10:42.000Z",
+  "gated": false,
+  "disabled": false,
+  "model-index": null,
+  "config": {},
+  "cardData": {
+    "library_name": "hunyuan3d-2",
+    "license": "other",
+    "license_name": "tencent-hunyuan-community",
+    "license_link": "https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1/blob/main/LICENSE",
+    "language": [
+      "en",
+      "zh"
+    ],
+    "tags": [
+      "image-to-3d",
+      "text-to-3d"
+    ],
+    "pipeline_tag": "image-to-3d",
+    "extra_gated_eu_disallowed": true
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes"
+    },
+    {
+      "rfilename": "LICENSE"
+    },
+    {
+      "rfilename": "Notice.txt"
+    },
+    {
+      "rfilename": "README.md"
+    },
+    {
+      "rfilename": "demo.py"
+    },
+    {
+      "rfilename": "hunyuan3d-dit-v2-1/config.yaml"
+    },
+    {
+      "rfilename": "hunyuan3d-dit-v2-1/model.fp16.ckpt"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/README.md"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/feature_extractor/preprocessor_config.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/image_encoder/config.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/image_encoder/model.safetensors"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/model_index.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/scheduler/scheduler_config.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/text_encoder/config.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/text_encoder/pytorch_model.bin"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/tokenizer/merges.txt"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/tokenizer/special_tokens_map.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/tokenizer/tokenizer_config.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/tokenizer/vocab.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/unet/attn_processor.py"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/unet/config.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/unet/diffusion_pytorch_model.bin"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/unet/model.py"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/unet/modules.py"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/vae/config.json"
+    },
+    {
+      "rfilename": "hunyuan3d-paintpbr-v2-1/vae/diffusion_pytorch_model.bin"
+    },
+    {
+      "rfilename": "hunyuan3d-vae-v2-1/config.yaml"
+    },
+    {
+      "rfilename": "hunyuan3d-vae-v2-1/model.fp16.ckpt"
+    },
+    {
+      "rfilename": "hy3dpaint/textureGenPipeline.py"
+    },
+    {
+      "rfilename": "hy3dpaint/utils/multiview_utils.py"
+    }
+  ],
+  "spaces": [
+    "tardellirs/model-pulse",
+    "tencent/Hunyuan3D-2.1",
+    "emanforhelp/model-pulse",
+    "Jbowyer/Hunyuan3D-2.1",
+    "Bton/Hunyuan3D-2.1",
+    "dylanebert/Hunyuan3D-2.1",
+    "imagine-io-webinar/image-to-3d",
+    "victor/Hunyuan3D-2.1",
+    "chengzhigang/Hunyuan3D-2.1-2025-12-11",
+    "aptol/genshin",
+    "duranponce/ai-default",
+    "mfurkanyener/hunyuan3d-demo",
+    "Xernive/game-asset-generator-pipeline",
+    "luh0502/NeAR",
+    "ELumya/Face2Mesh",
+    "th3w1zard1/Hunyuan3D-2.1",
+    "jkorstad/daggr-studio",
+    "KINGHAJI/Hunyuan3D-2.1",
+    "KINGHAJI/mat",
+    "BladeSzaSza/digiPal",
+    "Volturus/Hunyuan3D-2_1",
+    "Gouri764/Gouri3D-2.1",
+    "MikeEhrmantraut69/Hunyuan3D-2.1",
+    "asimfayaz/Hunyuan3D-2.1",
+    "fawwazmohd/Hunyuan3D-2.1",
+    "FlavioRamso/Hunuvyvuyv",
+    "ginigen/Hunyuan3D-2.1",
+    "kcoda36/Hunyuan3D-2.1",
+    "Monikashyapa/VTO",
+    "Monikashyapa/3DVTO",
+    "aerovfx/Hunyuan3D-2.1",
+    "Austinsz-Warehouse/EchoUltraModelGenerator",
+    "Dev2803/imagetoSTl",
+    "minhho/Hunyuan-MT",
+    "romeroguido/Hunyuan3D-2.1",
+    "ESSEDDYK/VOXELASE_1.1",
+    "ESSEDDYK/VOXELASE",
+    "maxxxi100/Hunyuan3D-2.1",
+    "xnikkon/prmpt-ar-be",
+    "l3333333a/Hunyuan3D-2.1",
+    "shivay00001/Hunyuan3D-2.1",
+    "ka0010/Hunyuan3D-2.1",
+    "BenjaminPittsley/ai-specialist-trainer",
+    "HiLight-AI/Hunyuan3D-2.1",
+    "babybirdprd/ai-specialist-trainer",
+    "ComputeNerd/Hunyuan3D-2.1",
+    "AliothTalks/Hunyuan3D-2.1",
+    "ManaraD/furnara-connect",
+    "Termotanque123/Hunyuan3D-2.1",
+    "joaojack/Hunyuan3D-2.1",
+    "ashish956/Hunyuan3D-2.1",
+    "santiagooverpower/text3",
+    "kalixextonisis/3DCardgen",
+    "vg22112/Hunyuan3D-2.1",
+    "ChepoHG/Hunyuan3D-2.1",
+    "Juanmanuel245/Hunyuan3D-2.1",
+    "HKBUniverse/riasad_fyp_backend",
+    "wencolle/Hunyuan3D-2.1",
+    "mikekuniavsky/Hunyuan3D-2.1",
+    "amrnavy007/Hunyuan3D-2.1",
+    "Sweet1121/3dmelab",
+    "chenfengchang71/Hunyuan3D-2.1",
+    "tobislr/Hunyuan3D-2.1",
+    "jochy/Hunyuan3D-2.1",
+    "PabloDalma93/Hunyuan3D-2.1",
+    "dekxs/Hunyuan3D-2.1",
+    "jwchen119/Hunyuan3D-2.1",
+    "a2post/Hunyuan3D-2.1",
+    "Toshi8855/Hunyuan3D-2.1",
+    "MEKAAAeewwq332/Hunyuan3D-2.1",
+    "SGSHub26/Hunyuan3D-2.1",
+    "rjsdn7288/Hunyuan3D-2.1",
+    "optigear/Hunyuan3D-2.1",
+    "mogretici/Hunyuan3D-2.1",
+    "risuwu/riasad_fyp_backend",
+    "sarkrda/Hunyuan3D-2.1",
+    "JoseManuelSV/Hunyuan3D-2.1",
+    "SepDevX/Dream-Hunyuan3D-2.1",
+    "guigoss/Hunyuan3D-2.1",
+    "Ranjeetpal/Hunyuan3D-2.1",
+    "manav117/Hunyuan3D-2.1",
+    "AravindS2006/TwoTh",
+    "destroyerdrow/Hunyuan3D-2.1",
+    "yclyvz/Hunyuan3D-2.1",
+    "justabadcoder/Hunyuan3D-2.1",
+    "ayeyumon08/Hunyuan3D-2.1",
+    "rew24/Hunyuan3D-2.1",
+    "solkol/Hunyuan3D-2.1",
+    "Jassimmasara/Hunyuan3D-2.1",
+    "karthick925/Hunyuan3D-2.1",
+    "rvir553/Hunyuan3D-2.1",
+    "Ishashaka/Hunyuan3D-2.1",
+    "Kynae/Hunyuan3D-2.1",
+    "supremazy/Hunyuan3D-2.1",
+    "Aymerix01/Hunyuan3D-2.1",
+    "huggsface1/Hunyuan3D-2.1",
+    "war1234/HUN3",
+    "captainsiroko/Hunyuan3D-2.1",
+    "popso1so/Hunyuan3D-2.1",
+    "rianzeazo/Hunyuan3D-2.1"
+  ],
+  "createdAt": "2025-06-13T16:10:02.000Z",
+  "usedStorage": 14955419333
+}

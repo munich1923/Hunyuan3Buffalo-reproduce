@@ -11,8 +11,8 @@ configure();sys.path.insert(0,str(ROOT/"src/Hunyuan3D-2.1/hy3dshape"))
 from hy3dshape.models.autoencoders import ShapeVAE
 from hy3dshape.pipelines import export_to_trimesh,Hunyuan3DDiTFlowMatchingPipeline
 def decode(vae,z,scale):
-    with torch.no_grad():
-        decoded=vae.decode((z/scale).to(torch.float16))
+    with torch.no_grad(),torch.autocast("cuda",dtype=torch.float16):
+        decoded=vae.decode((z/scale).to(torch.float32))
         meshes=vae.latents2mesh(decoded,bounds=1.01,mc_level=0,num_chunks=10000,octree_resolution=256,mc_algo="mc",enable_pbar=False)
     return export_to_trimesh(meshes)[0]
 def main():
@@ -23,7 +23,7 @@ def main():
     if a.mode=="native":
         pipeline=Hunyuan3DDiTFlowMatchingPipeline.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float16)
     elif a.mode!="source":
-        vae=ShapeVAE.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float16).eval()
+        vae=ShapeVAE.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float32).eval()
         if a.mode!="vae":
             editor=Editor(load_dit(),lora=a.mode in ["lora","no_source","noop","shuffled"]).cuda().eval()
             if a.mode not in ["random"]:

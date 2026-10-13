@@ -155,5 +155,8 @@ def main():
         (out/(split+".jsonl")).write_text("".join(json.dumps(x)+"\n" for x in records))
     sample=accepted[:30]
     (out/"visual_review.jsonl").write_text("".join(json.dumps(x)+"\n" for x in sample))
+    if (ROOT/"results/summaries/visual_review_decisions.json").exists():
+        from apply_visual_review import apply
+        apply()
     print("Prepared 1024 train, 128 validation, 40 test entries",flush=True)
 if __name__=="__main__":main()

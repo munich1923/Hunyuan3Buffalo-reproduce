@@ -1,0 +1,410 @@
+{
+  "_id": "69cd5ad5d3a1c47859ec3a51",
+  "id": "yejunliang23/Nano3D-Edit-100k",
+  "author": "yejunliang23",
+  "sha": "d6686ff82ea14c2dfa4fdd55db332309a0241495",
+  "lastModified": "2026-04-03T06:30:27.000Z",
+  "private": false,
+  "gated": false,
+  "disabled": false,
+  "tags": [
+    "task_categories:text-generation",
+    "language:en",
+    "license:mit",
+    "size_categories:1M<n<10M",
+    "format:webdataset",
+    "modality:text",
+    "modality:3d",
+    "library:datasets",
+    "library:webdataset",
+    "library:mlcroissant",
+    "arxiv:2510.15019",
+    "region:us",
+    "3d",
+    "3d-edit",
+    "nano-banana",
+    "text-to-3d"
+  ],
+  "description": "\n\t\n\t\t\n\t\n\t\n\t\tNano3D-Edit-100k\n\t\n\nThis dataset is the official data release for Nano3D, a training-free framework for precise and coherent 3D object editing without masks.\n\n\nPaper: Nano3D: A Training-Free Approach for Efficient 3D Editing Without MasksProject Page: https://jamesyjl.github.io/Nano3D/\n\nNano3D integrates FlowEdit into TRELLIS to perform localized 3D edits guided by front-view renderings, and introduces Voxel/Slat-Merge strategies to preserve structural consistency between edited… See the full description on the dataset page: https://huggingface.co/datasets/yejunliang23/Nano3D-Edit-100k.",
+  "downloads": 363,
+  "likes": 2,
+  "cardData": {
+    "license": "mit",
+    "task_categories": [
+      "text-generation"
+    ],
+    "language": [
+      "en"
+    ],
+    "tags": [
+      "3d",
+      "3d-edit",
+      "nano-banana",
+      "text-to-3d"
+    ],
+    "size_categories": [
+      "100K<n<1M"
+    ]
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes"
+    },
+    {
+      "rfilename": "README.md"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_000.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_001.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_002.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_003.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_004.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_005.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_006.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_007.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_008.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_009.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_010.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_011.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_012.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_013.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_014.tar.gz"
+    },
+    {
+      "rfilename": "v0_15k/editing_assets/part_015.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_000.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_001.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_002.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_003.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_004.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_005.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_006.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_007.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_008.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_009.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_010.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_011.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_012.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_013.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_014.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_015.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_016.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_017.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_018.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_019.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_020.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_021.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_022.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_023.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_024.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_025.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_026.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_027.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_028.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_029.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_030.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_031.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_032.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_033.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_034.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_035.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_036.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_037.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_038.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_039.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_040.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_041.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_042.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_043.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_044.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_045.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_046.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_047.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_048.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_049.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_050.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_051.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_052.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_053.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_054.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_055.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_056.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_057.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_058.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_059.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_060.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_061.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_062.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_063.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_064.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_065.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_066.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_067.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_068.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_069.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_070.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_071.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_072.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_073.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_074.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_075.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_076.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_077.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_078.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_079.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_080.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_081.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_082.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_083.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_084.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_085.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_086.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_087.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_088.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_089.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_090.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_091.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_092.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_093.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_094.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_095.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_096.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_097.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_098.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/editing_assets/part_099.tar.gz"
+    },
+    {
+      "rfilename": "v1_100k/info/v1_100k_info.jsonl"
+    }
+  ],
+  "createdAt": "2026-04-01T17:50:13.000Z",
+  "usedStorage": 664003726012
+}

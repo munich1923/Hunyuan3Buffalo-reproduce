@@ -1,4 +1,4 @@
-import argparse,json,random,sys,time
+import argparse,hashlib,json,random,sys,time
 from pathlib import Path
 import numpy as np
 import torch,trimesh
@@ -34,13 +34,25 @@ def main():
     existing=set()
     if (out/"metrics.jsonl").exists():
         existing={(x["id"],x["seed"]) for x in map(json.loads,(out/"metrics.jsonl").read_text().splitlines())}
-    for i,row in enumerate(rows):
-        for seed in [20261013,20261014,20261015]:
+    # Keep original indices for the cached cyclic shuffled instruction mapping.
+    by_op={op:[(i,r) for i,r in enumerate(rows) if r["operation"]==op] for op in ["add","remove"]}
+    balanced=[]
+    for j in range(max(map(len,by_op.values()))):
+        for op in ["add","remove"]:
+            if j<len(by_op[op]):balanced.append(by_op[op][j])
+    protocol={"iteration":"seed first, alternating add/remove, original manifest order within operation",
+              "manifest_sha256":hashlib.sha256((ROOT/"assets/manifests/test_prepared.jsonl").read_bytes()).hexdigest(),
+              "expected":len(rows)*3,"mode":a.mode,"decode":"FP32 VAE with FP16 autocast for edited modes",
+              "checkpoint":"connector_initial" if a.mode=="random" else "connector_best" if a.mode=="connector" else "lora_best" if editor is not None else None}
+    (out/"protocol.json").write_text(json.dumps(protocol,indent=2)+"\n")
+    for seed in [20261013,20261014,20261015]:
+        for i,row in balanced:
             if (row["id"],seed) in existing:continue
             if time.monotonic()-start>a.seconds:
                 print("Evaluation time cap",flush=True);summarize(out,rows,a.mode);return
             record={"effective_instruction":"Keep the geometry unchanged." if a.mode=="noop" else rows[(i+1)%len(rows)]["instruction"] if a.mode=="shuffled" else row["instruction"],"id":row["id"],"seed":seed,"mode":a.mode,"operation":row["operation"],"instruction":row["instruction"]}
             path=out/(row["id"]+"_"+str(seed)+".glb")
+            sample_start=time.monotonic()
             try:
                 if a.mode=="source":pred=trimesh.load(row["source_normalized"],force="mesh")
                 elif a.mode=="native":
@@ -73,6 +85,7 @@ def main():
             except Exception as e:
                 record.update(valid=False,error=repr(e));print("FAIL",record,flush=True)
                 if isinstance(e,torch.cuda.OutOfMemoryError):raise
+            record["elapsed_seconds"]=time.monotonic()-sample_start
             with (out/"metrics.jsonl").open("a") as f:f.write(json.dumps(record)+"\n")
             print(json.dumps(record),flush=True)
     summarize(out,rows,a.mode)
@@ -80,6 +93,8 @@ def summarize(out,rows,mode):
     results=[json.loads(l) for l in (out/"metrics.jsonl").read_text().splitlines()] if (out/"metrics.jsonl").exists() else []
     summary={"sampling":{"seeds":[20261013,20261014,20261015],"steps":50,"edited_guidance":1,"native_guidance":5,"octree_resolution":256},"mode":mode,"attempted":len(results),"expected":len(rows)*3,"complete":len(results)==len(rows)*3,"valid_rate":sum(x["valid"] for x in results)/max(1,len(results))}
     metric_key="source_metrics" if mode=="noop" else "target_metrics"
+    summary["unique_objects"]=len({x["id"] for x in results})
+    summary["attempted_by_operation"]={op:sum(x["operation"]==op for x in results) for op in ["add","remove"]}
     summary["reference"]="source" if mode=="noop" else "target"
     for op in ["add","remove","all"]:
         valid=[x for x in results if x["valid"] and (op=="all" or x["operation"]==op)]

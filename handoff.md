@@ -124,3 +124,8 @@
 - 完整Shape/VLM缓存CPU审计通过，六个目录条目数量正确，tensor形状与有限性通过。
 - LoRA<=2000steps已启动，从connector_best初始化；冻结主干、训练MLP和attention rank8/alpha16 LoRA。
 - 累计至connector结束9984.09秒（2.773h）。尚无生成几何/benchmark结果，不得从loss推断编辑有效。
+
+## 评估顺序和审计更新
+- benchmark运行顺序改为add/remove交替、seed优先，保留原manifest索引的shuffled指令映射。每模式protocol.json记录manifest哈希及采样对照。
+- scripts/build_comparison_sheets.py在CPU拼接已有四视角图；缺失输出标pending，不创建新GPU工作。
+- LoRA仍运行中，尚无benchmark生成证据。

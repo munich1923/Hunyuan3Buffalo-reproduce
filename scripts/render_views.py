@@ -18,7 +18,7 @@ def render(m,folder):
     folder=Path(folder);folder.mkdir(parents=True,exist_ok=True)
     m=m.copy()
     material=pyrender.MetallicRoughnessMaterial(baseColorFactor=[0.7,0.7,0.7,1],metallicFactor=0,roughnessFactor=0.9)
-    s=pyrender.Scene(bg_color=[1,1,1,1],ambient_light=[0.5]*3)
+    s=pyrender.Scene(bg_color=[255,255,255,0],ambient_light=[0.5]*3)
     s.add(pyrender.Mesh.from_trimesh(m,material=material,smooth=False))
     camera=s.add(pyrender.PerspectiveCamera(yfov=math.radians(40)),pose=pose(0))
     light=s.add(pyrender.DirectionalLight(color=np.ones(3),intensity=3),pose=pose(0))
@@ -27,7 +27,7 @@ def render(m,folder):
     try:
         for az in [0,90,180,270]:
             p=pose(az);s.set_pose(camera,p);s.set_pose(light,p)
-            color,depth=r.render(s);path=folder/(str(az)+".png");Image.fromarray(np.concatenate([color[:,:,:3],((depth>0)*255).astype(np.uint8)[:,:,None]],axis=2),"RGBA").save(path);paths.append(str(path))
+            color,depth=r.render(s);color[depth==0,:3]=255;path=folder/(str(az)+".png");Image.fromarray(np.concatenate([color[:,:,:3],((depth>0)*255).astype(np.uint8)[:,:,None]],axis=2),"RGBA").save(path);paths.append(str(path))
     finally:r.delete()
     return paths
 def main():

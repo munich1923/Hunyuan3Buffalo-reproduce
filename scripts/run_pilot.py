@@ -79,6 +79,7 @@ def main():
         run(state,"shape_interface_smoke",shape,"smoke_shape.py",gpu=True,cap=900)
         run(state,"vlm_interface_smoke",vlm,"smoke_vlm.py",gpu=True,cap=900)
         run(state,"complete_interface_smoke",shape,"smoke_forward.py",gpu=True,cap=900)
+        run(state,"vae_precision_probe",shape,"probe_vae_precision.py",gpu=True,cap=900)
         wait_preparation(state,("download",))
         run(state,"data_contracts",shape,"test_data_contracts.py")
         run(state,"data",shape,"prepare_dataset.py")

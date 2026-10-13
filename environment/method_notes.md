@@ -19,3 +19,7 @@
 - VAE source reconstruction gate uses F-score at 0.05 >= 0.5 in the shared 1.5 source extent frame; 8-sample gate requires a 10% reduction of deterministic-noise training loss. These are diagnostic stop rules, not final success criteria.
 
 - Ninja is 1.13.0 (manylinux2014): original 1.11.1.1 installs and runs but pip 26.2 rejects its old manylinux1 platform tag. No upstream source is patched.
+
+- Headless NVIDIA EGL is selected only within experiment subprocesses; inherited global Mesa software variables are cleared locally. Saved RGBA renders use a white RGB background plus depth-derived alpha for the native pipeline.
+- VAE surface sampling now seeds both NumPy and Torch per sample/role. Reverse tasks undergo their own shared-frame QC.
+- Synthetic interface diagnostics are separate from reconstruction gates on cleaned public data. Low synthetic reconstruction scores are retained and trigger precision/domain diagnostics, not a claim of trained editing.

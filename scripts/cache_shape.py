@@ -6,11 +6,11 @@ from remote_runtime import ROOT,configure
 configure();sys.path.insert(0,str(ROOT/"src/Hunyuan3D-2.1/hy3dshape"))
 from hy3dshape.models.autoencoders import ShapeVAE
 from hy3dshape.pipelines import export_to_trimesh
-def surface(path,seed):
+def surface(path,seed,dtype=torch.float16):
     m=trimesh.load(path,force="mesh",process=False)
     torch.manual_seed(seed);np.random.seed(seed);pts,faces=trimesh.sample.sample_surface(m,81920)
     # Upstream point_feats=4 expects normals plus the sharp-edge marker.
-    return torch.tensor(np.concatenate([pts,m.face_normals[faces],np.zeros((len(pts),1))],axis=1),dtype=torch.float16,device="cuda")[None]
+    return torch.tensor(np.concatenate([pts,m.face_normals[faces],np.zeros((len(pts),1))],axis=1),dtype=dtype,device="cuda")[None]
 def main():
     p=argparse.ArgumentParser();p.add_argument("--split",default="all");p.add_argument("--limit",type=int);a=p.parse_args()
     vae=ShapeVAE.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float16).eval()

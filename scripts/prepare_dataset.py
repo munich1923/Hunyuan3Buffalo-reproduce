@@ -1,5 +1,5 @@
 """Extract public meshes safely and create leakage-resistant editing manifests."""
-import argparse,csv,hashlib,json,random,re,tarfile
+import argparse,csv,hashlib,json,random,re,tarfile,concurrent.futures
 from collections import defaultdict
 from pathlib import Path
 import numpy as np
@@ -89,14 +89,17 @@ def prepare_bench():
         kept=0
         for r in rows:
             item={"id":"bench_"+op+"_"+r["source"],"operation":op,"instruction":r["instruction"],"source_id":r["source"],"target_id":r["target"],"dataset":"Edit3D-Bench"}
+            tasks=[]
             for role in ["source","target"]:
                 uid=r[role]
                 candidates=[p for p in lookup if p.endswith("/"+uid+".glb")]
                 candidates.sort(key=lambda p:(("/"+op+"/") not in p,p))
                 if not candidates:raise ValueError("Benchmark mesh missing: "+uid)
                 path=candidates[0]
-                if not download(repo,"datasets",meta["sha"],lookup[path],base):raise RuntimeError("Benchmark download failed")
+                tasks.append((repo,"datasets",meta["sha"],lookup[path],base))
                 item[role]=str(base/path)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
+                if not all(ex.map(lambda args:download(*args),tasks)):raise RuntimeError("Benchmark download failed; durable receipts retained")
             try:
                 a,b=mesh(item["source"]),mesh(item["target"])
                 if geometry_hash(a)==geometry_hash(b):raise ValueError("identical normalized geometry")

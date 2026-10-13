@@ -11,6 +11,10 @@ PINNED_REVISIONS={
  "ziqima/Edit3D-Bench":"30ace7d3b0e834189b514cf3753cd832825b6922",
 }
 def api(repo,kind="models"):
+    cache=ROOT/"environment"/("manifest-"+repo.replace("/","--")+".json")
+    if cache.exists():
+        cached=json.loads(cache.read_text())
+        if cached.get("sha")==PINNED_REVISIONS[repo]:return cached
     url="https://hf-mirror.com/api/"+kind+"/"+repo+"/revision/"+PINNED_REVISIONS[repo]+"?blobs=true"
     with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0"}),timeout=45) as r:meta=json.load(r)
     if meta["sha"]!=PINNED_REVISIONS[repo]:raise RuntimeError("Unexpected repository revision: "+repo)
@@ -48,7 +52,7 @@ def _download(repo,kind,revision,item,base):
                 urls.insert(0,alternative)
                 data["alternative_source"]={"repo":ms_repo,"revision":matched["Revision"],"sha256":expected}
     save()
-    cmd=["aria2c","--continue=true","--allow-overwrite=true","--auto-file-renaming=false","--file-allocation=none","--max-connection-per-server=8","--split=8","--min-split-size=16M","--max-tries=3","--retry-wait=5","--connect-timeout=20","--timeout=60","--summary-interval=30","--console-log-level=warn","--dir",str(partial.parent),"--out",partial.name,*urls]
+    cmd=["aria2c","--async-dns=false","--continue=true","--allow-overwrite=true","--auto-file-renaming=false","--file-allocation=none","--max-connection-per-server=8","--split=8","--min-split-size=16M","--max-tries=3","--retry-wait=5","--connect-timeout=20","--timeout=60","--summary-interval=30","--console-log-level=warn","--dir",str(partial.parent),"--out",partial.name,*urls]
     transfer_env=__import__("os").environ.copy()
     if network_proxy() and kind=="datasets" and __import__("os").environ.get("EXPERIMENT_DATA_RELAY")=="1":cmd.insert(1,"--all-proxy="+network_proxy())
     else:
@@ -57,7 +61,7 @@ def _download(repo,kind,revision,item,base):
         attempts=[]
         # Large cross-border transfers sometimes lose throughput on long-lived connections.
         # Periodic graceful restarts preserve aria2's completed ranges and renew connections.
-        for attempt in range(360 if kind=="datasets" and size and size>1024**3 else 1):
+        for attempt in range(360 if kind=="datasets" and size and size>1024**3 else 10):
             started=time.monotonic()
             p=subprocess.Popen(cmd,stdout=f,stderr=subprocess.STDOUT,env=transfer_env)
             try:
@@ -72,6 +76,8 @@ def _download(repo,kind,revision,item,base):
                 continue
             attempts.append({"attempt":attempt+1,"elapsed_seconds":time.monotonic()-started,"exit_code":p.returncode})
             data["transfer_attempts"]=attempts;save()
+            if p.returncode and attempt<10:
+                time.sleep(2);continue
             break
     data["exit_code"]=p.returncode
     if p.returncode:

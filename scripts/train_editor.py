@@ -40,6 +40,7 @@ def main():
     dit=load_dit();editor=Editor(dit,lora=a.stage=="lora").cuda()
     path=ROOT/"results/checkpoints";path.mkdir(parents=True,exist_ok=True)
     if a.stage=="lora":editor.load_adapter(path/"connector_best.pt")
+    save(editor,path/(a.stage+"_initial.pt"),0,a.stage,{"initialized_only":True})
     rates=[{"params":editor.connector.parameters(),"lr":1e-4 if a.stage!="lora" else 5e-5}]
     if a.stage=="lora":rates.append({"params":[p for n,p in editor.dit.named_parameters() if p.requires_grad],"lr":1e-4})
     opt=torch.optim.AdamW(rates,weight_decay=0.01)

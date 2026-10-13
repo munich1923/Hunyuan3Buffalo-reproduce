@@ -30,3 +30,5 @@
 - Formal connector/LoRA initial and final validation losses use all128 held-out entries. The 20-step trend/checkpoint selection uses a fixed16-entry probe; reports distinguish these counts. The preliminary8-pair fitting diagnostic used only16 validation entries.
 
 - Published manifests are authoritative for reruns. Visual-review application snapshots initial splits and restores untouched validation/test snapshots. Candidate enumeration is sorted for fresh deterministic cleaning; rerunning preparation must not silently resplit already-reviewed assets.
+
+- The untrained-connector evaluation loads connector_initial.pt saved immediately before formal optimization, ensuring the random baseline uses the same initial MLP rather than a new RNG draw after loading VAE.

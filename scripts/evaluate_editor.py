@@ -26,7 +26,8 @@ def main():
         vae=ShapeVAE.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float32).eval()
         if a.mode!="vae":
             editor=Editor(load_dit(),lora=a.mode in ["lora","no_source","noop","shuffled"]).cuda().eval()
-            if a.mode not in ["random"]:
+            if a.mode=="random":editor.load_adapter(ROOT/"results/checkpoints/connector_initial.pt")
+            else:
                 checkpoint="connector" if a.mode=="connector" else "lora"
                 editor.load_adapter(ROOT/"results/checkpoints"/(checkpoint+"_best.pt"))
     start=time.monotonic()

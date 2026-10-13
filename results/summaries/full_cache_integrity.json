@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "counts": {
+    "shape/train": 1024,
+    "shape/val": 128,
+    "shape/test": 40,
+    "vlm/train": 1024,
+    "vlm/val": 128,
+    "vlm/test": 40
+  }
+}

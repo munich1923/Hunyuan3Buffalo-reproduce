@@ -92,6 +92,10 @@ def main():
         review=ROOT/"environment/data_review.json"
         if not review.exists() or not json.loads(review.read_text()).get("approved_for_pilot"):
             raise RuntimeError("Visual review pending: inspect data_review images and record actual observations first")
+        review_data=json.loads(review.read_text())
+        for split,expected in review_data["manifest_sha256"].items():
+            actual=hashlib.sha256((ROOT/"assets/manifests"/(split+".jsonl")).read_bytes()).hexdigest()
+            if actual!=expected:raise RuntimeError("Manifest changed after visual review: "+split)
         # VAE gate first, before spending time extracting all features.
         run(state,"vae_gate",shape,"cache_shape.py",["--split","train","--limit","1"],gpu=True,cap=900)
         gate=json.loads((ROOT/"environment/vae_gate.json").read_text())

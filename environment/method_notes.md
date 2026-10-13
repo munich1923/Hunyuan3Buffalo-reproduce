@@ -23,3 +23,6 @@
 - Headless NVIDIA EGL is selected only within experiment subprocesses; inherited global Mesa software variables are cleared locally. Saved RGBA renders use a white RGB background plus depth-derived alpha for the native pipeline.
 - VAE surface sampling now seeds both NumPy and Torch per sample/role. Reverse tasks undergo their own shared-frame QC.
 - Synthetic interface diagnostics are separate from reconstruction gates on cleaned public data. Low synthetic reconstruction scores are retained and trigger precision/domain diagnostics, not a claim of trained editing.
+
+- Formal VAE cache and edited-model evaluation decoder use FP32 weights/inputs with CUDA FP16 autocast; pure FP16 synthetic box failures are retained separately. Neutral renders v2 use material0.6, ambient0.15, directional1.3; all-black EGL frames retry or fail.
+- Agent visual QC reviewed 46 candidate pairs, excluded16, retained30 reviewed pairs in the final training split. Remaining 482 training pairs have automated geometric QC only.

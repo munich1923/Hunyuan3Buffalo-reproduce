@@ -80,3 +80,12 @@
 - 原始清单保存在assets/manifests/before_visual_review；替换与观察见results/summaries/visual_review_*.json，完整清单可追溯。
 - 正在重新渲染低光照v2图像并复核替换样本，尚未批准pilot。不会把样本语义抽查解释成整套数据语义保证。
 - 评估VAE使用与正式缓存相同的FP32/autocast精度；connector验证loss无提升时停止扩大训练。
+
+## 正式诊断启动
+- 视觉复核共46候选配对，排除16，最终训练前30独立配对已有观察记录；其他482配对只有自动几何QC。
+- 批准记录environment/data_review.json包含当前train/val/test SHA，正式runner验证清单未发生变化。
+- 训练源uid_66677_add正式VAE gate通过：CD平方和0.0004056，F-score@0.05=0.99639；只代表此网格重建。
+- Shape诊断缓存16条已完成，Qwen诊断特征抽取中；随后缓存val16并运行200-step上限8独立add配对拟合。
+- 当前进程以environment/pilot_pid.txt与run_state.json为准；GPU0。不要重复启动runner或绕过pilot.lock运行GPU。
+- 启动日志logs/pilot_launcher.log；scripts/summarize_pilot.py可生成证据驱动当前摘要。
+- 原始Hunyuan基线只输入源物体单视角，忽略编辑指令；编辑模型输入四视角+指令。此基线检验原生生成，不等同公平的指令编辑模型。

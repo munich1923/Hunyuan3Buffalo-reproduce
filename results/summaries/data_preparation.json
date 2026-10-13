@@ -18,18 +18,18 @@
     "train": {
       "entries": 1024,
       "groups": 512,
-      "sha256": "770ece38c720fcf42907f1f4bad5ef07d1c9662d5b1a71680a4f6028091e45bb",
+      "sha256": "0ef15d45e6b677753f2ad62d3e8c0cadccdb903e9e7dc248563de9477006d789",
       "categories": {
-        "Animal": 134,
-        "Vehicle": 98,
+        "Animal": 136,
+        "Vehicle": 102,
         "Personal Item": 96,
-        "Human": 58,
-        "Building": 134,
-        "Weapon": 126,
-        "Musical Instrument ": 36,
+        "Human": 54,
         "Furniture": 110,
+        "Building": 130,
+        "Electronic Device": 74,
+        "Weapon": 124,
+        "Musical Instrument ": 38,
         "Food": 74,
-        "Electronic Device": 72,
         "Plant": 86
       }
     },
@@ -65,5 +65,7 @@
     "target exceeds fixed VAE extraction bounds": 23,
     "no substantial preserved surface": 1,
     "extreme scale change": 1
-  }
+  },
+  "visual_review": "visual_review_decisions.json",
+  "replacements": "visual_review_replacements.json"
 }

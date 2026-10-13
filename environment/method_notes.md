@@ -34,3 +34,5 @@
 - The untrained-connector evaluation loads connector_initial.pt saved immediately before formal optimization, ensuring the random baseline uses the same initial MLP rather than a new RNG draw after loading VAE.
 
 - Benchmark iteration alternates add/remove and covers every object at the first seed before later seeds. Original indices and cyclic shuffled instructions remain unchanged. This limits operation/order bias if the time cap produces partial coverage.
+
+- Controlled comparisons use deterministic sorted object IDs for bootstrap resampling, report separate add/remove deltas and ground-truth-assisted surface proxies, and include a scoreboard restricted to jointly valid meshes in every mode.

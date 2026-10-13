@@ -66,7 +66,9 @@ def main():
                 record.update(valid=True,path=str(path),target_metrics=compare(pred,target,seed),source_metrics=compare(pred,source_mesh,seed),preservation_metrics=preservation(pred,source_mesh,target,seed))
                 if seed==20261013:
                     from render_views import render
-                    render(pred,out/(row["id"]+"_views"))
+                    try:render(pred,out/(row["id"]+"_views"))
+                    except Exception as render_error:
+                        record["render_error"]=repr(render_error);print("RENDER_FAIL",row["id"],repr(render_error),flush=True)
             except Exception as e:
                 record.update(valid=False,error=repr(e));print("FAIL",record,flush=True)
                 if isinstance(e,torch.cuda.OutOfMemoryError):raise

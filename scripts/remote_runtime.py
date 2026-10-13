@@ -3,6 +3,7 @@ import os,json,socket
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 def configure():
+    for key in ["OMP_NUM_THREADS","MKL_NUM_THREADS","OPENBLAS_NUM_THREADS"]:os.environ.setdefault(key,"8")
     for key, value in {
         "HF_HOME": ROOT/"models/cache/huggingface",
         "HUGGINGFACE_HUB_CACHE": ROOT/"models/cache/huggingface/hub",

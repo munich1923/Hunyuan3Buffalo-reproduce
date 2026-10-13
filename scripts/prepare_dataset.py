@@ -81,12 +81,13 @@ def prepare_bench():
     from download_artifacts import api,download
     repo="ziqima/Edit3D-Bench";meta=api(repo,"datasets")
     lookup={x["rfilename"]:x for x in meta["siblings"]}
-    base=ROOT/"assets/Edit3D-Bench";records=[]
+    base=ROOT/"assets/Edit3D-Bench";records=[];rejects=[]
     rng=random.Random(SEED)
     for op in ["add","remove"]:
         rows=list(csv.DictReader((base/"metadata"/(op+".csv")).open()))
         rng.shuffle(rows)
-        for r in rows[:20]:
+        kept=0
+        for r in rows:
             item={"id":"bench_"+op+"_"+r["source"],"operation":op,"instruction":r["instruction"],"source_id":r["source"],"target_id":r["target"],"dataset":"Edit3D-Bench"}
             for role in ["source","target"]:
                 uid=r[role]
@@ -96,7 +97,17 @@ def prepare_bench():
                 path=candidates[0]
                 if not download(repo,"datasets",meta["sha"],lookup[path],base):raise RuntimeError("Benchmark download failed")
                 item[role]=str(base/path)
-            records.append(item)
+            try:
+                a,b=mesh(item["source"]),mesh(item["target"])
+                if geometry_hash(a)==geometry_hash(b):raise ValueError("identical normalized geometry")
+                item["qc"]=paired_qc(a,b,SEED+len(records))
+            except Exception as e:
+                rejects.append({"id":item["id"],"reason":repr(e)});continue
+            records.append(item);kept+=1
+            if kept==20:break
+        if kept<20:raise RuntimeError("Insufficient valid benchmark "+op+" entries: "+str(kept))
+    out=ROOT/"assets/manifests";out.mkdir(parents=True,exist_ok=True)
+    (out/"bench_rejected.jsonl").write_text("".join(json.dumps(x)+"\n" for x in rejects))
     return records
 def main():
     out=ROOT/"assets/manifests";out.mkdir(parents=True,exist_ok=True)
@@ -119,9 +130,9 @@ def main():
             if hs==ht:raise ValueError("identical geometry")
             if hs in excluded or ht in excluded:raise ValueError("benchmark geometry overlap")
             if hs in seen or ht in seen:raise ValueError("duplicate shared geometry")
-            qc=paired_qc(a,b,SEED+int(uid[4:]))
+            qc=paired_qc(a,b,SEED+int(uid[4:]));inverse_qc=paired_qc(b,a,SEED+int(uid[4:]))
             seen.update([hs,ht])
-            accepted.append({"uid":uid,"source":str(s),"target":str(t),"source_geometry_hash":hs,"target_geometry_hash":ht,"source_sha256":digest(s),"target_sha256":digest(t),"instruction":text,"category":row.get("category"),"qc":qc})
+            accepted.append({"uid":uid,"source":str(s),"target":str(t),"source_geometry_hash":hs,"target_geometry_hash":ht,"source_sha256":digest(s),"target_sha256":digest(t),"instruction":text,"category":row.get("category"),"qc":qc,"inverse_qc":inverse_qc})
         except Exception as e:rejects.append({"uid":uid,"reason":str(e)})
         if len(accepted)%50==0 and accepted:print("ACCEPTED",len(accepted),flush=True)
     report={"candidates":len(candidates),"accepted_original_pairs":len(accepted),"rejected":len(rejects),"required_original_pairs":576,"seed":SEED,"thresholds":{"max_extent_ratio":4,"min_extent_ratio":0.2,"max_center_shift":2,"preserved_surface_distance":0.05,"min_preserved_fraction":0.1},"note":"QC gates detect gross anomalies; semantic correctness requires sampled visual review."}
@@ -135,7 +146,7 @@ def main():
         for x in originals:
             rec={**x,"id":x["uid"]+"_add","group":x["uid"],"operation":"add","dataset":"Nano3D-Edit-100k"}
             records.append(rec)
-            inverse={**rec,"id":x["uid"]+"_remove","operation":"remove","source":x["target"],"target":x["source"],"instruction":"Remove the following added parts: "+re.sub(r"^add\s+","",x["instruction"],flags=re.I).rstrip(".")+".","inverted_from":rec["id"],"source_geometry_hash":x["target_geometry_hash"],"target_geometry_hash":x["source_geometry_hash"],"source_sha256":x["target_sha256"],"target_sha256":x["source_sha256"],"qc_original_forward":x["qc"]}
+            inverse={**rec,"id":x["uid"]+"_remove","operation":"remove","source":x["target"],"target":x["source"],"instruction":"Remove the following added parts: "+re.sub(r"^add\s+","",x["instruction"],flags=re.I).rstrip(".")+".","inverted_from":rec["id"],"source_geometry_hash":x["target_geometry_hash"],"target_geometry_hash":x["source_geometry_hash"],"source_sha256":x["target_sha256"],"target_sha256":x["source_sha256"],"qc_original_forward":x["qc"],"qc":x["inverse_qc"]}
             # Reversed pair uses its own source-derived common transform later.
             records.append(inverse)
         (out/(split+".jsonl")).write_text("".join(json.dumps(x)+"\n" for x in records))

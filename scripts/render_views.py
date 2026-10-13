@@ -27,7 +27,7 @@ def render(m,folder):
     try:
         for az in [0,90,180,270]:
             p=pose(az);s.set_pose(camera,p);s.set_pose(light,p)
-            color,depth=r.render(s);path=folder/(str(az)+".png");Image.fromarray(color).save(path);paths.append(str(path))
+            color,depth=r.render(s);path=folder/(str(az)+".png");Image.fromarray(np.concatenate([color[:,:,:3],((depth>0)*255).astype(np.uint8)[:,:,None]],axis=2),"RGBA").save(path);paths.append(str(path))
     finally:r.delete()
     return paths
 def main():

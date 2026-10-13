@@ -75,8 +75,11 @@ def main():
     try:
         wait_preparation(state,("install",))
         run(state,"tensor_contract",shape,"test_edit_model.py",gpu=True,cap=300)
-        wait_preparation(state,("download",))
         run(state,"imports",shape,"verify_environment.py")
+        run(state,"shape_interface_smoke",shape,"smoke_shape.py",gpu=True,cap=900)
+        run(state,"vlm_interface_smoke",vlm,"smoke_vlm.py",gpu=True,cap=900)
+        run(state,"complete_interface_smoke",shape,"smoke_forward.py",gpu=True,cap=900)
+        wait_preparation(state,("download",))
         run(state,"data_contracts",shape,"test_data_contracts.py")
         run(state,"data",shape,"prepare_dataset.py")
         run(state,"render_train_diagnostic",shape,"render_views.py",["--split","train","--limit","60"],gpu=True,cap=1800)

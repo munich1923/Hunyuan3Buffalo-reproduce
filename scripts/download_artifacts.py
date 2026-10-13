@@ -57,11 +57,11 @@ def _download(repo,kind,revision,item,base):
         attempts=[]
         # Large cross-border transfers sometimes lose throughput on long-lived connections.
         # Periodic graceful restarts preserve aria2's completed ranges and renew connections.
-        for attempt in range(60 if kind=="datasets" and size and size>1024**3 else 1):
+        for attempt in range(360 if kind=="datasets" and size and size>1024**3 else 1):
             started=time.monotonic()
             p=subprocess.Popen(cmd,stdout=f,stderr=subprocess.STDOUT,env=transfer_env)
             try:
-                p.wait(timeout=180 if kind=="datasets" and size and size>1024**3 else None)
+                p.wait(timeout=60 if kind=="datasets" and size and size>1024**3 else None)
             except subprocess.TimeoutExpired:
                 p.terminate()
                 try:p.wait(timeout=15)

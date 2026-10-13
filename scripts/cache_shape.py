@@ -1,4 +1,4 @@
-import argparse,json,sys
+import argparse,json,sys,hashlib
 import numpy as np
 import torch
 import trimesh
@@ -8,7 +8,7 @@ from hy3dshape.models.autoencoders import ShapeVAE
 from hy3dshape.pipelines import export_to_trimesh
 def surface(path,seed):
     m=trimesh.load(path,force="mesh",process=False)
-    np.random.seed(seed);pts,faces=trimesh.sample.sample_surface(m,81920)
+    torch.manual_seed(seed);np.random.seed(seed);pts,faces=trimesh.sample.sample_surface(m,81920)
     # Upstream point_feats=4 expects normals plus the sharp-edge marker.
     return torch.tensor(np.concatenate([pts,m.face_normals[faces],np.zeros((len(pts),1))],axis=1),dtype=torch.float16,device="cuda")[None]
 def main():
@@ -25,8 +25,8 @@ def main():
             out=ROOT/"assets/cache/shape"/split/(row["id"]+".pt");out.parent.mkdir(parents=True,exist_ok=True)
             if out.exists():continue
             with torch.no_grad():
-                src=vae.encode(surface(row["source_normalized"],20261013+i),sample_posterior=False)
-                tar=vae.encode(surface(row["target_normalized"],20261013+i),sample_posterior=False)
+                src=vae.encode(surface(row["source_normalized"],int(hashlib.sha256((row["id"]+"/source").encode()).hexdigest()[:8],16)),sample_posterior=False)
+                tar=vae.encode(surface(row["target_normalized"],int(hashlib.sha256((row["id"]+"/target").encode()).hexdigest()[:8],16)),sample_posterior=False)
             if not torch.isfinite(src).all() or not torch.isfinite(tar).all():raise RuntimeError("Nonfinite VAE latent")
             if not gate:
                 with torch.no_grad():

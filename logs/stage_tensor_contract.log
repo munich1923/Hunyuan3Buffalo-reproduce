@@ -1,0 +1,3 @@
+/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/lib/python3.10/contextlib.py:103: FutureWarning: `torch.backends.cuda.sdp_kernel()` is deprecated. In the future, this context manager will be removed. Please see `torch.nn.attention.sdpa_kernel()` for the new context manager, with updated signature.
+  self.gen = func(*args, **kwds)
+PASS native equivalence, source slicing, connector gradients, frozen weights, LoRA initialization and gradients

@@ -19,7 +19,10 @@ def run(name,cmd):
 for name in ["shape","vlm"]:
     prefix=ROOT/"environment/venvs"/name
     if not (prefix/"bin/python").exists():
-        run("conda_"+name,["/opt/conda/bin/conda","create","--yes","--prefix",str(prefix),"--override-channels","--channel","https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge","python=3.10","pip"])
+        base_explicit=ROOT/"environment/conda-explicit-shape.txt"
+        cmd=["/opt/conda/bin/conda","create","--yes","--prefix",str(prefix)]
+        cmd += ["--file",str(base_explicit)] if name=="vlm" and base_explicit.exists() else ["--override-channels","--channel","https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge","python=3.10","pip"]
+        run("conda_"+name,cmd)
     python=str(prefix/"bin/python")
     wheel_dir=ROOT/".cache/wheels";wheel_dir.mkdir(parents=True,exist_ok=True)
     wheels=[]

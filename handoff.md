@@ -52,3 +52,12 @@
 - 大数据传输采用远端直连、180秒连接刷新和aria2续传；Python依赖预取全部校验保存远端。国外PyPI元数据和wheel使用临时SSH中继。
 - data_review.json尚未创建；不得未看图即批准。
 - 临时中继仍需在准备结束后关闭；见environment/network_relay.json。
+
+
+## 2026-10-13 14:12 Asia/Shanghai 更新
+- 两个独立Conda环境均完成安装，pip check均为0；pip-freeze和conda-explicit已保存。
+- 正式Shape环境verify_environment通过，DiT/VAE重新hash匹配；DINO439个tensor严格加载无missing/unexpected。
+- H100 GPU0张量合同检查全部通过，累计分配54.34秒。
+- 正式Shape环境数据合同测试通过。
+- 正在运行官方权重的合成box/sphere完整接口诊断（EGL、VAE编码重建、Qwen隐藏状态、MLP/DiT前向梯度），这些不代表训练或泛化效果。
+- Nano大分片仍续传；Edit3D-Bench mesh预取运行中。GPU训练未开始。

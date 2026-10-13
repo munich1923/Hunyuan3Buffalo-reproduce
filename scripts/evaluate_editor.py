@@ -78,7 +78,7 @@ def main():
     summarize(out,rows,a.mode)
 def summarize(out,rows,mode):
     results=[json.loads(l) for l in (out/"metrics.jsonl").read_text().splitlines()] if (out/"metrics.jsonl").exists() else []
-    summary={"mode":mode,"attempted":len(results),"expected":len(rows)*3,"complete":len(results)==len(rows)*3,"valid_rate":sum(x["valid"] for x in results)/max(1,len(results))}
+    summary={"sampling":{"seeds":[20261013,20261014,20261015],"steps":50,"edited_guidance":1,"native_guidance":5,"octree_resolution":256},"mode":mode,"attempted":len(results),"expected":len(rows)*3,"complete":len(results)==len(rows)*3,"valid_rate":sum(x["valid"] for x in results)/max(1,len(results))}
     metric_key="source_metrics" if mode=="noop" else "target_metrics"
     summary["reference"]="source" if mode=="noop" else "target"
     for op in ["add","remove","all"]:

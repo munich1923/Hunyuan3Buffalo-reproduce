@@ -15,6 +15,7 @@ def hidden(model,processor,views,instruction):
     with torch.no_grad():
         outputs=model(**inputs,output_hidden_states=True,use_cache=False,return_dict=True)
     h=outputs.hidden_states[-1][0][inputs.attention_mask[0].bool()].detach().cpu().to(torch.bfloat16)
+    if not torch.isfinite(h).all():raise RuntimeError("Nonfinite VLM hidden state")
     return h
 def main():
     p=argparse.ArgumentParser();p.add_argument("--split",default="all");p.add_argument("--limit",type=int);a=p.parse_args()

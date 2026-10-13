@@ -51,7 +51,7 @@ def main():
     log=ROOT/"logs"/("train_"+a.stage+".jsonl")
     baseline_val=validation(editor,val,"val")
     print(json.dumps({"stage":a.stage,"initial_train":initial,"initial_val":baseline_val,"trainable_parameters":sum(p.numel() for p in editor.parameters() if p.requires_grad)}),flush=True)
-    step=0
+    step=0;completed_steps=0
     for step in range(1,maxsteps+1):
         if time.monotonic()-start>a.seconds:break
         opt.zero_grad(set_to_none=True);losses=[]
@@ -63,7 +63,7 @@ def main():
             if not torch.isfinite(loss):raise RuntimeError("Nonfinite training loss")
             (loss/4).backward();losses.append(float(loss.detach()))
         torch.nn.utils.clip_grad_norm_([p for p in editor.parameters() if p.requires_grad],1)
-        opt.step()
+        opt.step();completed_steps=step
         stats={"step":step,"loss":sum(losses)/4,"elapsed_seconds":time.monotonic()-start}
         if step%20==0 or step==maxsteps:
             stats["train_probe"]=validation(editor,rows,"train")
@@ -75,7 +75,7 @@ def main():
             print(json.dumps(stats),flush=True)
         with log.open("a") as f:f.write(json.dumps(stats)+"\n")
     final=validation(editor,rows,"train");final_val=validation(editor,val,"val")
-    report={"stage":a.stage,"steps":step,"initial_train":initial,"final_train":final,"initial_val":baseline_val,"final_val":final_val,"elapsed_seconds":time.monotonic()-start,"history":history,"note":"Velocity loss is a fitting diagnostic, not a geometry editing success metric."}
+    report={"stage":a.stage,"steps":completed_steps,"initial_train":initial,"final_train":final,"initial_val":baseline_val,"final_val":final_val,"elapsed_seconds":time.monotonic()-start,"best_validation":best,"history":history,"note":"Velocity loss is a fitting diagnostic, not a geometry editing success metric."}
     if a.stage=="overfit":
         report["passed"]=final<initial*0.9 and len(history)>0
     save(editor,path/(a.stage+"_latest.pt"),step,a.stage,report)

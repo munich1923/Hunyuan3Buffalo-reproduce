@@ -81,5 +81,13 @@ def summarize(out,rows,mode):
     for op in ["add","remove","all"]:
         valid=[x for x in results if x["valid"] and (op=="all" or x["operation"]==op)]
         if valid:summary[op]={key:float(np.mean([x[metric_key][key] for x in valid])) for key in ["cd_squared_sum","fscore_001","fscore_0025","fscore_005"]}
+    summary["surface_proxy"]={}
+    for op in ["add","remove","all"]:
+        valid=[x for x in results if x["valid"] and (op=="all" or x["operation"]==op)]
+        proxy={}
+        for key in ["unchanged_region_coverage_005","unchanged_region_distance_mean","changed_target_coverage_005","changed_target_distance_mean","removed_source_still_present_fraction_005"]:
+            vals=[x["preservation_metrics"][key] for x in valid if key in x["preservation_metrics"]]
+            if vals:proxy[key]={"mean":float(np.mean(vals)),"available":len(vals)}
+        summary["surface_proxy"][op]=proxy
     (out/"summary.json").write_text(json.dumps(summary,indent=2)+"\n")
 if __name__=="__main__":main()

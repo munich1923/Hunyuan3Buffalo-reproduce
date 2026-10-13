@@ -18,4 +18,14 @@ def preservation(pred,source,target,seed=20261013,n=16384):
     unchanged=cKDTree(tar).query(src)[0]<0.025
     if unchanged.sum()<64:return {"available":False,"unchanged_points":int(unchanged.sum())}
     d=cKDTree(out).query(src[unchanged])[0]
-    return {"available":True,"unchanged_points":int(unchanged.sum()),"unchanged_region_distance_mean":float(d.mean()),"unchanged_region_coverage_005":float((d<0.05).mean()),"note":"Surface-distance proxy for unchanged regions, not human part masks."}
+    report={"available":True,"unchanged_points":int(unchanged.sum()),"unchanged_region_distance_mean":float(d.mean()),"unchanged_region_coverage_005":float((d<0.05).mean()),"note":"Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold."}
+    added=cKDTree(src).query(tar)[0]>0.025
+    removed=cKDTree(tar).query(src)[0]>0.025
+    report["changed_target_points"]=int(added.sum());report["removed_source_points"]=int(removed.sum())
+    if added.sum()>=64:
+        da=cKDTree(out).query(tar[added])[0]
+        report["changed_target_coverage_005"]=float((da<0.05).mean());report["changed_target_distance_mean"]=float(da.mean())
+    if removed.sum()>=64:
+        dr=cKDTree(out).query(src[removed])[0]
+        report["removed_source_still_present_fraction_005"]=float((dr<0.05).mean())
+    return report

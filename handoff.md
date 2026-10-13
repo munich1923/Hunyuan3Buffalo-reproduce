@@ -110,3 +110,10 @@
 - 累计截至Shape缓存完成6050.87秒（1.681h）。正在全量Qwen隐藏状态缓存，正确/no-op各一份；测试集另有打乱指令。
 - 8样本拟合门槛已通过。正式connector/LoRA与benchmark推断尚未开始。
 - 原始和最终完整清单均提交results/summaries/*_manifest.jsonl，修改代码和文档有连续Git提交；上游官方源码保持原提交无补丁。
+
+## 正式训练启动
+- 全量Qwen缓存train1024/val128/test40完成，test含正确/no-op/shuffled隐藏状态，无生成回答。
+- 累计至VLM完成7556.35秒（2.10h）；正在connector<=500steps。
+- 正式MLP初始train前16探针loss0.9658027，val全部128条loss0.9231679；训练4720640参数，DiT/VAE/VLM冻结。
+- scripts/audit_full_cache.py正在CPU检查所有Shape/VLM缓存；日志logs/full_cache_integrity.log。
+- results/checkpoints/connector_initial.pt已保存，同初始化作为random对照；过拟合诊断不作为正式训练初始化。

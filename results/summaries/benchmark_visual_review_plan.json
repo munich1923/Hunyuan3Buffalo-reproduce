@@ -1,0 +1,46 @@
+{
+  "selected_before_benchmark_generation": true,
+  "updated_utc": "2026-10-13T10:15:07.288864+00:00",
+  "seed": 20261013,
+  "selection_rule": "First3 manifest entries per operation; optional metric extremes must be labeled posthoc.",
+  "selected": [
+    {
+      "id": "bench_add_45d32f8e2df34ce0b9a71cca74f79078",
+      "operation": "add",
+      "instruction": "Add a power cord extending from the base"
+    },
+    {
+      "id": "bench_add_8ca6b76e676b4504b5f9c5580a751ec3",
+      "operation": "add",
+      "instruction": "Add a crafted lid with a small knob on top of the vase"
+    },
+    {
+      "id": "bench_add_9bc76559bccb409d9a8e6dc69b50977b",
+      "operation": "add",
+      "instruction": "Add a roof luggage rack on top of the limousine"
+    },
+    {
+      "id": "bench_remove_81615480737c495785a6aecee0184e10",
+      "operation": "remove",
+      "instruction": "Remove topknot hair"
+    },
+    {
+      "id": "bench_remove_dd841d02b6164337a486de13c545b15d",
+      "operation": "remove",
+      "instruction": "Remove the grip"
+    },
+    {
+      "id": "bench_remove_82d7a79c62f94c979f02c2ced6126780",
+      "operation": "remove",
+      "instruction": "Remove lid from the container"
+    }
+  ],
+  "observations": [
+    "source subject retention",
+    "requested additions/deletions visible across4 views",
+    "correct versus noop and shuffled behavior",
+    "fragmentation or collapse"
+  ],
+  "reviewer": "AI agent; not a human user signoff",
+  "limitations": "Six selected examples do not establish full-set semantic accuracy."
+}

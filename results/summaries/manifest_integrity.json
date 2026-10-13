@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "entries": {
+    "train": 1024,
+    "val": 128,
+    "test": 40
+  },
+  "train_validation_geometry_hash_overlap": 0,
+  "all_recorded_mesh_file_sha256_match": true,
+  "review_manifest_sha256_match": true
+}

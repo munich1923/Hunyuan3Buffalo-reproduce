@@ -26,3 +26,5 @@
 
 - Formal VAE cache and edited-model evaluation decoder use FP32 weights/inputs with CUDA FP16 autocast; pure FP16 synthetic box failures are retained separately. Neutral renders v2 use material0.6, ambient0.15, directional1.3; all-black EGL frames retry or fail.
 - Agent visual QC reviewed 46 candidate pairs, excluded16, retained30 reviewed pairs in the final training split. Remaining 482 training pairs have automated geometric QC only.
+
+- Formal connector/LoRA initial and final validation losses use all128 held-out entries. The 20-step trend/checkpoint selection uses a fixed16-entry probe; reports distinguish these counts. The preliminary8-pair fitting diagnostic used only16 validation entries.

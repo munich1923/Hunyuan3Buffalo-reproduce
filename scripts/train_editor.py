@@ -24,10 +24,10 @@ def objective(editor,source,target,h,generator=None):
     with torch.autocast("cuda",dtype=torch.bfloat16):
         pred=editor(noisy.to(torch.bfloat16),t.to(torch.bfloat16),h,source)
     return (pred.float()-(target-noise).float()).square().mean()
-def validation(editor,rows,split):
+def validation(editor,rows,split,limit=16):
     values=[];editor.eval()
     with torch.no_grad():
-        for i,row in enumerate(rows[:16]):
+        for i,row in enumerate(rows if limit is None else rows[:limit]):
             g=torch.Generator(device="cuda").manual_seed(9000+i)
             source,target,h=tensors(row,split)
             values.append(float(objective(editor,source,target,h,g)))
@@ -49,7 +49,7 @@ def main():
     maxsteps={"overfit":200,"connector":500,"lora":2000}[a.stage]
     start=time.monotonic();history=[];initial=validation(editor,rows,"train");best=float("inf")
     log=ROOT/"logs"/("train_"+a.stage+".jsonl")
-    baseline_val=validation(editor,val,"val")
+    baseline_val=validation(editor,val,"val",limit=16 if a.stage=="overfit" else None)
     print(json.dumps({"stage":a.stage,"initial_train":initial,"initial_val":baseline_val,"trainable_parameters":sum(p.numel() for p in editor.parameters() if p.requires_grad)}),flush=True)
     step=0;completed_steps=0
     for step in range(1,maxsteps+1):
@@ -74,8 +74,8 @@ def main():
             save(editor,path/(a.stage+"_latest.pt"),step,a.stage,stats)
             print(json.dumps(stats),flush=True)
         with log.open("a") as f:f.write(json.dumps(stats)+"\n")
-    final=validation(editor,rows,"train");final_val=validation(editor,val,"val")
-    report={"stage":a.stage,"steps":completed_steps,"initial_train":initial,"final_train":final,"initial_val":baseline_val,"final_val":final_val,"elapsed_seconds":time.monotonic()-start,"best_validation":best,"train_entries":len(rows),"validation_probe_entries":min(16,len(val)),"validation_split_entries":len(val),"history":history,"note":"Velocity loss is a fitting diagnostic, not a geometry editing success metric."}
+    final=validation(editor,rows,"train");final_val=validation(editor,val,"val",limit=16 if a.stage=="overfit" else None)
+    report={"stage":a.stage,"steps":completed_steps,"initial_train":initial,"final_train":final,"initial_val":baseline_val,"final_val":final_val,"elapsed_seconds":time.monotonic()-start,"best_validation":best,"train_entries":len(rows),"validation_probe_entries":min(16,len(val)),"validation_split_entries":len(val),"final_validation_entries":min(16,len(val)) if a.stage=="overfit" else len(val),"history":history,"note":"Velocity loss is a fitting diagnostic, not a geometry editing success metric."}
     if a.stage=="overfit":
         report["passed"]=final<initial*0.9 and len(history)>0
     save(editor,path/(a.stage+"_latest.pt"),step,a.stage,report)

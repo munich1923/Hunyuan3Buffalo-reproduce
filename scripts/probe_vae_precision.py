@@ -9,7 +9,8 @@ from metrics import compare
 folder=ROOT/"results/vae_precision_probe";folder.mkdir(parents=True,exist_ok=True)
 benchpaths=sorted((ROOT/"assets/Edit3D-Bench/data/glbs/add").glob("*.glb"))
 assert benchpaths
-bench=mesh(benchpaths[0]);bench,_,_,_=normalize_pair(bench,bench)
+benchmark_path=ROOT/"assets/Nano3D-Edit-100k/extracted/uid_0/src_mesh.glb"
+bench=mesh(benchmark_path if benchmark_path.exists() else benchpaths[0]);bench,_,_,_=normalize_pair(bench,bench)
 bench.export(folder/"bench_source.glb")
 box=mesh(ROOT/"results/interface_smoke/source.glb")
 vae=ShapeVAE.from_pretrained(str(ROOT/"models/Hunyuan3D-2.1"),dtype=torch.float32).eval()

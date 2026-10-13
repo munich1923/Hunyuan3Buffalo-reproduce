@@ -61,3 +61,13 @@
 - 正式Shape环境数据合同测试通过。
 - 正在运行官方权重的合成box/sphere完整接口诊断（EGL、VAE编码重建、Qwen隐藏状态、MLP/DiT前向梯度），这些不代表训练或泛化效果。
 - Nano大分片仍续传；Edit3D-Bench mesh预取运行中。GPU训练未开始。
+
+
+## 2026-10-13 14:23 Asia/Shanghai 更新
+- 下载主任务30/30 verified。Nano分片0、33、66完整SHA匹配；总112份模型/数据/benchmark下载收据verified。
+- Edit3D-Bench取得add/remove各20有效配对，另1配对因保留表面不足排除；排除记录保存。
+- NVIDIA EGL实际渲染已跑通。原服务器强制Mesa变量仅对实验子进程取消。
+- 官方VAE+Qwen+MLP+4096-token DiT源条件完整前向/反向在GPU0通过；Qwen hidden1350x3584，随机MLP velocity loss约0.973。不能据此宣称编辑有效。
+- 合成盒子纯FP16 VAE重建F-score@0.05=0.2475，明显较差。已排队真实Nano源网格/FP32+autocast/尺度诊断；尚未运行真实数据VAE门槛或训练。
+- 当前prepare-only在CPU数据提取/QC，完成后渲染30个训练配对；精度诊断等待同一pilot锁，绝不同时运行两张GPU。
+- 临时SSH中继已关闭，environment/network_relay.json enabled=false，本地forward会话退出。

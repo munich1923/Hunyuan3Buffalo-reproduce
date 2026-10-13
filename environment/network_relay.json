@@ -1,0 +1,11 @@
+{
+  "enabled": false,
+  "pid": 3465752,
+  "http_proxy": "http://127.0.0.1:19791",
+  "socks_port": 19790,
+  "local_ssh_session": 45220,
+  "started_utc": "2026-10-13T05:35:55.475167+00:00",
+  "note": "Only transport relayed via local SSH; all files saved remotely. Stop after preparation.",
+  "disabled_utc": "2026-10-13T06:27:32.724006+00:00",
+  "reason": "All pinned model/data and benchmark transfers verified; environments installed."
+}

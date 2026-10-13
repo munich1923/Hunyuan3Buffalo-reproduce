@@ -20,6 +20,9 @@ def configure():
         os.environ[key] = str(value)
     os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
     proxy=network_proxy()
+    if not proxy:
+        for key in ["http_proxy","https_proxy","HTTP_PROXY","HTTPS_PROXY"]:
+            if os.environ.get(key)=="http://127.0.0.1:19791":os.environ.pop(key,None)
     if proxy:
         for key in ["http_proxy","https_proxy","HTTP_PROXY","HTTPS_PROXY"]:os.environ[key]=proxy
 

@@ -75,7 +75,7 @@ def main():
             print(json.dumps(stats),flush=True)
         with log.open("a") as f:f.write(json.dumps(stats)+"\n")
     final=validation(editor,rows,"train");final_val=validation(editor,val,"val")
-    report={"stage":a.stage,"steps":completed_steps,"initial_train":initial,"final_train":final,"initial_val":baseline_val,"final_val":final_val,"elapsed_seconds":time.monotonic()-start,"best_validation":best,"history":history,"note":"Velocity loss is a fitting diagnostic, not a geometry editing success metric."}
+    report={"stage":a.stage,"steps":completed_steps,"initial_train":initial,"final_train":final,"initial_val":baseline_val,"final_val":final_val,"elapsed_seconds":time.monotonic()-start,"best_validation":best,"train_entries":len(rows),"validation_probe_entries":min(16,len(val)),"validation_split_entries":len(val),"history":history,"note":"Velocity loss is a fitting diagnostic, not a geometry editing success metric."}
     if a.stage=="overfit":
         report["passed"]=final<initial*0.9 and len(history)>0
     save(editor,path/(a.stage+"_latest.pt"),step,a.stage,report)

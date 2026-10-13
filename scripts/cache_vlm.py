@@ -34,6 +34,6 @@ def main():
             nop=hidden(model,processor,row["source_views"],"Keep the geometry unchanged.")
             wrong=None
             if split=="test":wrong=hidden(model,processor,row["source_views"],rows[(i+1)%len(rows)]["instruction"])
-            torch.save({"hidden":h,"noop_hidden":nop,"shuffled_hidden":wrong,"instruction":row["instruction"],"model_revision":"cc594898137f460bfe9f0759e9844b3ce807cfb5","layer":-1},out)
+            torch.save({"hidden":h,"noop_hidden":nop,"shuffled_hidden":wrong,"instruction":row["instruction"],"model_revision":"cc594898137f460bfe9f0759e9844b3ce807cfb5","layer":-1,"render_version":row.get("render_version"),"source_normalized":row["source_normalized"]},out)
             if i%10==0:print("VLM",split,i,list(h.shape),flush=True)
 if __name__=="__main__":main()

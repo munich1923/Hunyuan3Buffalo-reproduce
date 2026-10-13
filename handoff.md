@@ -1,135 +1,63 @@
 # 实验交接
 
-## 当前阶段
-用户已授权执行近似复现。源码已拉取并固定；独立环境安装和模型/数据下载正在准备。
-尚未运行完整模型、训练或评估。Python语法检查、基础环境中的数据合同测试通过；专用环境模型接口检查待执行。
+更新时间：2026-10-13T18:05:27.488117+08:00
 
-## 工作区
-/root/userdata/zc/hunyuan3d-buffalo-1.0-editing；本地通过 ssh h100 操作。
-工作约定见 agent.md。所有环境、数据、权重、日志和结果保存在本目录。
+## 当前状态
+- 正式连接器已完成500步；LoRA正在运行，最多2000步。最近已落盘探针step=380，train=0.4607116，val16=0.4391631。
+- 尚未开始正式benchmark生成；未见物体的几何编辑有效性尚无结论。
+- 唯一工作区：/root/userdata/zc/hunyuan3d-buffalo-1.0-editing。本地只通过ssh -o BatchMode=yes h100操作。
+- 当前runner和子进程以environment/pilot_pid.txt及environment/run_state.json current.pid为准。不要重复启动，不能绕过pilot.lock运行GPU。
+- 已完成阶段累计GPU分配9984.09秒；正在运行阶段尚未计入此字段。总预算86400秒，一次只使用一张空闲H100。
 
-## 固定路线
-- 官方 Hunyuan3D 2.1 提交：82920d643c0dc2f7bfd7255f45f62d386edfe60c。
-- Qwen2.5-VL-7B-Instruct + 四视角几何渲染 + 隐藏状态 MLP。
-- 冻结 VLM/VAE/DiT 主干；先训练 MLP，后训练 MLP + 注意力 LoRA。
-- 几何添加/删除；不安装 Paint 流程。
-- 训练 1024 条、验证 128 条；来自分别 512/64 个原始添加配对及其反向删除条目。
-- Nano3D v1 实际没有直接 remove 标注；只使用 add，反向构造 remove 并保留 provenance。
-- 独立测试 Edit3D-Bench 添加/删除各20例，排除训练几何重复。
-- 单卡累计 24 GPU 小时封顶；VAE 重建与8样本拟合门槛失败则停止。
-- 本实验是开源替代的小规模机制检验，不是官方权重或指标复现。
+## 已完成
+- 官方源码src/Hunyuan3D-2.1固定82920d643c0dc2f7bfd7255f45f62d386edfe60c，上游无补丁。
+- 独立Conda环境environment/venvs/shape与vlm；torch2.5.1+cu124，Transformers分别4.46.0/4.51.3。pip check通过，freeze/conda-explicit保存environment/。
+- 计划30项模型/数据下载全部verified；含benchmark共112份大小/SHA收据，logs/downloads/。HF直连失败，使用固定revision镜像和官方备用来源；临时网络中继已关闭。
+- 官方VAE、Qwen最后层状态、MLP、源latent DiT前向/反向及冻结/LoRA合同检查通过。
+- 正式首训练源uid_66677_add的VAE gate通过：CD平方和0.0004055963，F-score@0.05=0.9963859。不能解释为全部数据VAE保真保证。
+- Nano3D分片0/33/66，共3000候选；1798独立add配对通过自动QC。删除来自反向构造，并有provenance。
+- 训练1024条=512独立配对两方向；验证128条=64配对两方向。源/目标共同归一化，禁止独立归一化或ICP；跨split几何哈希交集0。
+- AI agent实际查看46候选四视角，排除16，最终训练前30个独立配对均有观察，其余482配对只有自动几何QC。不是用户本人审核。
+- Edit3D-Bench固定add/remove各20条；全量render及Shape/Qwen缓存完成，六目录数量/shape/有限性审计通过。test另含shuffled特征。
+- 8独立add配对200步诊断：固定噪声train loss0.9926369→0.6293402，val16 loss1.0304584→0.6628609。通过预设下降10%诊断门槛；仅证明velocity loss拟合，不能称为几何记忆成功。
+- 正式connector500步：train16 loss0.9658027→0.6386403，完整128val loss0.9231679→0.6159285。最佳探针0.6408666；不是从overfit初始化。random加载同一connector_initial.pt。
+- CPU源网格首seed参照：F-score@0.05 add0.604/remove0.833；删除集需关注被删区域残留。正式三seed基线仍待运行。
+- Matplotlib3.10.7已补入专用Shape环境，pip check再通过；缓存设置在本工作区，初步训练曲线已生成。
 
-## 已完成与证据
-- src/Hunyuan3D-2.1 源码干净，提交固定；environment/hunyuan3d21_source.json 和 logs/source_*.log。
-- 镜像 API 与真实 payload Range 请求已验证；直连 Hugging Face 失败。
-- 权重、数据集的官方 repo 身份和 revision 已固定；下载完成后逐项 SHA-256/大小验证。
-- Shape config 已核验：4096x64 latent，1024 条件宽度，1370 条件 tokens。
-- 编写下载、数据筛选、EGL渲染、缓存、模型适配、训练、评估和GPU预算脚本。
-- 当前只确认 Python 脚本可编译，不能视为模型或训练测试通过。
+## 方法与边界
+- Qwen2.5-VL-7B-Instruct：四视角源几何+指令，抽取所有有效输入token最后层hidden，不生成回答。
+- MLP3584→1024→1024/GELU，pool至1370 tokens；源Shape-VAE latent固定，与4096×64 noisy target按token拼接，只取target预测。
+- 冻结VLM/VAE/DiT主干；LoRA attention rank8/alpha16，同时训练MLP。训练10%no-op。
+- 缓存/编辑解码使用FP32 VAE权重与输入+FP16 autocast，DiT BF16、adapters FP32。
+- 9评估模式source/vae/native/random/connector/lora/no_source/noop/shuffled，3seeds、50步。edited无CFG，native使用默认CFG5、源单视角、不输入指令；不是完全对等的指令模型。
+- 每模式最多3500秒、runner硬限3600秒，可能部分覆盖，必须报告attempted/expected。交替add/remove，先覆盖所有物体首seed；shuffled保持原manifest循环映射。
+- CD/F-score基于共同坐标、16384表面点，无对齐优化。变化区域指标是ground-truth辅助表面proxy，不是真实人工part mask。
+- 模式比较按共同样本及物体级三seed均值计算1000次bootstrap；只比较有效对，同时报告无效比例。不能给无效网格填0距离。
+- 本实验是开源替代机制检验，不能宣称官方Buffalo模型/指标复现。
 
-## 进程与状态
-- environment/install_pid.txt：实验环境安装进程。
-- environment/download_pid.txt：模型/数据下载进程；environment/data_download_pid.txt 为额外数据下载进程。
-- logs/install_launcher.log、logs/download_launcher.log、logs/data_download_launcher.log。
-- 成功状态分别记录 environment/install_status.json、download_status.json。
-- models/ 中的 *.partial 可能为分段稀疏文件；文件大小不能用作完成百分比，必须以下载收据的 verified 状态为准。
+## 证据入口
+- environment/run_state.json：逐阶段命令/提交/时间/GPU/退出码/累计预算。
+- results/summaries/：完整原始/最终清单、视觉决策、完整缓存审计、训练报告、源参照。
+- environment/training_overfit.json、training_connector.json；training_lora.json仅在该阶段结束后生成。
+- results/checkpoints/：initial/best/latest adapters。大文件不入Git。
+- logs/train_*.jsonl、stage_*.log；合成box纯FP16失败和EGL全黑帧失败均保留。
+- 全量train render第999条曾全黑，重启新进程续缓存成功，失败时间已入预算，不删除此数据。
+- environment/method_notes.md：全部方法差异；environment/README.md：环境操作。
 
 ## 下一步
-1. 检查并修复安装和下载，获得两个环境的 pip check 与依赖快照。
-2. 运行 scripts/run_pilot.py --prepare-only，完成数据QC和渲染；检查 results/data_review/ 的30个独立物体配对。
-3. 用 scripts/run_pilot.py 运行张量合同检查、VAE门槛、缓存、8样本拟合、连接器、LoRA、对照评估。
-4. 根据实际状态更新此文档并提交。完整命令和假设见 environment/README.md、method_notes.md。
+1. 观察当前LoRA到结束，核对完整128val结果和实际steps。
+2. runner自动串行完成9个benchmark对照；检查错误、完整性以及实际生成几何。
+3. 仅CPU执行：
+   environment/venvs/shape/bin/python scripts/compare_evaluations.py
+   environment/venvs/shape/bin/python scripts/analyze_instruction_sensitivity.py
+   environment/venvs/shape/bin/python scripts/build_comparison_sheets.py
+   environment/venvs/shape/bin/python scripts/plot_training.py
+   environment/venvs/shape/bin/python scripts/summarize_pilot.py
+4. 实际查看比较图，记录AI观察和例子，严格区分接口通过、velocity拟合、未见编辑。
+5. 完成最终报告、文档、Git提交，检查本实验后台结束。当前仓库无Git remote。
 
-
-## 2026-10-13 14:02 Asia/Shanghai 更新
-- Shape DiT（7,366,389,768 bytes）、VAE及Qwen全部5个分片均已LFS SHA-256校验通过；下载收据在logs/downloads/。
-- Nano元数据100,000条校验完成。分片0/33/66仍续传，尚未生成1024清洗清单。
-- Shape专用环境torch2.5.1+cu124安装成功，依赖安装及torch_cluster安装成功。
-- pip check发现ninja1.11.1.1旧manylinux1 tag不兼容新pip检查，改为ninja1.13.0并重试。尚未声称环境检查通过。
-- 增加固定revision API、严格DINO state加载、缩放/平移不变的身份哈希。
-- 8样本诊断改为8个独立add原始配对；先只缓存诊断训练/验证子集，通过后再完整渲染/缓存。
-- 多视角EGL渲染计入GPU预算，采用同一张空闲卡。目前GPU累计0秒。
-- 大数据传输采用远端直连、180秒连接刷新和aria2续传；Python依赖预取全部校验保存远端。国外PyPI元数据和wheel使用临时SSH中继。
-- data_review.json尚未创建；不得未看图即批准。
-- 临时中继仍需在准备结束后关闭；见environment/network_relay.json。
-
-
-## 2026-10-13 14:12 Asia/Shanghai 更新
-- 两个独立Conda环境均完成安装，pip check均为0；pip-freeze和conda-explicit已保存。
-- 正式Shape环境verify_environment通过，DiT/VAE重新hash匹配；DINO439个tensor严格加载无missing/unexpected。
-- H100 GPU0张量合同检查全部通过，累计分配54.34秒。
-- 正式Shape环境数据合同测试通过。
-- 正在运行官方权重的合成box/sphere完整接口诊断（EGL、VAE编码重建、Qwen隐藏状态、MLP/DiT前向梯度），这些不代表训练或泛化效果。
-- Nano大分片仍续传；Edit3D-Bench mesh预取运行中。GPU训练未开始。
-
-
-## 2026-10-13 14:23 Asia/Shanghai 更新
-- 下载主任务30/30 verified。Nano分片0、33、66完整SHA匹配；总112份模型/数据/benchmark下载收据verified。
-- Edit3D-Bench取得add/remove各20有效配对，另1配对因保留表面不足排除；排除记录保存。
-- NVIDIA EGL实际渲染已跑通。原服务器强制Mesa变量仅对实验子进程取消。
-- 官方VAE+Qwen+MLP+4096-token DiT源条件完整前向/反向在GPU0通过；Qwen hidden1350x3584，随机MLP velocity loss约0.973。不能据此宣称编辑有效。
-- 合成盒子纯FP16 VAE重建F-score@0.05=0.2475，明显较差。已排队真实Nano源网格/FP32+autocast/尺度诊断；尚未运行真实数据VAE门槛或训练。
-- 当前prepare-only在CPU数据提取/QC，完成后渲染30个训练配对；精度诊断等待同一pilot锁，绝不同时运行两张GPU。
-- 临时SSH中继已关闭，environment/network_relay.json enabled=false，本地forward会话退出。
-
-## 2026-10-13 视觉复核及正式训练前更新
-- 两个独立环境安装、pip check、环境快照已完成；112份下载收据verified，中继已关闭。
-- 官方权重完整接口通过；真实Nano uid_0 VAE FP32/autocast F-score@0.05=0.995，合成box重建较差。正式训练首样本VAE gate仍待执行。
-- 3000候选自动清洗：1798独立add配对通过，1202排除。固定512/64个独立训练/验证配对各包含add与反向remove；测试40条。
-- AI agent查看30个独立配对四视角图（不代表用户亲自人工确认），排除10个语义不符/难以确认配对，并保持其他训练位置和验证集不变、确定性补入10对。
-- 原始清单保存在assets/manifests/before_visual_review；替换与观察见results/summaries/visual_review_*.json，完整清单可追溯。
-- 正在重新渲染低光照v2图像并复核替换样本，尚未批准pilot。不会把样本语义抽查解释成整套数据语义保证。
-- 评估VAE使用与正式缓存相同的FP32/autocast精度；connector验证loss无提升时停止扩大训练。
-
-## 正式诊断启动
-- 视觉复核共46候选配对，排除16，最终训练前30独立配对已有观察记录；其他482配对只有自动几何QC。
-- 批准记录environment/data_review.json包含当前train/val/test SHA，正式runner验证清单未发生变化。
-- 训练源uid_66677_add正式VAE gate通过：CD平方和0.0004056，F-score@0.05=0.99639；只代表此网格重建。
-- Shape诊断缓存16条已完成，Qwen诊断特征抽取中；随后缓存val16并运行200-step上限8独立add配对拟合。
-- 当前进程以environment/pilot_pid.txt与run_state.json为准；GPU0。不要重复启动runner或绕过pilot.lock运行GPU。
-- 启动日志logs/pilot_launcher.log；scripts/summarize_pilot.py可生成证据驱动当前摘要。
-- 原始Hunyuan基线只输入源物体单视角，忽略编辑指令；编辑模型输入四视角+指令。此基线检验原生生成，不等同公平的指令编辑模型。
-
-## 8独立配对诊断通过
-- overfit运行200步，训练velocity loss 0.9926369 -> 0.6293402（下降36.6%）；独立val前16条loss 1.0304584 -> 0.6628609。
-- 通过预先规定的固定噪声训练loss下降10%门槛；这不是几何生成成功，也不证明未见物体编辑有效。
-- 运行耗时459.2秒，含加载的GPU分配589.36秒。累计截至诊断结束2571.93秒（0.714小时）。
-- 检查点results/checkpoints/overfit_{best,latest}.pt；逐步日志logs/train_overfit.jsonl，报告environment/training_overfit.json。
-- runner正在render_train_full；后续full shape/VLM缓存、connector<=500steps、LoRA<=2000steps、9种对照。
-- 若connector验证loss无提升，不扩大LoRA；所有阶段按24h GPU分配预算硬停止。
-
-## 全量准备继续
-- render_train_full第999条uid_349_remove遇到持续全黑EGL帧，脚本主动失败并保留原日志。重新启动新渲染进程，从已有record缓存恢复后所有1024条完成。
-- 两次渲染时间均计入预算，累计至train渲染完成4068.76秒；正在val全量渲染。
-- 没有排除该配对或修改其几何，故清单哈希不变。黑帧失败归因尚不能确证，重启后恢复。
-- 正式connector和LoRA前后验证loss覆盖全部128条；20步趋势/最佳检查点采用固定16条探针。字段已明确区分。
-
-## 全量几何准备完成
-- 全量渲染train1024、val128、test40均完成；RGBA四视角source数据与共有坐标source/target网格位于assets/prepared/。
-- Shape latent缓存train1024、val128、test40均完成。FP32 VAE权重与输入、FP16 autocast编码，4096x64，全部有限值。
-- 累计截至Shape缓存完成6050.87秒（1.681h）。正在全量Qwen隐藏状态缓存，正确/no-op各一份；测试集另有打乱指令。
-- 8样本拟合门槛已通过。正式connector/LoRA与benchmark推断尚未开始。
-- 原始和最终完整清单均提交results/summaries/*_manifest.jsonl，修改代码和文档有连续Git提交；上游官方源码保持原提交无补丁。
-
-## 正式训练启动
-- 全量Qwen缓存train1024/val128/test40完成，test含正确/no-op/shuffled隐藏状态，无生成回答。
-- 累计至VLM完成7556.35秒（2.10h）；正在connector<=500steps。
-- 正式MLP初始train前16探针loss0.9658027，val全部128条loss0.9231679；训练4720640参数，DiT/VAE/VLM冻结。
-- scripts/audit_full_cache.py正在CPU检查所有Shape/VLM缓存；日志logs/full_cache_integrity.log。
-- results/checkpoints/connector_initial.pt已保存，同初始化作为random对照；过拟合诊断不作为正式训练初始化。
-
-## Connector正式训练完成，LoRA启动
-- connector500步：train前16探针0.9658027 -> 0.6386403；完整128val loss0.9231679 -> 0.6159285（下降33.3%）。
-- 最佳val探针0.6408666，500步检查点为best；正式connector未从overfit初始化，random对照保存相同初始MLP。
-- 完整Shape/VLM缓存CPU审计通过，六个目录条目数量正确，tensor形状与有限性通过。
-- LoRA<=2000steps已启动，从connector_best初始化；冻结主干、训练MLP和attention rank8/alpha16 LoRA。
-- 累计至connector结束9984.09秒（2.773h）。尚无生成几何/benchmark结果，不得从loss推断编辑有效。
-
-## 评估顺序和审计更新
-- benchmark运行顺序改为add/remove交替、seed优先，保留原manifest索引的shuffled指令映射。每模式protocol.json记录manifest哈希及采样对照。
-- scripts/build_comparison_sheets.py在CPU拼接已有四视角图；缺失输出标pending，不创建新GPU工作。
-- LoRA仍运行中，尚无benchmark生成证据。
-
-## 源几何参照诊断
-- CPU全部40例首seed源网格与编辑目标比较：F-score@0.05 add0.604/remove0.833/all0.719。删除集整体相似度高，最终必须结合removed-source residual与指令控制判断。
-- 该诊断不替代正式三seed源基线；results/summaries/source_identity_diagnostic.json。LoRA训练仍在进行。
+## 恢复
+- 先读取agent.md与本文件，git status，检查/proc和run_state；尚在运行时只观察。
+- 失败后修复实现问题，保留原日志/预算，确认runner退出后再运行environment/venvs/shape/bin/python scripts/run_pilot.py；成功阶段自动跳过。
+- 已发布清单为权威；不要重划分已复核数据。data_review.json批准的是固定manifest SHA。
+- 正式权重、VAE gate或8样本拟合失败停止扩大；connector完整val无提升不继续LoRA；预算不可绕过。

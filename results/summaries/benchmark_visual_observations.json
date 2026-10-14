@@ -1,0 +1,69 @@
+{
+  "reviewed_utc": "2026-10-14T02:35:59.621972+00:00",
+  "reviewer": "AI agent, not human signoff",
+  "seed": 20261013,
+  "selection": "Six objects preselected before benchmark generation; no posthoc best/worst selection",
+  "views": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "limitations": "Qualitative observations for six examples; not a full-set semantic success rate. Shuffled evaluation/render recovery still in progress at review time.",
+  "observations": [
+    {
+      "id": "bench_add_45d32f8e2df34ce0b9a71cca74f79078",
+      "operation": "add",
+      "instruction": "Add a power cord extending from the base",
+      "requested_edit": "Power cord is absent; lamp stem lost, base and shade disconnected, shade rim has holes.",
+      "instruction_controls": "Correct and shuffled outputs are visually very similar.",
+      "verdict": "failed",
+      "comparison_sheet": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_45d32f8e2df34ce0b9a71cca74f79078.jpg"
+    },
+    {
+      "id": "bench_add_8ca6b76e676b4504b5f9c5580a751ec3",
+      "operation": "add",
+      "instruction": "Add a crafted lid with a small knob on top of the vase",
+      "requested_edit": "Crafted lid and knob are absent; vase opening/rim is distorted.",
+      "instruction_controls": "Shuffled also lacks the lid; small rim differences do not implement requested addition.",
+      "verdict": "failed",
+      "comparison_sheet": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_8ca6b76e676b4504b5f9c5580a751ec3.jpg"
+    },
+    {
+      "id": "bench_add_9bc76559bccb409d9a8e6dc69b50977b",
+      "operation": "add",
+      "instruction": "Add a roof luggage rack on top of the limousine",
+      "requested_edit": "No coherent roof luggage rack is visible; car surface has holes and roof/body damage.",
+      "instruction_controls": "Correct and shuffled outputs look similar; noop also has damage.",
+      "verdict": "failed",
+      "comparison_sheet": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_9bc76559bccb409d9a8e6dc69b50977b.jpg"
+    },
+    {
+      "id": "bench_remove_81615480737c495785a6aecee0184e10",
+      "operation": "remove",
+      "instruction": "Remove topknot hair",
+      "requested_edit": "Head retains a raised hair-like/top protrusion; does not clearly match the bald target across views. Body identity mostly retained.",
+      "instruction_controls": "Correct, noop, shuffled head silhouettes remain similar.",
+      "verdict": "not clearly achieved",
+      "comparison_sheet": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_81615480737c495785a6aecee0184e10.jpg"
+    },
+    {
+      "id": "bench_remove_dd841d02b6164337a486de13c545b15d",
+      "operation": "remove",
+      "instruction": "Remove the grip",
+      "requested_edit": "Grip remains visible; body and magazine have extensive holes/fragments.",
+      "instruction_controls": "Correct and shuffled outputs show similar retained grip and breakage.",
+      "verdict": "failed",
+      "comparison_sheet": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_dd841d02b6164337a486de13c545b15d.jpg"
+    },
+    {
+      "id": "bench_remove_82d7a79c62f94c979f02c2ced6126780",
+      "operation": "remove",
+      "instruction": "Remove lid from the container",
+      "requested_edit": "Container still has a closed lid/disc-like top; small knob removed but target opening not produced.",
+      "instruction_controls": "Correct and shuffled outputs are near identical.",
+      "verdict": "failed",
+      "comparison_sheet": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_82d7a79c62f94c979f02c2ced6126780.jpg"
+    }
+  ]
+}

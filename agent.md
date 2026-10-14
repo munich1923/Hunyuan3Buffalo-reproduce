@@ -46,3 +46,10 @@
 - 1024 训练条目、128 验证条目；添加配对反向构造删除，正反样本不跨 split。
 - 具体方法差异见 environment/method_notes.md，参数见 environment/pilot_config.json。
 - scripts/run_pilot.py 维护 environment/run_state.json、GPU 时间累计和阶段失败状态。不能把后台启动或脚本语法检查写成实验成功。
+
+## 收尾与恢复规则
+- 保留原阶段失败、部分metrics和已计入的GPU时间；续跑不能重置预算或随机种子。
+- scripts/recover_experiment.py只补齐既有评估、8对训练几何、缺失四视角与CPU摘要，不追加训练或扩大数据。
+- EGL渲染与模型生成分离，每网格独立渲染进程；渲染恢复仍使用同一pilot锁和单卡预算。
+- best checkpoint与最终训练步数不同：当前LoRA训练2000步，评估best(step1920)。
+- 完成流水线不表示编辑复现成功；报告区分接口通过、velocity拟合、实际训练几何和未见指令有效性。

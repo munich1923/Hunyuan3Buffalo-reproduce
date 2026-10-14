@@ -1,0 +1,15 @@
+{
+  "repo": "ziqima/Edit3D-Bench",
+  "kind": "datasets",
+  "revision": "30ace7d3b0e834189b514cf3753cd832825b6922",
+  "file": "README.md",
+  "local_path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/Edit3D-Bench/README.md",
+  "expected_sha256": null,
+  "expected_bytes": 3140,
+  "started_utc": "2026-10-13T05:50:23.103652+00:00",
+  "exit_code": 0,
+  "actual_bytes": 3140,
+  "actual_sha256": "edf3b24d7d07ae8fa41089cc61567abb02fe1f0b4b3fe1f20cef81ff8756eda2",
+  "status": "verified",
+  "completed_utc": "2026-10-13T05:50:24.467251+00:00"
+}

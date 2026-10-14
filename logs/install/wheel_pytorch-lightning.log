@@ -1,0 +1,17 @@
+[#1ed474 0B/0B CN:1 DL:0B]
+[#1ed474 0B/0B CN:1 DL:0B]
+[#1ed474 0B/0B CN:1 DL:0B]
+[#1ed474 0B/0B CN:1 DL:0B]
+[#1ed474 0B/0B CN:1 DL:0B]
+[#1ed474 0B/0B CN:1 DL:0B]
+[#1ed474 0B/0B CN:1 DL:0B]
+[#1ed474 256KiB/810KiB(31%) CN:1 DL:291KiB ETA:1s]
+[#1ed474 416KiB/810KiB(51%) CN:1 DL:209KiB ETA:1s]
+
+Download Results:
+gid   |stat|avg speed  |path/URI
+======+====+===========+=======================================================
+1ed474|OK  |   273KiB/s|/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/pytorch_lightning-1.9.5-py3-none-any.whl
+
+Status Legend:
+(OK):download completed.

@@ -1,0 +1,132 @@
+{
+  "updated_utc": "2026-10-14T03:10:50.568031+00:00",
+  "status": "completed",
+  "current_stage": null,
+  "stop_reason": null,
+  "gpu_allocated_seconds_completed_stages": 37363.49007081753,
+  "gpu_budget_seconds": 86400,
+  "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+  "conclusions": {
+    "interface": "Official-weight VAE/Qwen/MLP/source-latent DiT forward and backward passed; see interface_diagnostics.json.",
+    "training_fit": "8-pair deterministic velocity-loss fitting gate passed.",
+    "unseen_editing": "LoRA is worse than unchanged source against edited targets; this approximation does not establish reliable instruction editing.",
+    "geometry_fit_overfit": "Generated geometry does not beat unchanged source F-score.",
+    "geometry_fit_lora": "Generated geometry does not beat unchanged source F-score."
+  },
+  "paths": {
+    "logs": "logs/",
+    "results": "results/",
+    "weight_receipts": "logs/downloads/",
+    "manifests": "results/summaries/*_manifest.jsonl"
+  },
+  "training_geometry": {
+    "overfit": {
+      "checkpoint": "overfit",
+      "expected": 8,
+      "attempted": 8,
+      "complete": true,
+      "valid": 8,
+      "sampling": {
+        "seed": 20261013,
+        "steps": 50,
+        "guidance": 1
+      },
+      "note": "Training-add-pair geometry diagnostic, separate from held-out benchmark; velocity-loss gate did not require successful geometry memorization.",
+      "generated_cd_squared_sum": 0.0013606241159734567,
+      "unchanged_source_cd_squared_sum": 0.00128104535335607,
+      "generated_fscore_005": 0.9596533130820746,
+      "unchanged_source_fscore_005": 0.9648306994603255
+    },
+    "lora": {
+      "checkpoint": "lora",
+      "expected": 8,
+      "attempted": 8,
+      "complete": true,
+      "valid": 8,
+      "sampling": {
+        "seed": 20261013,
+        "steps": 50,
+        "guidance": 1
+      },
+      "note": "Training-add-pair geometry diagnostic, separate from held-out benchmark; velocity-loss gate did not require successful geometry memorization.",
+      "generated_cd_squared_sum": 0.002356400230022006,
+      "unchanged_source_cd_squared_sum": 0.00128104535335607,
+      "generated_fscore_005": 0.9186367368556585,
+      "unchanged_source_fscore_005": 0.9648306994603255
+    }
+  },
+  "instruction_sensitivity": {
+    "note": "Differences between generated meshes at the same seed measure sensitivity, not instruction correctness; nonzero CD occurs even for identical meshes due to surface sampling.",
+    "comparisons": {
+      "noop": {
+        "add": {
+          "attempted": 60,
+          "both_valid": 60,
+          "paired_objects": 20,
+          "cd_squared_sum": 0.03637602194528987,
+          "fscore_005": 0.9215999034937505
+        },
+        "remove": {
+          "attempted": 60,
+          "both_valid": 60,
+          "paired_objects": 20,
+          "cd_squared_sum": 0.007816743987148912,
+          "fscore_005": 0.9364085008696221
+        },
+        "all": {
+          "attempted": 120,
+          "both_valid": 120,
+          "paired_objects": 40,
+          "cd_squared_sum": 0.02209638296621939,
+          "fscore_005": 0.9290042021816862
+        }
+      },
+      "shuffled": {
+        "add": {
+          "attempted": 60,
+          "both_valid": 60,
+          "paired_objects": 20,
+          "cd_squared_sum": 0.0004047270069715158,
+          "fscore_005": 0.9943107719466733
+        },
+        "remove": {
+          "attempted": 60,
+          "both_valid": 60,
+          "paired_objects": 20,
+          "cd_squared_sum": 0.001082027883365241,
+          "fscore_005": 0.9856344457769511
+        },
+        "all": {
+          "attempted": 120,
+          "both_valid": 120,
+          "paired_objects": 40,
+          "cd_squared_sum": 0.0007433774451683783,
+          "fscore_005": 0.989972608861812
+        }
+      },
+      "no_source": {
+        "add": {
+          "attempted": 60,
+          "both_valid": 60,
+          "paired_objects": 20,
+          "cd_squared_sum": 0.13871595834815836,
+          "fscore_005": 0.18958191368206084
+        },
+        "remove": {
+          "attempted": 60,
+          "both_valid": 60,
+          "paired_objects": 20,
+          "cd_squared_sum": 0.1635854264017445,
+          "fscore_005": 0.17609742499533476
+        },
+        "all": {
+          "attempted": 120,
+          "both_valid": 120,
+          "paired_objects": 40,
+          "cd_squared_sum": 0.1511506923749514,
+          "fscore_005": 0.18283966933869783
+        }
+      }
+    }
+  }
+}

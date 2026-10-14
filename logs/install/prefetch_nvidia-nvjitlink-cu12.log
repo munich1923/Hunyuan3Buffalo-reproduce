@@ -1,0 +1,15 @@
+[#0df0d0 0B/0B CN:1 DL:0B]
+[#0df0d0 1.2MiB/20MiB(6%) CN:2 DL:1.3MiB ETA:13s]
+[#0df0d0 3.0MiB/20MiB(15%) CN:2 DL:1.6MiB ETA:10s]
+[#0df0d0 5.5MiB/20MiB(27%) CN:2 DL:1.9MiB ETA:7s]
+[#0df0d0 7.9MiB/20MiB(39%) CN:2 DL:2.0MiB ETA:5s]
+[#0df0d0 11MiB/20MiB(57%) CN:2 DL:2.3MiB ETA:3s]
+[#0df0d0 16MiB/20MiB(80%) CN:1 DL:2.7MiB ETA:1s]
+
+Download Results:
+gid   |stat|avg speed  |path/URI
+======+====+===========+=======================================================
+0df0d0|OK  |   2.9MiB/s|/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/nvidia_nvjitlink_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl
+
+Status Legend:
+(OK):download completed.

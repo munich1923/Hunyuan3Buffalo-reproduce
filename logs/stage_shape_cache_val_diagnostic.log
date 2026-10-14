@@ -1,0 +1,5 @@
+2026-10-13 15:12:22,116 - hy3dgen.shapgen - INFO - Try to load model from local path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1/hunyuan3d-vae-v2-1
+2026-10-13 15:12:22,129 - hy3dgen.shapgen - INFO - Loading model from /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1/hunyuan3d-vae-v2-1/model.fp16.ckpt
+PointCrossAttentionEncoder INFO: pc_sharpedge_size is zero
+VAE val 0 [1, 4096, 64]
+VAE val 10 [1, 4096, 64]

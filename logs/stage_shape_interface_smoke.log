@@ -1,0 +1,32 @@
+libEGL warning: Not allowed to force software rendering when API explicitly selects a hardware device.
+libEGL warning: MESA-LOADER: failed to open llvmpipe: /usr/lib/dri/llvmpipe_dri.so: cannot open shared object file: No such file or directory (search paths /usr/lib/x86_64-linux-gnu/dri:\$${ORIGIN}/dri:/usr/lib/dri, suffix _dri)
+
+Traceback (most recent call last):
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/smoke_shape.py", line 18, in <module>
+    views=render(source,folder/"source_views");render(target,folder/"target_views")
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/render_views.py", line 25, in render
+    r=pyrender.OffscreenRenderer(512,512)
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/lib/python3.10/site-packages/pyrender/offscreen.py", line 31, in __init__
+    self._create()
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/lib/python3.10/site-packages/pyrender/offscreen.py", line 149, in _create
+    self._platform.init_context()
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/lib/python3.10/site-packages/pyrender/platforms/egl.py", line 177, in init_context
+    assert eglInitialize(self._egl_display, major, minor)
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/lib/python3.10/site-packages/OpenGL/platform/baseplatform.py", line 402, in __call__
+    return self( *args, **named )
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/lib/python3.10/site-packages/OpenGL/error.py", line 228, in glCheckError
+    raise GLError(
+OpenGL.error.GLError: GLError(
+	err = 12289,
+	baseOperation = eglInitialize,
+	cArguments = (
+		<OpenGL._opaque.EGLDisplay_pointer object at 0x7b7cb45e1540>,
+		c_long(0),
+		c_long(0),
+	),
+	result = 0
+)
+2026-10-13 14:14:01,661 - hy3dgen.shapgen - INFO - Try to load model from local path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1/hunyuan3d-vae-v2-1
+2026-10-13 14:14:01,709 - hy3dgen.shapgen - INFO - Loading model from /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1/hunyuan3d-vae-v2-1/model.fp16.ckpt
+PointCrossAttentionEncoder INFO: pc_sharpedge_size is zero
+{"source_views": ["/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/interface_smoke/source_views/0.png", "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/interface_smoke/source_views/90.png", "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/interface_smoke/source_views/180.png", "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/interface_smoke/source_views/270.png"], "instruction": "Add a small sphere on top of the box.", "latent_shape": [1, 4096, 64], "reconstruction": {"cd_squared_sum": 0.16120956878190193, "cd_l1_mean": 0.18816468730609678, "sample_points": 16384, "fscore_001": 0.014808741155660377, "fscore_0025": 0.15590674894523496, "fscore_005": 0.2475057602537504}, "synthetic": true, "note": "Interface smoke only, does not certify dataset reconstruction or editing ability."}

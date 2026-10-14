@@ -1,0 +1,58 @@
+[#58b723 0B/0B CN:1 DL:0B]
+[#58b723 0B/0B CN:1 DL:0B]
+[#58b723 0B/0B CN:1 DL:0B]
+[#58b723 0B/0B CN:1 DL:0B]
+[#58b723 0B/0B CN:1 DL:0B]
+[#58b723 0B/0B CN:1 DL:0B]
+[#58b723 0B/0B CN:1 DL:0B]
+[#58b723 80KiB/47MiB(0%) CN:4 DL:212KiB ETA:3m48s]
+[#58b723 624KiB/47MiB(1%) CN:4 DL:433KiB ETA:1m50s]
+[#58b723 1.9MiB/47MiB(4%) CN:4 DL:804KiB ETA:58s]
+[#58b723 3.6MiB/47MiB(7%) CN:4 DL:1.0MiB ETA:42s]
+[#58b723 4.7MiB/47MiB(9%) CN:4 DL:1.0MiB ETA:40s]
+[#58b723 5.7MiB/47MiB(12%) CN:4 DL:1.0MiB ETA:40s]
+[#58b723 6.4MiB/47MiB(13%) CN:4 DL:0.9MiB ETA:41s]
+[#58b723 7.2MiB/47MiB(15%) CN:4 DL:0.9MiB ETA:42s]
+[#58b723 7.9MiB/47MiB(16%) CN:4 DL:0.9MiB ETA:42s]
+[#58b723 8.7MiB/47MiB(18%) CN:4 DL:0.9MiB ETA:42s]
+[#58b723 9.4MiB/47MiB(19%) CN:4 DL:0.9MiB ETA:39s]
+[#58b723 10MiB/47MiB(21%) CN:4 DL:0.9MiB ETA:37s]
+[#58b723 11MiB/47MiB(24%) CN:4 DL:0.9MiB ETA:38s]
+[#58b723 13MiB/47MiB(28%) CN:4 DL:0.9MiB ETA:34s]
+[#58b723 15MiB/47MiB(32%) CN:4 DL:1.0MiB ETA:30s]
+[#58b723 15MiB/47MiB(33%) CN:4 DL:1.0MiB ETA:30s]
+[#58b723 17MiB/47MiB(37%) CN:4 DL:1.1MiB ETA:25s]
+[#58b723 18MiB/47MiB(39%) CN:4 DL:1.1MiB ETA:23s]
+[#58b723 19MiB/47MiB(41%) CN:4 DL:1.1MiB ETA:23s]
+[#58b723 21MiB/47MiB(44%) CN:4 DL:1.2MiB ETA:20s]
+[#58b723 22MiB/47MiB(47%) CN:4 DL:1.3MiB ETA:18s]
+ *** Download Progress Summary as of Tue Oct 13 13:53:30 2026 *** 
+===============================================================================
+[#58b723 23MiB/47MiB(50%) CN:4 DL:1.3MiB ETA:17s]
+FILE: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/opencv_python_headless-4.10.0.84-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+-------------------------------------------------------------------------------
+
+[#58b723 23MiB/47MiB(50%) CN:4 DL:1.3MiB ETA:17s]
+[#58b723 26MiB/47MiB(55%) CN:4 DL:1.4MiB ETA:15s]
+[#58b723 27MiB/47MiB(58%) CN:4 DL:1.3MiB ETA:14s]
+[#58b723 28MiB/47MiB(59%) CN:4 DL:1.3MiB ETA:14s]
+[#58b723 29MiB/47MiB(62%) CN:4 DL:1.3MiB ETA:13s]
+[#58b723 30MiB/47MiB(64%) CN:4 DL:1.2MiB ETA:12s]
+[#58b723 32MiB/47MiB(67%) CN:4 DL:1.3MiB ETA:11s]
+[#58b723 33MiB/47MiB(71%) CN:4 DL:1.3MiB ETA:10s]
+[#58b723 34MiB/47MiB(72%) CN:4 DL:1.3MiB ETA:9s]
+[#58b723 36MiB/47MiB(77%) CN:3 DL:1.4MiB ETA:7s]
+[#58b723 38MiB/47MiB(80%) CN:3 DL:1.3MiB ETA:7s]
+[#58b723 39MiB/47MiB(83%) CN:3 DL:1.3MiB ETA:5s]
+[#58b723 40MiB/47MiB(84%) CN:3 DL:1.3MiB ETA:5s]
+[#58b723 42MiB/47MiB(88%) CN:3 DL:1.3MiB ETA:3s]
+[#58b723 44MiB/47MiB(93%) CN:3 DL:1.4MiB ETA:2s]
+[#58b723 46MiB/47MiB(97%) CN:2 DL:1.5MiB]
+
+Download Results:
+gid   |stat|avg speed  |path/URI
+======+====+===========+=======================================================
+58b723|OK  |   1.2MiB/s|/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/opencv_python_headless-4.10.0.84-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+
+Status Legend:
+(OK):download completed.

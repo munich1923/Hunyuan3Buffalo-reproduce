@@ -1,0 +1,74 @@
+{
+  "note": "Differences between generated meshes at the same seed measure sensitivity, not instruction correctness; nonzero CD occurs even for identical meshes due to surface sampling.",
+  "comparisons": {
+    "noop": {
+      "add": {
+        "attempted": 60,
+        "both_valid": 60,
+        "paired_objects": 20,
+        "cd_squared_sum": 0.03637602194528987,
+        "fscore_005": 0.9215999034937505
+      },
+      "remove": {
+        "attempted": 60,
+        "both_valid": 60,
+        "paired_objects": 20,
+        "cd_squared_sum": 0.007816743987148912,
+        "fscore_005": 0.9364085008696221
+      },
+      "all": {
+        "attempted": 120,
+        "both_valid": 120,
+        "paired_objects": 40,
+        "cd_squared_sum": 0.02209638296621939,
+        "fscore_005": 0.9290042021816862
+      }
+    },
+    "shuffled": {
+      "add": {
+        "attempted": 20,
+        "both_valid": 20,
+        "paired_objects": 20,
+        "cd_squared_sum": 0.00032523730302251136,
+        "fscore_005": 0.9959314715307597
+      },
+      "remove": {
+        "attempted": 19,
+        "both_valid": 19,
+        "paired_objects": 19,
+        "cd_squared_sum": 0.0006368019887865721,
+        "fscore_005": 0.9924277468523379
+      },
+      "all": {
+        "attempted": 39,
+        "both_valid": 39,
+        "paired_objects": 39,
+        "cd_squared_sum": 0.0004770252268562846,
+        "fscore_005": 0.9942245287387081
+      }
+    },
+    "no_source": {
+      "add": {
+        "attempted": 60,
+        "both_valid": 60,
+        "paired_objects": 20,
+        "cd_squared_sum": 0.13871595834815836,
+        "fscore_005": 0.18958191368206084
+      },
+      "remove": {
+        "attempted": 60,
+        "both_valid": 60,
+        "paired_objects": 20,
+        "cd_squared_sum": 0.1635854264017445,
+        "fscore_005": 0.17609742499533476
+      },
+      "all": {
+        "attempted": 120,
+        "both_valid": 120,
+        "paired_objects": 40,
+        "cd_squared_sum": 0.1511506923749514,
+        "fscore_005": 0.18283966933869783
+      }
+    }
+  }
+}

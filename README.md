@@ -8,3 +8,8 @@ environment/ 保存环境定义与快照，logs/ 保存过程日志，results/ �
 
 本仓库为远端本地 Git 仓库，尚未配置远程地址。
 大型文件位于同一远端工作区内，由 .gitignore 排除，结果摘要应记录其路径与校验值。
+
+
+## 最终结果入口
+本轮实验收尾已完成，但开源替代方法未复现可靠的指令编辑。完整报告见results/summaries/final_report.md，各评估模式说明见results/summaries/evaluation_modes.md；恢复与后续操作见handoff.md。
+40张benchmark对比图在results/visual_comparisons/，8张训练几何检查图在results/training_geometry_comparisons/。全部产物保存在远端。

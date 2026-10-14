@@ -1,0 +1,762 @@
+[
+  {
+    "id": "bench_add_45d32f8e2df34ce0b9a71cca74f79078",
+    "operation": "add",
+    "instruction": "Add a power cord extending from the base",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_45d32f8e2df34ce0b9a71cca74f79078.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_8ca6b76e676b4504b5f9c5580a751ec3",
+    "operation": "add",
+    "instruction": "Add a crafted lid with a small knob on top of the vase",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_8ca6b76e676b4504b5f9c5580a751ec3.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_9bc76559bccb409d9a8e6dc69b50977b",
+    "operation": "add",
+    "instruction": "Add a roof luggage rack on top of the limousine",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_9bc76559bccb409d9a8e6dc69b50977b.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_9e4c9175cee346babaaf3c187db52c8d",
+    "operation": "add",
+    "instruction": "Add a front bumper guard to the lower front of the truck",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_9e4c9175cee346babaaf3c187db52c8d.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_b5753ab691134b3898df8bd2d501c759",
+    "operation": "add",
+    "instruction": "Add a flowing cape to the superhero's shoulders",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_b5753ab691134b3898df8bd2d501c759.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_1807676ed2b74d33a7d23449768db84b",
+    "operation": "add",
+    "instruction": "Add an antenna to the rear side of the turret",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_1807676ed2b74d33a7d23449768db84b.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_adc93c8e59fd4abdb95378c7ef86143c",
+    "operation": "add",
+    "instruction": "Add a horn to the top of the head",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_adc93c8e59fd4abdb95378c7ef86143c.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_92d4f7e1c8a659b30e2f7d16c4b89a53",
+    "operation": "add",
+    "instruction": "Add a pedestal base beneath the bottom of the vase",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_92d4f7e1c8a659b30e2f7d16c4b89a53.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_5dcf349d01c5494787b65827452d672f",
+    "operation": "add",
+    "instruction": "Add a crown to the head",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_5dcf349d01c5494787b65827452d672f.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_b1f5730271a94f7ab3fef93bf5e3a489",
+    "operation": "add",
+    "instruction": "Add roof racks to the top of the car",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_b1f5730271a94f7ab3fef93bf5e3a489.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_dc168b1d23aa4f208d493329ebf2203d",
+    "operation": "add",
+    "instruction": "Add a small backpack",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_dc168b1d23aa4f208d493329ebf2203d.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_e1be35c462a94cd48b2964a8e5ead4e3",
+    "operation": "add",
+    "instruction": "Add a wrist guard on the left arm",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_e1be35c462a94cd48b2964a8e5ead4e3.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_23c3aa8f5df34cd1b9b68810cddd7f48",
+    "operation": "add",
+    "instruction": "Add a small rectangular backpack to the back",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_23c3aa8f5df34cd1b9b68810cddd7f48.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_f4ad252d962a4a6bae2d76eba804ced4",
+    "operation": "add",
+    "instruction": "Add a small antenna to the top of the hood",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_f4ad252d962a4a6bae2d76eba804ced4.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_c5566014f735482980d909d958f9146d",
+    "operation": "add",
+    "instruction": "Add a wooden lid on top of the barrel",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_c5566014f735482980d909d958f9146d.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_67ee3ee874904ceb8627541b34045ca5",
+    "operation": "add",
+    "instruction": "Add a small circular base stand to the bottom of the vase",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_67ee3ee874904ceb8627541b34045ca5.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_0da6104a838a4c32a067fc2d0a8b566b",
+    "operation": "add",
+    "instruction": "Add a short tail extending from the rear",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_0da6104a838a4c32a067fc2d0a8b566b.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_e0bd59c70a8f44a08e227f99c29fef81",
+    "operation": "add",
+    "instruction": "Add two wheels at the bottom of the stand for mobility",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_e0bd59c70a8f44a08e227f99c29fef81.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_65880617586342db903f9236c014aeab",
+    "operation": "add",
+    "instruction": "Add a collar around the neck",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_65880617586342db903f9236c014aeab.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_add_445b5a9c131d482fad76bf5b6c2f8271",
+    "operation": "add",
+    "instruction": "Add a small hat on top of the capybara's head",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_add_445b5a9c131d482fad76bf5b6c2f8271.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_81615480737c495785a6aecee0184e10",
+    "operation": "remove",
+    "instruction": "Remove topknot hair",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_81615480737c495785a6aecee0184e10.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_dd841d02b6164337a486de13c545b15d",
+    "operation": "remove",
+    "instruction": "Remove the grip",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_dd841d02b6164337a486de13c545b15d.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_82d7a79c62f94c979f02c2ced6126780",
+    "operation": "remove",
+    "instruction": "Remove lid from the container",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_82d7a79c62f94c979f02c2ced6126780.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_d117b1afb1d44946b0c1784730cbe3ed",
+    "operation": "remove",
+    "instruction": "Remove the knob from the lid of the teapot",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_d117b1afb1d44946b0c1784730cbe3ed.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_628fc3d2fcef4d9fbd42119d0fb6dbd1",
+    "operation": "remove",
+    "instruction": "Remove the spherical top",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_628fc3d2fcef4d9fbd42119d0fb6dbd1.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_4d14272e44bd4bb6898d91b223296606",
+    "operation": "remove",
+    "instruction": "Remove the carrying handle bars on the top",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_4d14272e44bd4bb6898d91b223296606.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_4946d101bb6e4a34bf125a8c7c1113a0",
+    "operation": "remove",
+    "instruction": "Remove the blade from the axe",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_4946d101bb6e4a34bf125a8c7c1113a0.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_54911296afa045749c645ca9c22f2a56",
+    "operation": "remove",
+    "instruction": "Remove crown from head",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_54911296afa045749c645ca9c22f2a56.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_e9d1b916e651466ab989df1829189633",
+    "operation": "remove",
+    "instruction": "Remove arms",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_e9d1b916e651466ab989df1829189633.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_e848ec12d707473ea7b2da565f29aa07",
+    "operation": "remove",
+    "instruction": "Remove the hanging chain from the top of the chandelier",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_e848ec12d707473ea7b2da565f29aa07.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_16700b27484f46d3a418f025808fedf0",
+    "operation": "remove",
+    "instruction": "Remove the handlebars from the bicycle",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_16700b27484f46d3a418f025808fedf0.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_91b5a0e1b87e4b3185d2c3e599da963c",
+    "operation": "remove",
+    "instruction": "Remove the ceiling mount",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_91b5a0e1b87e4b3185d2c3e599da963c.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_2d970c3fd0904ae6b5bbaffd007255b9",
+    "operation": "remove",
+    "instruction": "Remove the shoes",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_2d970c3fd0904ae6b5bbaffd007255b9.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_7ff84e7e989141a6869c7afc12a5e398",
+    "operation": "remove",
+    "instruction": "Remove the gray ribbon from the hat",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_7ff84e7e989141a6869c7afc12a5e398.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_dfdde6f725b642f296c89755fc29271b",
+    "operation": "remove",
+    "instruction": "Remove the knob from the side of the cup",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_dfdde6f725b642f296c89755fc29271b.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_5a9670307f8f4b02b08203ae1944de80",
+    "operation": "remove",
+    "instruction": "Remove the screw-like component from the top left",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_5a9670307f8f4b02b08203ae1944de80.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_fd206aec08014884a5c707e31dc4b7c5",
+    "operation": "remove",
+    "instruction": "Remove the top part of the barrel",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_fd206aec08014884a5c707e31dc4b7c5.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_32540354f8ff4e0784c3c6f97023732d",
+    "operation": "remove",
+    "instruction": "Remove the finger rings from the syringe",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_32540354f8ff4e0784c3c6f97023732d.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_9d357edddc534431b5699e542c96bbcd",
+    "operation": "remove",
+    "instruction": "Remove the top cross from the chess king piece",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_9d357edddc534431b5699e542c96bbcd.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  },
+  {
+    "id": "bench_remove_ce6062a92993463eac26cb68e579cec0",
+    "operation": "remove",
+    "instruction": "Remove the string from the crossbow",
+    "path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/visual_comparisons/bench_remove_ce6062a92993463eac26cb68e579cec0.jpg",
+    "available": [
+      "input source",
+      "edited target",
+      "vae",
+      "native",
+      "random",
+      "connector",
+      "lora",
+      "no_source",
+      "noop",
+      "shuffled"
+    ],
+    "seed": 20261013
+  }
+]

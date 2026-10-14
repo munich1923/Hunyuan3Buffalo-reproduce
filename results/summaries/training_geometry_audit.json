@@ -1,0 +1,502 @@
+{
+  "expected_pairs": 8,
+  "note": "One seed,8 known add training pairs. F-score/CD deltas compare generated to target against unchanged source to target; region values are surface proxies, not semantic part masks.",
+  "checkpoints": {
+    "overfit": {
+      "attempted": 8,
+      "valid": 8,
+      "better_fscore_pairs": 0,
+      "better_cd_pairs": 2,
+      "pairs": [
+        {
+          "id": "uid_66677_add",
+          "instruction": "Add a splintered wooden ship mast with deep-carved, jagged grain patterns to the back.",
+          "valid": true,
+          "mesh_sha256": "5af480be6f3ad8c2b8d85c2493f47ccc54506e389036d8ae7f94649fe6315407",
+          "vertices": 121273,
+          "faces": 242502,
+          "delta_fscore_005": -0.0056641018162922885,
+          "delta_cd_squared_sum": 0.0001415578798425179,
+          "source_similarity": {
+            "cd_squared_sum": 0.00031858713271153984,
+            "cd_l1_mean": 0.010539664323238173,
+            "sample_points": 16384,
+            "fscore_001": 0.5388175228034202,
+            "fscore_0025": 0.9842049129425533,
+            "fscore_005": 0.9939825617094437
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15677,
+            "unchanged_region_distance_mean": 0.009998190053525953,
+            "unchanged_region_coverage_005": 1.0,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 2497,
+            "removed_source_points": 707,
+            "changed_target_coverage_005": 0.49979975971165397,
+            "changed_target_distance_mean": 0.08604433204597424,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        },
+        {
+          "id": "uid_859_add",
+          "instruction": "Add a jagged, skeletal Hollow mask with long, curved horns to the carriage front.",
+          "valid": true,
+          "mesh_sha256": "030544e6df09bd4a0ea4372b82318c32eae82c21b7cf780870d38eb198a44206",
+          "vertices": 106504,
+          "faces": 213216,
+          "delta_fscore_005": -0.0034170659160760453,
+          "delta_cd_squared_sum": 9.65393907302983e-05,
+          "source_similarity": {
+            "cd_squared_sum": 0.00025973474326151247,
+            "cd_l1_mean": 0.009901486617732502,
+            "sample_points": 16384,
+            "fscore_001": 0.5787430819313538,
+            "fscore_0025": 0.9887664421021973,
+            "fscore_005": 0.9969389004530428
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15978,
+            "unchanged_region_distance_mean": 0.009590779655394833,
+            "unchanged_region_coverage_005": 1.0,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 602,
+            "removed_source_points": 406,
+            "changed_target_coverage_005": 0.5564784053156147,
+            "changed_target_distance_mean": 0.061767287147461755,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        },
+        {
+          "id": "uid_33733_add",
+          "instruction": "Add segmented mechanical legs and a retractable robotic head to the base.",
+          "valid": true,
+          "mesh_sha256": "a3471a77702b3f96bd4e9d5af1bd5e1c983b565432574c3dd430592a277e56b3",
+          "vertices": 250880,
+          "faces": 501906,
+          "delta_fscore_005": -0.004318097301474699,
+          "delta_cd_squared_sum": -5.033812287246397e-05,
+          "source_similarity": {
+            "cd_squared_sum": 0.0005260994727407445,
+            "cd_l1_mean": 0.014082722898825555,
+            "sample_points": 16384,
+            "fscore_001": 0.30642028814672345,
+            "fscore_0025": 0.9415193709689181,
+            "fscore_005": 0.9949699423383634
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15363,
+            "unchanged_region_distance_mean": 0.013635621499261901,
+            "unchanged_region_coverage_005": 1.0,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 1646,
+            "removed_source_points": 1021,
+            "changed_target_coverage_005": 0.491494532199271,
+            "changed_target_distance_mean": 0.07499674707847606,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        },
+        {
+          "id": "uid_66061_add",
+          "instruction": "Add a carved sun-lion figurehead and a large, woven straw hat canopy.",
+          "valid": true,
+          "mesh_sha256": "a4ca70069923e6967a1bd150295194158d3feee2db210120f29dda1ed3cfae77",
+          "vertices": 276931,
+          "faces": 554318,
+          "delta_fscore_005": -0.009157790048211267,
+          "delta_cd_squared_sum": -0.00011930639059659935,
+          "source_similarity": {
+            "cd_squared_sum": 0.0006032777309989145,
+            "cd_l1_mean": 0.015110067685398585,
+            "sample_points": 16384,
+            "fscore_001": 0.26463491010489937,
+            "fscore_0025": 0.9182674762631775,
+            "fscore_005": 0.9918856140782673
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 12115,
+            "unchanged_region_distance_mean": 0.014620280691575189,
+            "unchanged_region_coverage_005": 0.9998349153941395,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 2754,
+            "removed_source_points": 4269,
+            "changed_target_coverage_005": 0.5493827160493827,
+            "changed_target_distance_mean": 0.0528266383651954,
+            "removed_source_still_present_fraction_005": 0.9988287655188569
+          }
+        },
+        {
+          "id": "uid_33740_add",
+          "instruction": "Add three thick, chunky, oversized mechanical spider legs with exaggerated, beveled joints.",
+          "valid": true,
+          "mesh_sha256": "75c5e7a2d849889385c6ac59cb3946df7fc6f1e3097c7e653ab777f6f76e70ae",
+          "vertices": 61771,
+          "faces": 123438,
+          "delta_fscore_005": -0.007668224837641624,
+          "delta_cd_squared_sum": 0.00016560217962498344,
+          "source_similarity": {
+            "cd_squared_sum": 0.00021167551592324004,
+            "cd_l1_mean": 0.008965448934579595,
+            "sample_points": 16384,
+            "fscore_001": 0.6836370694896912,
+            "fscore_0025": 0.9901274623689209,
+            "fscore_005": 0.9977365877531046
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15368,
+            "unchanged_region_distance_mean": 0.009058854325291313,
+            "unchanged_region_coverage_005": 0.9973971889640812,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 2949,
+            "removed_source_points": 1016,
+            "changed_target_coverage_005": 0.3034927093930146,
+            "changed_target_distance_mean": 0.07775229070906987,
+            "removed_source_still_present_fraction_005": 0.9645669291338582
+          }
+        },
+        {
+          "id": "uid_33784_add",
+          "instruction": "Add a floating shattered stone greatsword bound in layered, frayed fabric strips.",
+          "valid": true,
+          "mesh_sha256": "da18970b56d22ec0c9619e174202168403b7660de368c2e3fa2bf2d9931ae337",
+          "vertices": 173142,
+          "faces": 346292,
+          "delta_fscore_005": -0.00977290451529067,
+          "delta_cd_squared_sum": 0.0002691022537148703,
+          "source_similarity": {
+            "cd_squared_sum": 0.0005485590019490842,
+            "cd_l1_mean": 0.012689582547822535,
+            "sample_points": 16384,
+            "fscore_001": 0.4111244588424534,
+            "fscore_0025": 0.9674249968764294,
+            "fscore_005": 0.9902025331877158
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15995,
+            "unchanged_region_distance_mean": 0.01211688258610341,
+            "unchanged_region_coverage_005": 0.9965614254454517,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 827,
+            "removed_source_points": 389,
+            "changed_target_coverage_005": 0.3143893591293833,
+            "changed_target_distance_mean": 0.08457923302717966,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        },
+        {
+          "id": "uid_120_add",
+          "instruction": "Add a segmented, robotic bracelet with carved Cybertronian geometric runes to the wrist.",
+          "valid": true,
+          "mesh_sha256": "2da819bec66a570d81e4b8c874c993aad0e3ccd370c7d03c5251246233034a9f",
+          "vertices": 35852,
+          "faces": 71704,
+          "delta_fscore_005": 0.0,
+          "delta_cd_squared_sum": 3.486470426759342e-05,
+          "source_similarity": {
+            "cd_squared_sum": 0.00010278825960450448,
+            "cd_l1_mean": 0.006643867056901505,
+            "sample_points": 16384,
+            "fscore_001": 0.893445246588619,
+            "fscore_0025": 0.9999389611182323,
+            "fscore_005": 1.0
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 16270,
+            "unchanged_region_distance_mean": 0.006697569705336016,
+            "unchanged_region_coverage_005": 1.0,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 1306,
+            "removed_source_points": 114,
+            "changed_target_coverage_005": 1.0,
+            "changed_target_distance_mean": 0.032329961956571784,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        },
+        {
+          "id": "uid_66911_add",
+          "instruction": "Add a chunky, faceted geometric whale tail rudder with exaggerated sharp edges.",
+          "valid": true,
+          "mesh_sha256": "bd6a0752c9aa9c600c97e52e957abab80d018ef1e3f34605534a419413b82b61",
+          "vertices": 64877,
+          "faces": 129854,
+          "delta_fscore_005": -0.0014209065910213425,
+          "delta_cd_squared_sum": 9.860820622789227e-05,
+          "source_similarity": {
+            "cd_squared_sum": 0.00021965673382046719,
+            "cd_l1_mean": 0.008416257703060565,
+            "sample_points": 16384,
+            "fscore_001": 0.7283308623293204,
+            "fscore_0025": 0.9977408591312626,
+            "fscore_005": 0.9984411773695632
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 16258,
+            "unchanged_region_distance_mean": 0.008155180459730661,
+            "unchanged_region_coverage_005": 1.0,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 478,
+            "removed_source_points": 126,
+            "changed_target_coverage_005": 0.6736401673640168,
+            "changed_target_distance_mean": 0.05210552696971494,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        }
+      ]
+    },
+    "lora": {
+      "attempted": 8,
+      "valid": 8,
+      "better_fscore_pairs": 0,
+      "better_cd_pairs": 0,
+      "pairs": [
+        {
+          "id": "uid_66677_add",
+          "instruction": "Add a splintered wooden ship mast with deep-carved, jagged grain patterns to the back.",
+          "valid": true,
+          "mesh_sha256": "55b8f41deef677f5821c7f6aa7e902565d7a5433f0a0be78f500295bdb0d1024",
+          "vertices": 130273,
+          "faces": 260560,
+          "delta_fscore_005": -0.04050629205035272,
+          "delta_cd_squared_sum": 0.0005238897805529179,
+          "source_similarity": {
+            "cd_squared_sum": 0.0016396831733529655,
+            "cd_l1_mean": 0.015644737702726563,
+            "sample_points": 16384,
+            "fscore_001": 0.5114034047269284,
+            "fscore_0025": 0.9358029152492892,
+            "fscore_005": 0.9383475588911738
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15677,
+            "unchanged_region_distance_mean": 0.010269473966569449,
+            "unchanged_region_coverage_005": 0.9996810614275691,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 2497,
+            "removed_source_points": 707,
+            "changed_target_coverage_005": 0.5879054865839006,
+            "changed_target_distance_mean": 0.07660113396811702,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        },
+        {
+          "id": "uid_859_add",
+          "instruction": "Add a jagged, skeletal Hollow mask with long, curved horns to the carriage front.",
+          "valid": true,
+          "mesh_sha256": "07214dae98aefae92e8f8f8957db337f9dc41f350446b76545f53437693d8bf4",
+          "vertices": 101257,
+          "faces": 202710,
+          "delta_fscore_005": -0.005982217643971888,
+          "delta_cd_squared_sum": 0.00012557114775783347,
+          "source_similarity": {
+            "cd_squared_sum": 0.00028641026001239385,
+            "cd_l1_mean": 0.010116825477301871,
+            "sample_points": 16384,
+            "fscore_001": 0.572263515849976,
+            "fscore_0025": 0.9860832439138323,
+            "fscore_005": 0.9943542021529632
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15978,
+            "unchanged_region_distance_mean": 0.01019416710327575,
+            "unchanged_region_coverage_005": 0.9939291525848041,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 602,
+            "removed_source_points": 406,
+            "changed_target_coverage_005": 0.5697674418604651,
+            "changed_target_distance_mean": 0.06201593376608766,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        },
+        {
+          "id": "uid_33733_add",
+          "instruction": "Add segmented mechanical legs and a retractable robotic head to the base.",
+          "valid": true,
+          "mesh_sha256": "a754c5f9133198dac32d93d1f92f3af14586245eeda7916933c790b5de3c55f1",
+          "vertices": 255833,
+          "faces": 511916,
+          "delta_fscore_005": -0.03124435205906606,
+          "delta_cd_squared_sum": 0.0008749625213169761,
+          "source_similarity": {
+            "cd_squared_sum": 0.0012451114839972864,
+            "cd_l1_mean": 0.01676477444735117,
+            "sample_points": 16384,
+            "fscore_001": 0.3066706293458926,
+            "fscore_0025": 0.9112186658547224,
+            "fscore_005": 0.9659519029407094
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15363,
+            "unchanged_region_distance_mean": 0.014113699022804545,
+            "unchanged_region_coverage_005": 0.9985679880231726,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 1646,
+            "removed_source_points": 1021,
+            "changed_target_coverage_005": 0.47509113001215064,
+            "changed_target_distance_mean": 0.082467251734281,
+            "removed_source_still_present_fraction_005": 0.9843290891283056
+          }
+        },
+        {
+          "id": "uid_66061_add",
+          "instruction": "Add a carved sun-lion figurehead and a large, woven straw hat canopy.",
+          "valid": true,
+          "mesh_sha256": "bfccdc618694e20da57352ed887fb7d68f953b361a017d49ae27092d291bc15e",
+          "vertices": 263085,
+          "faces": 526514,
+          "delta_fscore_005": -0.00045087872159788045,
+          "delta_cd_squared_sum": 4.5749877639257586e-05,
+          "source_similarity": {
+            "cd_squared_sum": 0.0005801870212271193,
+            "cd_l1_mean": 0.01452690959369041,
+            "sample_points": 16384,
+            "fscore_001": 0.28671238337380256,
+            "fscore_0025": 0.9380996138225846,
+            "fscore_005": 0.9952602298163309
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 12115,
+            "unchanged_region_distance_mean": 0.014090313941583244,
+            "unchanged_region_coverage_005": 0.9997523730912092,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 2754,
+            "removed_source_points": 4269,
+            "changed_target_coverage_005": 0.5246913580246914,
+            "changed_target_distance_mean": 0.060287888360986516,
+            "removed_source_still_present_fraction_005": 0.9946123213867416
+          }
+        },
+        {
+          "id": "uid_33740_add",
+          "instruction": "Add three thick, chunky, oversized mechanical spider legs with exaggerated, beveled joints.",
+          "valid": true,
+          "mesh_sha256": "96b680af51f03701386deaf9b7f660e5f4b827fceed6cb58c173236615e29b95",
+          "vertices": 65757,
+          "faces": 131470,
+          "delta_fscore_005": -0.04036202553463697,
+          "delta_cd_squared_sum": 0.0009111044024823626,
+          "source_similarity": {
+            "cd_squared_sum": 0.0007991702875017511,
+            "cd_l1_mean": 0.013617794881575704,
+            "sample_points": 16384,
+            "fscore_001": 0.551297736148111,
+            "fscore_0025": 0.8960319615696516,
+            "fscore_005": 0.9656932427207765
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15368,
+            "unchanged_region_distance_mean": 0.013677284655722028,
+            "unchanged_region_coverage_005": 0.9626496616345653,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 2949,
+            "removed_source_points": 1016,
+            "changed_target_coverage_005": 0.28179043743641913,
+            "changed_target_distance_mean": 0.08480389784627274,
+            "removed_source_still_present_fraction_005": 0.8503937007874016
+          }
+        },
+        {
+          "id": "uid_33784_add",
+          "instruction": "Add a floating shattered stone greatsword bound in layered, frayed fabric strips.",
+          "valid": true,
+          "mesh_sha256": "ff2101a099a530569c17db0d441cc7fb4fa3fd3ad6888508892997decd9ae9e4",
+          "vertices": 169113,
+          "faces": 338210,
+          "delta_fscore_005": -0.025776967931977368,
+          "delta_cd_squared_sum": 0.0009564948470847342,
+          "source_similarity": {
+            "cd_squared_sum": 0.0010702056281752701,
+            "cd_l1_mean": 0.014549021618009063,
+            "sample_points": 16384,
+            "fscore_001": 0.3983298409608902,
+            "fscore_0025": 0.9497822666943458,
+            "fscore_005": 0.9741440478937771
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 15995,
+            "unchanged_region_distance_mean": 0.01367591593874373,
+            "unchanged_region_coverage_005": 0.9854954673335418,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 827,
+            "removed_source_points": 389,
+            "changed_target_coverage_005": 0.28657799274486095,
+            "changed_target_distance_mean": 0.09421353670011196,
+            "removed_source_still_present_fraction_005": 0.9922879177377892
+          }
+        },
+        {
+          "id": "uid_120_add",
+          "instruction": "Add a segmented, robotic bracelet with carved Cybertronian geometric runes to the wrist.",
+          "valid": true,
+          "mesh_sha256": "732685851b02baaa3dd9b809bc0675fdb9e1682cc7316ffd65ed16fe42950da5",
+          "vertices": 42751,
+          "faces": 85606,
+          "delta_fscore_005": -0.03189163035005671,
+          "delta_cd_squared_sum": 0.0005586587819060881,
+          "source_similarity": {
+            "cd_squared_sum": 0.0006580393634015784,
+            "cd_l1_mean": 0.011956932954420043,
+            "sample_points": 16384,
+            "fscore_001": 0.6808240824996651,
+            "fscore_0025": 0.8959233109557764,
+            "fscore_005": 0.9657878238705193
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 16270,
+            "unchanged_region_distance_mean": 0.009109937767613265,
+            "unchanged_region_coverage_005": 0.9977873386601106,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 1306,
+            "removed_source_points": 114,
+            "changed_target_coverage_005": 1.0,
+            "changed_target_distance_mean": 0.03250570329416031,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        },
+        {
+          "id": "uid_66911_add",
+          "instruction": "Add a chunky, faceted geometric whale tail rudder with exaggerated sharp edges.",
+          "valid": true,
+          "mesh_sha256": "b6c78a2d0492ad00b5d95bdbddc532168a90d0de6615e24ea8f8b8c2e0e17fd3",
+          "vertices": 87930,
+          "faces": 175800,
+          "delta_fscore_005": -0.19333733654567675,
+          "delta_cd_squared_sum": 0.004606407654587318,
+          "source_similarity": {
+            "cd_squared_sum": 0.0047279733499152364,
+            "cd_l1_mean": 0.02641714413335717,
+            "sample_points": 16384,
+            "fscore_001": 0.5436318261282784,
+            "fscore_0025": 0.7919110539260392,
+            "fscore_005": 0.805082718583564
+          },
+          "region_proxies": {
+            "available": true,
+            "unchanged_points": 16258,
+            "unchanged_region_distance_mean": 0.010655543169644047,
+            "unchanged_region_coverage_005": 0.9930495755935539,
+            "note": "Ground-truth-assisted surface proxies, not human part masks; regions use 0.025 distance threshold.",
+            "changed_target_points": 478,
+            "removed_source_points": 126,
+            "changed_target_coverage_005": 0.6799163179916318,
+            "changed_target_distance_mean": 0.052346371909378804,
+            "removed_source_still_present_fraction_005": 1.0
+          }
+        }
+      ]
+    }
+  }
+}

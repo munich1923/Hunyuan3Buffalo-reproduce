@@ -1,0 +1,46 @@
+{
+  "repo": "yejunliang23/Nano3D-Edit-100k",
+  "kind": "datasets",
+  "revision": "d6686ff82ea14c2dfa4fdd55db332309a0241495",
+  "file": "v1_100k/editing_assets/part_033.tar.gz",
+  "local_path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/Nano3D-Edit-100k/v1_100k/editing_assets/part_033.tar.gz",
+  "expected_sha256": "59e82acd2d99144dd0e2e0fe6e24df111c5186adedadcc7927b600d08229fce5",
+  "expected_bytes": 6356375583,
+  "started_utc": "2026-10-13T06:14:57.587279+00:00",
+  "transfer_attempts": [
+    {
+      "attempt": 1,
+      "elapsed_seconds": 60.3143760478124,
+      "restart": "renew_connections",
+      "exit_code": 7
+    },
+    {
+      "attempt": 2,
+      "elapsed_seconds": 60.46464898716658,
+      "restart": "renew_connections",
+      "exit_code": 7
+    },
+    {
+      "attempt": 3,
+      "elapsed_seconds": 60.464527105912566,
+      "restart": "renew_connections",
+      "exit_code": 7
+    },
+    {
+      "attempt": 4,
+      "elapsed_seconds": 60.16408154787496,
+      "restart": "renew_connections",
+      "exit_code": 7
+    },
+    {
+      "attempt": 5,
+      "elapsed_seconds": 22.79389051022008,
+      "exit_code": 0
+    }
+  ],
+  "exit_code": 0,
+  "actual_bytes": 6356375583,
+  "actual_sha256": "59e82acd2d99144dd0e2e0fe6e24df111c5186adedadcc7927b600d08229fce5",
+  "status": "verified",
+  "completed_utc": "2026-10-13T06:19:27.517298+00:00"
+}

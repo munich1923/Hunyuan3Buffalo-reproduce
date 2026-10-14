@@ -1,0 +1,13 @@
+{
+  "verified_utc": "2026-10-14T03:13:48.592815+00:00",
+  "ok": true,
+  "evaluation_records": 1080,
+  "training_geometry_records": 16,
+  "benchmark_sheets": 40,
+  "training_sheets": 8,
+  "original39_records_preserved": true,
+  "manifests_unchanged": true,
+  "gpu_hours": 10.378747241893757,
+  "own_processes_alive": [],
+  "pilot_lock_available": true
+}

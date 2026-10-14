@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/write_final_report.py", line 34, in <module>
+    if __name__=='__main__':main()
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/write_final_report.py", line 13, in main
+    if r:lines.append(f"|{stage}|{r['steps']}|{fmt(r['initial_train'])}|{fmt(r['final_train'])}|{fmt(r['initial_val'])}|{fmt(r['final_val'])}|{r['final_validation_entries']}|")
+KeyError: 'final_validation_entries'

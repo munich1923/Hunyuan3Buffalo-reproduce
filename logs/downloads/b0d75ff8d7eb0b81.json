@@ -1,0 +1,22 @@
+{
+  "repo": "ziqima/Edit3D-Bench",
+  "kind": "datasets",
+  "revision": "30ace7d3b0e834189b514cf3753cd832825b6922",
+  "file": "data/glbs/add/d7cb096770504fd4aa7a53e0628967bb.glb",
+  "local_path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/Edit3D-Bench/data/glbs/add/d7cb096770504fd4aa7a53e0628967bb.glb",
+  "expected_sha256": "5dda3edd2cc14dd96ba44c746753fbc6dac26947b053606106acffd76b0cc89e",
+  "expected_bytes": 2935432,
+  "started_utc": "2026-10-13T06:11:13.587815+00:00",
+  "transfer_attempts": [
+    {
+      "attempt": 1,
+      "elapsed_seconds": 309.9773725499399,
+      "exit_code": 0
+    }
+  ],
+  "exit_code": 0,
+  "actual_bytes": 2935432,
+  "actual_sha256": "5dda3edd2cc14dd96ba44c746753fbc6dac26947b053606106acffd76b0cc89e",
+  "status": "verified",
+  "completed_utc": "2026-10-13T06:16:23.577428+00:00"
+}

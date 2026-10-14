@@ -1,0 +1,15 @@
+{
+  "repo": "tencent/Hunyuan3D-2.1",
+  "kind": "models",
+  "revision": "0b94677654c57bb9a6b6845cd7b704ccf551d327",
+  "file": "Notice.txt",
+  "local_path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1/Notice.txt",
+  "expected_sha256": null,
+  "expected_bytes": 16644,
+  "started_utc": "2026-10-13T05:07:16.969378+00:00",
+  "exit_code": 0,
+  "actual_bytes": 16644,
+  "actual_sha256": "ffccf6b539a82e6084d14ff064dadd22d33384d6164b07c0c5a3141810df0350",
+  "status": "verified",
+  "completed_utc": "2026-10-13T05:07:21.307755+00:00"
+}

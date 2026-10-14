@@ -1,0 +1,39 @@
+{
+  "started_utc": "2026-10-14T02:34:00.099321+00:00",
+  "commands": [
+    {
+      "script": "audit_checkpoints.py",
+      "exit_code": 0
+    },
+    {
+      "script": "audit_evaluations.py",
+      "exit_code": 0
+    },
+    {
+      "script": "compare_evaluations.py",
+      "exit_code": 0
+    },
+    {
+      "script": "analyze_instruction_sensitivity.py",
+      "exit_code": 0
+    },
+    {
+      "script": "build_comparison_sheets.py",
+      "exit_code": 0
+    },
+    {
+      "script": "plot_training.py",
+      "exit_code": 0
+    },
+    {
+      "script": "summarize_pilot.py",
+      "exit_code": 0
+    },
+    {
+      "script": "write_final_report.py",
+      "exit_code": 0
+    }
+  ],
+  "ok": true,
+  "ended_utc": "2026-10-14T03:10:50.653574+00:00"
+}

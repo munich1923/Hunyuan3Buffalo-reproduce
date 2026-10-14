@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/render_views.py", line 62, in <module>
+    if __name__=="__main__":main()
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/render_views.py", line 51, in main
+    paths=render(src,folder/"source_views")
+  File "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/render_views.py", line 30, in render
+    color,depth=r.render(s);color[depth==0,:3]=255;path=folder/(str(az)+".png");Image.fromarray(np.concatenate([color[:,:,:3],((depth>0)*255).astype(np.uint8)[:,:,None]],axis=2),"RGBA").save(path);paths.append(str(path))
+ValueError: assignment destination is read-only
+RENDER train 0
+RENDER train 25
+RENDER train 50

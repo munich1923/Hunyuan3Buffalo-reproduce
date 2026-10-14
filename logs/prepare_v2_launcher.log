@@ -1,0 +1,20 @@
+START visual_review_apply GPU None
+END visual_review_apply 0
+START render_train_diagnostic_v2 GPU 0
+END render_train_diagnostic_v2 0
+START render_val_diagnostic_v2 GPU 0
+END render_val_diagnostic_v2 0
+START render_test_v2 GPU 0
+END render_test_v2 0
+START visual_review_apply_9fc8ad2d GPU None
+END visual_review_apply_9fc8ad2d 0
+START render_train_diagnostic_v2_9fc8ad2d GPU 0
+END render_train_diagnostic_v2_9fc8ad2d 0
+START visual_review_apply_b0b246c0 GPU None
+END visual_review_apply_b0b246c0 0
+START render_train_diagnostic_v2_b0b246c0 GPU 0
+END render_train_diagnostic_v2_b0b246c0 0
+START visual_review_apply_f648ae11 GPU None
+END visual_review_apply_f648ae11 0
+START render_train_diagnostic_v2_f648ae11 GPU 0
+END render_train_diagnostic_v2_f648ae11 0

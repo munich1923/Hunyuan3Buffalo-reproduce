@@ -1,0 +1,53 @@
+[#2e48b5 0B/0B CN:1 DL:0B]
+[#2e48b5 0B/0B CN:1 DL:0B]
+[#2e48b5 0B/0B CN:1 DL:0B]
+[#2e48b5 0B/0B CN:1 DL:0B]
+[#2e48b5 0B/0B CN:1 DL:0B]
+[#2e48b5 352KiB/56MiB(0%) CN:4 DL:735KiB ETA:1m18s]
+[#2e48b5 1.9MiB/56MiB(3%) CN:4 DL:1.2MiB ETA:42s]
+[#2e48b5 3.5MiB/56MiB(6%) CN:4 DL:1.4MiB ETA:36s]
+[#2e48b5 5.3MiB/56MiB(9%) CN:4 DL:1.5MiB ETA:33s]
+[#2e48b5 6.9MiB/56MiB(12%) CN:4 DL:1.5MiB ETA:32s]
+[#2e48b5 8.6MiB/56MiB(15%) CN:4 DL:1.5MiB ETA:30s]
+[#2e48b5 11MiB/56MiB(20%) CN:4 DL:1.8MiB ETA:24s]
+[#2e48b5 14MiB/56MiB(25%) CN:4 DL:1.9MiB ETA:21s]
+[#2e48b5 16MiB/56MiB(28%) CN:4 DL:1.9MiB ETA:20s]
+[#2e48b5 18MiB/56MiB(33%) CN:4 DL:1.9MiB ETA:18s]
+[#2e48b5 20MiB/56MiB(36%) CN:4 DL:2.1MiB ETA:17s]
+[#2e48b5 21MiB/56MiB(37%) CN:4 DL:1.9MiB ETA:17s]
+[#2e48b5 22MiB/56MiB(39%) CN:4 DL:1.8MiB ETA:17s]
+[#2e48b5 24MiB/56MiB(43%) CN:4 DL:1.9MiB ETA:16s]
+[#2e48b5 26MiB/56MiB(46%) CN:4 DL:1.9MiB ETA:15s]
+[#2e48b5 28MiB/56MiB(49%) CN:4 DL:1.8MiB ETA:15s]
+[#2e48b5 29MiB/56MiB(51%) CN:4 DL:1.6MiB ETA:16s]
+[#2e48b5 32MiB/56MiB(56%) CN:4 DL:1.7MiB ETA:14s]
+[#2e48b5 33MiB/56MiB(59%) CN:4 DL:1.6MiB ETA:13s]
+[#2e48b5 35MiB/56MiB(62%) CN:4 DL:1.5MiB ETA:13s]
+[#2e48b5 37MiB/56MiB(67%) CN:4 DL:1.7MiB ETA:10s]
+[#2e48b5 39MiB/56MiB(69%) CN:4 DL:1.8MiB ETA:9s]
+[#2e48b5 39MiB/56MiB(70%) CN:4 DL:1.6MiB ETA:10s]
+[#2e48b5 41MiB/56MiB(73%) CN:4 DL:1.6MiB ETA:8s]
+ *** Download Progress Summary as of Tue Oct 13 13:54:10 2026 *** 
+===============================================================================
+[#2e48b5 43MiB/56MiB(77%) CN:4 DL:1.7MiB ETA:7s]
+FILE: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/pymeshlab-2022.2.post3-cp310-cp310-manylinux1_x86_64.whl
+-------------------------------------------------------------------------------
+
+[#2e48b5 43MiB/56MiB(77%) CN:4 DL:1.7MiB ETA:7s]
+[#2e48b5 45MiB/56MiB(79%) CN:4 DL:1.7MiB ETA:6s]
+[#2e48b5 46MiB/56MiB(81%) CN:4 DL:1.6MiB ETA:6s]
+[#2e48b5 48MiB/56MiB(84%) CN:4 DL:1.5MiB ETA:5s]
+[#2e48b5 49MiB/56MiB(87%) CN:4 DL:1.6MiB ETA:4s]
+[#2e48b5 50MiB/56MiB(89%) CN:4 DL:1.4MiB ETA:3s]
+[#2e48b5 52MiB/56MiB(92%) CN:4 DL:1.4MiB ETA:3s]
+[#2e48b5 53MiB/56MiB(95%) CN:4 DL:1.5MiB ETA:1s]
+[#2e48b5 55MiB/56MiB(97%) CN:2 DL:1.5MiB]
+[#2e48b5 56MiB/56MiB(99%) CN:1 DL:1.3MiB]
+
+Download Results:
+gid   |stat|avg speed  |path/URI
+======+====+===========+=======================================================
+2e48b5|OK  |   1.6MiB/s|/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/pymeshlab-2022.2.post3-cp310-cp310-manylinux1_x86_64.whl
+
+Status Legend:
+(OK):download completed.

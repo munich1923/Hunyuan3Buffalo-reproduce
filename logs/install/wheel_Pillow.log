@@ -1,0 +1,13 @@
+[#b05210 48KiB/4.0MiB(1%) CN:1 DL:208KiB ETA:19s]
+[#b05210 544KiB/4.0MiB(13%) CN:1 DL:452KiB ETA:8s]
+[#b05210 1.0MiB/4.0MiB(26%) CN:1 DL:492KiB ETA:6s]
+[#b05210 1.8MiB/4.0MiB(46%) CN:1 DL:595KiB ETA:3s]
+[#b05210 3.7MiB/4.0MiB(90%) CN:1 DL:893KiB]
+
+Download Results:
+gid   |stat|avg speed  |path/URI
+======+====+===========+=======================================================
+b05210|OK  |   0.9MiB/s|/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/pillow-11.0.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+
+Status Legend:
+(OK):download completed.

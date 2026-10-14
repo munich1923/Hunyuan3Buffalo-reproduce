@@ -1,0 +1,35 @@
+[#eccfa4 192KiB/39MiB(0%) CN:4 DL:401KiB ETA:1m39s]
+[#eccfa4 512KiB/39MiB(1%) CN:4 DL:347KiB ETA:1m54s]
+[#eccfa4 1.9MiB/39MiB(4%) CN:4 DL:800KiB ETA:47s]
+[#eccfa4 3.6MiB/39MiB(9%) CN:4 DL:1.0MiB ETA:34s]
+[#eccfa4 4.8MiB/39MiB(12%) CN:4 DL:1.0MiB ETA:31s]
+[#eccfa4 5.9MiB/39MiB(15%) CN:4 DL:1.0MiB ETA:30s]
+[#eccfa4 6.9MiB/39MiB(17%) CN:4 DL:1.0MiB ETA:30s]
+[#eccfa4 8.7MiB/39MiB(22%) CN:4 DL:1.1MiB ETA:26s]
+[#eccfa4 10MiB/39MiB(25%) CN:4 DL:1.1MiB ETA:24s]
+[#eccfa4 10MiB/39MiB(27%) CN:4 DL:1.1MiB ETA:24s]
+[#eccfa4 11MiB/39MiB(30%) CN:4 DL:1.2MiB ETA:22s]
+[#eccfa4 13MiB/39MiB(34%) CN:4 DL:1.3MiB ETA:19s]
+[#eccfa4 15MiB/39MiB(38%) CN:4 DL:1.3MiB ETA:18s]
+[#eccfa4 16MiB/39MiB(40%) CN:4 DL:1.2MiB ETA:18s]
+[#eccfa4 16MiB/39MiB(43%) CN:4 DL:1.1MiB ETA:18s]
+[#eccfa4 17MiB/39MiB(45%) CN:4 DL:1.1MiB ETA:18s]
+[#eccfa4 18MiB/39MiB(47%) CN:4 DL:1.1MiB ETA:18s]
+[#eccfa4 20MiB/39MiB(52%) CN:4 DL:1.1MiB ETA:16s]
+[#eccfa4 22MiB/39MiB(57%) CN:4 DL:1.2MiB ETA:13s]
+[#eccfa4 24MiB/39MiB(62%) CN:4 DL:1.3MiB ETA:10s]
+[#eccfa4 26MiB/39MiB(67%) CN:4 DL:1.4MiB ETA:9s]
+[#eccfa4 28MiB/39MiB(73%) CN:4 DL:1.4MiB ETA:7s]
+[#eccfa4 32MiB/39MiB(81%) CN:4 DL:1.7MiB ETA:4s]
+[#eccfa4 34MiB/39MiB(87%) CN:4 DL:1.8MiB ETA:2s]
+[#eccfa4 37MiB/39MiB(94%) CN:3 DL:2.1MiB]
+[#eccfa4 38MiB/39MiB(97%) CN:2 DL:2.1MiB]
+[#eccfa4 39MiB/39MiB(99%) CN:1 DL:2.0MiB]
+
+Download Results:
+gid   |stat|avg speed  |path/URI
+======+====+===========+=======================================================
+eccfa4|OK  |   1.4MiB/s|/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/scipy-1.14.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+
+Status Legend:
+(OK):download completed.

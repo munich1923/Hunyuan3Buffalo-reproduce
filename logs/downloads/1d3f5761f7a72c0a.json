@@ -1,0 +1,15 @@
+{
+  "repo": "tencent/Hunyuan3D-2.1",
+  "kind": "models",
+  "revision": "0b94677654c57bb9a6b6845cd7b704ccf551d327",
+  "file": "hunyuan3d-vae-v2-1/model.fp16.ckpt",
+  "local_path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1/hunyuan3d-vae-v2-1/model.fp16.ckpt",
+  "expected_sha256": "5cbe97f25e6e7abd4bccc80ab07524ec0c86d24118486a9ba49bb5dfb070288a",
+  "expected_bytes": 655648152,
+  "started_utc": "2026-10-13T05:08:59.217272+00:00",
+  "exit_code": 0,
+  "actual_bytes": 655648152,
+  "actual_sha256": "5cbe97f25e6e7abd4bccc80ab07524ec0c86d24118486a9ba49bb5dfb070288a",
+  "status": "verified",
+  "completed_utc": "2026-10-13T05:18:09.644410+00:00"
+}

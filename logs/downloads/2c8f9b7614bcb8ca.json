@@ -1,0 +1,15 @@
+{
+  "repo": "tencent/Hunyuan3D-2.1",
+  "kind": "models",
+  "revision": "0b94677654c57bb9a6b6845cd7b704ccf551d327",
+  "file": "hunyuan3d-dit-v2-1/config.yaml",
+  "local_path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1/hunyuan3d-dit-v2-1/config.yaml",
+  "expected_sha256": null,
+  "expected_bytes": 2078,
+  "started_utc": "2026-10-13T05:07:16.970183+00:00",
+  "exit_code": 0,
+  "actual_bytes": 2078,
+  "actual_sha256": "a9e9b66f0163a9b827d730633ac88f47fcc8e3071dcbb9ee12d88ef7537c5c6e",
+  "status": "verified",
+  "completed_utc": "2026-10-13T05:07:22.457464+00:00"
+}

@@ -22,7 +22,7 @@ def main():
             if not data['complete']:raise RuntimeError('Training geometry diagnostic incomplete')
         run(state,'repair_result_renders',PY,'repair_result_renders.py',gpu=True,cap=7200)
         state.update(status='completed',training_geometry_diagnostics=True,updated_utc=utc());atomic(state)
-        for script in ['audit_checkpoints.py','audit_evaluations.py','compare_evaluations.py','analyze_instruction_sensitivity.py','build_comparison_sheets.py','build_training_comparison_sheets.py','plot_training.py','summarize_pilot.py','write_final_report.py']:
+        for script in ['audit_checkpoints.py','audit_evaluations.py','compare_evaluations.py','analyze_instruction_sensitivity.py','build_comparison_sheets.py','build_training_comparison_sheets.py','analyze_training_geometry.py','plot_training.py','summarize_pilot.py','write_final_report.py']:
             env=os.environ.copy();env['CUDA_VISIBLE_DEVICES']=''
             with (ROOT/'logs'/('recovery_'+script.replace('.py','.log'))).open('a') as log:
                 ret=subprocess.run([str(PY),str(ROOT/'scripts'/script)],cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT).returncode

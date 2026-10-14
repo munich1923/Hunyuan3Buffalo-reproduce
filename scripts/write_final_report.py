@@ -24,13 +24,23 @@ def main():
             n=d.get('final_validation_entries',16 if stage=='overfit' else 'unknown')
             lines.append(f"|{stage}|{d['steps']}|{fmt(d['initial_train'])}|{fmt(d['final_train'])}|{fmt(d['initial_val'])}|{fmt(d['final_val'])}|{n}|")
     lines+=['','正式connector/LoRA最终val覆盖128条；best选择使用固定16条probe。benchmark和几何诊断使用best，LoRA best为step1920，训练末尾为step2000。overfit_best为step200。','','## 8对训练样本的实际几何','',"同一8个独立原始add训练配对，每模型单seed20261013，50步采样；不追加训练。对比实际目标和不编辑源物体。",'','|checkpoint|完成/期望|有效|生成CD↓|源不编辑CD↓|生成F-score↑|源不编辑F-score↑|','|---|---:|---:|---:|---:|---:|---:|']
+    verdict_notes=[]
     for stage in ['overfit','lora']:
         d=read('results/summaries/training_geometry_'+stage+'.json')
         if d:
             lines.append(f"|{stage}|{d['attempted']}/8|{d['valid']}|{fmt(d.get('generated_cd_squared_sum'))}|{fmt(d.get('unchanged_source_cd_squared_sum'))}|{fmt(d.get('generated_fscore_005'))}|{fmt(d.get('unchanged_source_fscore_005'))}|")
             verdict='未优于不编辑源物体，不能认定学会几何记忆。' if d.get('generated_fscore_005',0)<=d.get('unchanged_source_fscore_005',0) else '整体F-score优于源基线；仍需逐样本检查编辑部件和非编辑区域，不能只凭一个平均分认定记忆成功。'
-            lines+=['',stage+'：'+verdict,'']
+            verdict_notes+=['',stage+'：'+verdict,'']
         else:lines.append('|'+stage+'|未完成|未完成|未完成|未完成|未完成|未完成|')
+    lines+=verdict_notes
+    train_review=read('results/summaries/training_geometry_visual_observations.json')
+    if train_review:
+        lines+=['','AI检查全部8对四视角，观察如下（小细节无法据此确认）：']
+        for d in train_review['observations']:lines+=['',f"- {d['id']}: {d['observation']} Verdict: {d['verdict']}."]
+    audit=read('results/summaries/training_geometry_audit.json')
+    if audit:
+        for stage,d in audit['checkpoints'].items():
+            lines+=['',f"{stage}逐样本：F-score优于源基线{d['better_fscore_pairs']}/8；CD优于源基线{d['better_cd_pairs']}/8。单seed小诊断不是泛化结果。"]
     lines+=['','## 未见物体benchmark与对照','',"Edit3D-Bench40物体，添加20/删除20，每物体3seeds，50步，网格解码分辨率256。CD/F-score以16384表面点、源导出的共同归一化坐标计算，无ICP；native单视角CFG5，编辑四视角guidance1，输入并不完全对等。",'','|模式|完成/期望|有效率|CD平方和↓|F-score@0.05↑|评分参照|','|---|---:|---:|---:|---:|---|']
     for m,d in summaries.items():
         if d:
@@ -45,7 +55,7 @@ def main():
     rg=read('results/summaries/render_recovery.json')
     if rg:lines+=['',f"渲染恢复：检查{rg['jobs']}组四视角，修复{len(rg['repaired'])}组，剩余缺图{len(rg.get('missing_after',[]))}组。原始render_error保留为历史。"]
     lines+=['','查看全部40张图：'+str(ROOT/'results/visual_comparisons')+'；图行依次为source、target、vae、native、random、connector、lora、no_source、noop、shuffled。',"训练8对比较图："+str(ROOT/'results/training_geometry_comparisons')+'。GLB在results/evaluation/<mode>/和results/training_geometry/<checkpoint>/，可用Blender旋转查看。',"","## 复现、日志与限制",'',"- environment/run_state.json保存每阶段命令、代码提交、GPU、时间、退出码、预算；environment/recovery_before.json保留恢复前状态。",'- logs/stage_*.log、train_*.jsonl、recovery_*.log保留原失败和恢复记录。','- results/summaries/checkpoint_integrity.json、evaluation_integrity.json为权重和全部导出网格审计。','- controlled_comparisons.json与instruction_sensitivity.json包含完整量化对照。','- 不改变权重、manifest、样本划分或已完成baseline。','- 恢复命令：environment/venvs/shape/bin/python scripts/recover_experiment.py（只能在现有进程退出后执行，同一pilot锁/累计24h预算）；已成功GPU阶段跳过。','- 人工复核应同时检查指令执行、非编辑结构保留、noop/shuffled差异；不要把loss拟合推断为编辑成功。','']
-    lines+=['## 各模式含义','',(ROOT/'results/summaries/evaluation_modes.md').read_text()]
-    (ROOT/'results/summaries/final_report.md').write_text('\n'.join(lines)+'\n')
+    lines+=['## 各模式含义','',(ROOT/'results/summaries/evaluation_modes.md').read_text().replace('# 评估模式说明','',1)]
+    (ROOT/'results/summaries/final_report.md').write_text('\n'.join(lines).rstrip()+'\n')
     print('Final evidence report written, complete benchmark:',complete)
 if __name__=='__main__':main()

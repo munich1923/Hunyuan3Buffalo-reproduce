@@ -1,0 +1,17 @@
+START audit_checkpoints.py
+END audit_checkpoints.py 0
+START audit_evaluations.py
+END audit_evaluations.py 0
+START compare_evaluations.py
+END compare_evaluations.py 0
+START analyze_instruction_sensitivity.py
+END analyze_instruction_sensitivity.py 0
+START build_comparison_sheets.py
+END build_comparison_sheets.py 0
+START plot_training.py
+END plot_training.py 0
+START summarize_pilot.py
+END summarize_pilot.py 0
+START write_final_report.py
+END write_final_report.py 1
+{"started_utc": "2026-10-13T16:37:28.576142+00:00", "pilot_status": "stopped", "commands": [{"script": "audit_checkpoints.py", "exit_code": 0}, {"script": "audit_evaluations.py", "exit_code": 0}, {"script": "compare_evaluations.py", "exit_code": 0}, {"script": "analyze_instruction_sensitivity.py", "exit_code": 0}, {"script": "build_comparison_sheets.py", "exit_code": 0}, {"script": "plot_training.py", "exit_code": 0}, {"script": "summarize_pilot.py", "exit_code": 0}, {"script": "write_final_report.py", "exit_code": 1}], "ended_utc": "2026-10-13T16:44:05.905306+00:00", "ok": false}

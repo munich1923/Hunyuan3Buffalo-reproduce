@@ -718,30 +718,317 @@
       "ended_utc": "2026-10-13T09:31:43.233403+00:00",
       "elapsed_seconds": 2427.74926856393,
       "timed_out": false
+    },
+    {
+      "experiment_commit": "acf71d96bc95586b1e977940bd7db4ee420b6bc3",
+      "started_shanghai": "2026-10-13T17:31:43.392480+08:00",
+      "name": "lora",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/train_editor.py",
+        "--stage",
+        "lora",
+        "--seconds",
+        "21000"
+      ],
+      "started_utc": "2026-10-13T09:31:43.392495+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_lora.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3539717,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T11:54:25.476064+00:00",
+      "elapsed_seconds": 8562.072955168784,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9713e50b9672d9a995651515fdd51769364ed14b",
+      "started_shanghai": "2026-10-13T19:54:25.620732+08:00",
+      "name": "eval_source",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "source",
+        "--seconds",
+        "3500"
+      ],
+      "started_utc": "2026-10-13T11:54:25.620744+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_source.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3614036,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T12:00:14.214829+00:00",
+      "elapsed_seconds": 348.40089785680175,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9713e50b9672d9a995651515fdd51769364ed14b",
+      "started_shanghai": "2026-10-13T20:00:14.442518+08:00",
+      "name": "eval_vae",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "vae",
+        "--seconds",
+        "3500"
+      ],
+      "started_utc": "2026-10-13T12:00:14.442535+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_vae.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3616086,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T12:23:04.648509+00:00",
+      "elapsed_seconds": 1370.204584387131,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9713e50b9672d9a995651515fdd51769364ed14b",
+      "started_shanghai": "2026-10-13T20:23:04.761926+08:00",
+      "name": "eval_native",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "native",
+        "--seconds",
+        "3500"
+      ],
+      "started_utc": "2026-10-13T12:23:04.761943+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_native.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3628793,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T12:57:20.464725+00:00",
+      "elapsed_seconds": 2055.655854871962,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9713e50b9672d9a995651515fdd51769364ed14b",
+      "started_shanghai": "2026-10-13T20:57:20.611457+08:00",
+      "name": "eval_random",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "random",
+        "--seconds",
+        "3500"
+      ],
+      "started_utc": "2026-10-13T12:57:20.611474+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_random.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3644080,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T13:37:07.239402+00:00",
+      "elapsed_seconds": 2386.624111516867,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9713e50b9672d9a995651515fdd51769364ed14b",
+      "started_shanghai": "2026-10-13T21:37:07.386782+08:00",
+      "name": "eval_connector",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "connector",
+        "--seconds",
+        "3500"
+      ],
+      "started_utc": "2026-10-13T13:37:07.386802+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_connector.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3664029,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T14:16:48.043739+00:00",
+      "elapsed_seconds": 2380.655208243057,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9713e50b9672d9a995651515fdd51769364ed14b",
+      "started_shanghai": "2026-10-13T22:16:48.187717+08:00",
+      "name": "eval_lora",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "lora",
+        "--seconds",
+        "3500"
+      ],
+      "started_utc": "2026-10-13T14:16:48.187728+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_lora.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3681373,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T14:57:08.554386+00:00",
+      "elapsed_seconds": 2420.3652746928856,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9713e50b9672d9a995651515fdd51769364ed14b",
+      "started_shanghai": "2026-10-13T22:57:08.675600+08:00",
+      "name": "eval_no_source",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "no_source",
+        "--seconds",
+        "3500"
+      ],
+      "started_utc": "2026-10-13T14:57:08.675618+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_no_source.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3696997,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T15:33:22.441726+00:00",
+      "elapsed_seconds": 2173.764656784013,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9713e50b9672d9a995651515fdd51769364ed14b",
+      "started_shanghai": "2026-10-13T23:33:22.563776+08:00",
+      "name": "eval_noop",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "noop",
+        "--seconds",
+        "3500"
+      ],
+      "started_utc": "2026-10-13T15:33:22.563794+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_noop.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3716169,
+      "exit_code": 0,
+      "ended_utc": "2026-10-13T16:14:03.267147+00:00",
+      "elapsed_seconds": 2440.701689046342,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9713e50b9672d9a995651515fdd51769364ed14b",
+      "started_shanghai": "2026-10-14T00:14:03.427444+08:00",
+      "name": "eval_shuffled",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "shuffled",
+        "--seconds",
+        "3500"
+      ],
+      "started_utc": "2026-10-13T16:14:03.427458+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_shuffled.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3738329,
+      "exit_code": -6,
+      "ended_utc": "2026-10-13T16:37:16.524146+00:00",
+      "elapsed_seconds": 1393.0942948493175,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "b0007be33ad56e333f403dd18e82f21dc2d2a325",
+      "started_shanghai": "2026-10-14T10:34:00.232422+08:00",
+      "name": "eval_shuffled",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_editor.py",
+        "--mode",
+        "shuffled",
+        "--seconds",
+        "3500",
+        "--skip-render"
+      ],
+      "started_utc": "2026-10-14T02:34:00.232435+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_eval_shuffled.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3951497,
+      "exit_code": 0,
+      "ended_utc": "2026-10-14T02:54:27.934470+00:00",
+      "elapsed_seconds": 1227.7003560420126,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9bb85dda10aa7757d3e5377d446797995e4076cb",
+      "started_shanghai": "2026-10-14T10:54:28.059384+08:00",
+      "name": "train_geometry_overfit",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_training_fit.py",
+        "--checkpoint",
+        "overfit",
+        "--seconds",
+        "1500",
+        "--skip-render"
+      ],
+      "started_utc": "2026-10-14T02:54:28.059397+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_train_geometry_overfit.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3957259,
+      "exit_code": 0,
+      "ended_utc": "2026-10-14T02:59:00.132817+00:00",
+      "elapsed_seconds": 272.0718959798105,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9bb85dda10aa7757d3e5377d446797995e4076cb",
+      "started_shanghai": "2026-10-14T10:59:00.239273+08:00",
+      "name": "train_geometry_lora",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/evaluate_training_fit.py",
+        "--checkpoint",
+        "lora",
+        "--seconds",
+        "1500",
+        "--skip-render"
+      ],
+      "started_utc": "2026-10-14T02:59:00.239289+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_train_geometry_lora.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3961310,
+      "exit_code": 0,
+      "ended_utc": "2026-10-14T03:03:18.937724+00:00",
+      "elapsed_seconds": 258.69663564907387,
+      "timed_out": false
+    },
+    {
+      "experiment_commit": "9bb85dda10aa7757d3e5377d446797995e4076cb",
+      "started_shanghai": "2026-10-14T11:03:19.337465+08:00",
+      "name": "repair_result_renders",
+      "command": [
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+        "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/repair_result_renders.py"
+      ],
+      "started_utc": "2026-10-14T03:03:19.337487+00:00",
+      "gpu": 0,
+      "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_repair_result_renders.log",
+      "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+      "pid": 3962718,
+      "exit_code": 0,
+      "ended_utc": "2026-10-14T03:04:48.726775+00:00",
+      "elapsed_seconds": 89.38691299501806,
+      "timed_out": false
     }
   ],
-  "gpu_seconds": 9984.09474273445,
-  "status": "running",
-  "waiting_for": [
-    "download"
-  ],
-  "updated_utc": "2026-10-13T09:31:43.392503+00:00",
-  "current": {
-    "experiment_commit": "acf71d96bc95586b1e977940bd7db4ee420b6bc3",
-    "started_shanghai": "2026-10-13T17:31:43.392480+08:00",
-    "name": "lora",
-    "command": [
-      "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
-      "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/train_editor.py",
-      "--stage",
-      "lora",
-      "--seconds",
-      "21000"
-    ],
-    "started_utc": "2026-10-13T09:31:43.392495+00:00",
-    "gpu": 0,
-    "log": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/logs/stage_lora.log",
-    "source_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
-    "pid": 3539717
-  }
+  "gpu_seconds": 37363.49007081753,
+  "status": "completed",
+  "updated_utc": "2026-10-14T03:04:48.728419+00:00",
+  "training_geometry_diagnostics": true
 }

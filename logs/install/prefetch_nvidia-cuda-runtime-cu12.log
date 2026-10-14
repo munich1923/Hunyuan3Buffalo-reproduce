@@ -1,0 +1,12 @@
+[#860c86 160KiB/863KiB(18%) CN:1 DL:299KiB ETA:2s]
+[#860c86 432KiB/863KiB(50%) CN:1 DL:271KiB ETA:1s]
+[#860c86 576KiB/863KiB(66%) CN:1 DL:224KiB ETA:1s]
+[#860c86 736KiB/863KiB(85%) CN:1 DL:206KiB]
+
+Download Results:
+gid   |stat|avg speed  |path/URI
+======+====+===========+=======================================================
+860c86|OK  |   198KiB/s|/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/nvidia_cuda_runtime_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl
+
+Status Legend:
+(OK):download completed.

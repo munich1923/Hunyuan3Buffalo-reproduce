@@ -1,0 +1,22 @@
+[#d477a1 0B/0B CN:1 DL:0B]
+[#d477a1 0B/0B CN:1 DL:0B]
+[#d477a1 0B/0B CN:1 DL:0B]
+[#d477a1 0B/0B CN:1 DL:0B]
+[#d477a1 0B/0B CN:1 DL:0B]
+[#d477a1 0B/0B CN:1 DL:0B]
+[#d477a1 0B/0B CN:1 DL:0B]
+[#d477a1 624KiB/3.2MiB(18%) CN:1 DL:640KiB ETA:4s]
+[#d477a1 816KiB/3.2MiB(24%) CN:1 DL:405KiB ETA:6s]
+[#d477a1 1.0MiB/3.2MiB(31%) CN:1 DL:343KiB ETA:6s]
+[#d477a1 1.4MiB/3.2MiB(46%) CN:1 DL:377KiB ETA:4s]
+[#d477a1 1.9MiB/3.2MiB(60%) CN:1 DL:391KiB ETA:3s]
+[#d477a1 2.3MiB/3.2MiB(74%) CN:1 DL:399KiB ETA:2s]
+[#d477a1 2.7MiB/3.2MiB(85%) CN:1 DL:393KiB ETA:1s]
+
+Download Results:
+gid   |stat|avg speed  |path/URI
+======+====+===========+=======================================================
+d477a1|OK  |   417KiB/s|/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/pythreejs-2.4.2-py3-none-any.whl
+
+Status Legend:
+(OK):download completed.

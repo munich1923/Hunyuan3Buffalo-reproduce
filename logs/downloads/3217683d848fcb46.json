@@ -1,0 +1,20 @@
+{
+  "repo": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "kind": "models",
+  "revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5",
+  "file": "model-00003-of-00005.safetensors",
+  "local_path": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Qwen2.5-VL-7B-Instruct/model-00003-of-00005.safetensors",
+  "expected_sha256": "111223d173e00bbee81cba1216fad28668df3476706b7fd26f4d5b50f8b3a507",
+  "expected_bytes": 3864726424,
+  "started_utc": "2026-10-13T05:28:46.334767+00:00",
+  "alternative_source": {
+    "repo": "Qwen/Qwen2.5-VL-7B-Instruct",
+    "revision": "c03ef5ea2cb88c1aaf8c1231f58dcd8b4a80374f",
+    "sha256": "111223d173e00bbee81cba1216fad28668df3476706b7fd26f4d5b50f8b3a507"
+  },
+  "exit_code": 0,
+  "actual_bytes": 3864726424,
+  "actual_sha256": "111223d173e00bbee81cba1216fad28668df3476706b7fd26f4d5b50f8b3a507",
+  "status": "verified",
+  "completed_utc": "2026-10-13T05:30:58.762248+00:00"
+}

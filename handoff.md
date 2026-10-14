@@ -1,70 +1,61 @@
 # 实验交接
 
-更新时间：2026-10-13T18:05:27.488117+08:00
+更新时间：2026-10-14T11:09:55.057885+08:00（Asia/Shanghai）。
 
-## 当前状态
-- 正式连接器已完成500步；LoRA正在运行，最多2000步。最近已落盘探针step=380，train=0.4607116，val16=0.4391631。
-- 尚未开始正式benchmark生成；未见物体的几何编辑有效性尚无结论。
-- 唯一工作区：/root/userdata/zc/hunyuan3d-buffalo-1.0-editing。本地只通过ssh -o BatchMode=yes h100操作。
-- 当前runner和子进程以environment/pilot_pid.txt及environment/run_state.json current.pid为准。不要重复启动，不能绕过pilot.lock运行GPU。
-- 已完成阶段累计GPU分配9984.09秒；正在运行阶段尚未计入此字段。总预算86400秒，一次只使用一张空闲H100。
+## 状态
+- 实验收尾已完成：训练、全部9组benchmark、两个checkpoint各8对训练几何、缺图恢复、报告和文档均已结束。
+- CPU指令敏感性、全部审计、报告生成和最终复核已完成且退出码为0。无本实验运行任务。
+- 完成执行不代表编辑复现成功：当前开源替代方法未表现出可靠的指令编辑能力。
+- 累计GPU分配37363.49秒（10.3787/24小时），全部失败与恢复时间已计入。后续不得清零预算。
 
-## 已完成
-- 官方源码src/Hunyuan3D-2.1固定82920d643c0dc2f7bfd7255f45f62d386edfe60c，上游无补丁。
-- 独立Conda环境environment/venvs/shape与vlm；torch2.5.1+cu124，Transformers分别4.46.0/4.51.3。pip check通过，freeze/conda-explicit保存environment/。
-- 计划30项模型/数据下载全部verified；含benchmark共112份大小/SHA收据，logs/downloads/。HF直连失败，使用固定revision镜像和官方备用来源；临时网络中继已关闭。
-- 官方VAE、Qwen最后层状态、MLP、源latent DiT前向/反向及冻结/LoRA合同检查通过。
-- 正式首训练源uid_66677_add的VAE gate通过：CD平方和0.0004055963，F-score@0.05=0.9963859。不能解释为全部数据VAE保真保证。
-- Nano3D分片0/33/66，共3000候选；1798独立add配对通过自动QC。删除来自反向构造，并有provenance。
-- 训练1024条=512独立配对两方向；验证128条=64配对两方向。源/目标共同归一化，禁止独立归一化或ICP；跨split几何哈希交集0。
-- AI agent实际查看46候选四视角，排除16，最终训练前30个独立配对均有观察，其余482配对只有自动几何QC。不是用户本人审核。
-- Edit3D-Bench固定add/remove各20条；全量render及Shape/Qwen缓存完成，六目录数量/shape/有限性审计通过。test另含shuffled特征。
-- 8独立add配对200步诊断：固定噪声train loss0.9926369→0.6293402，val16 loss1.0304584→0.6628609。通过预设下降10%诊断门槛；仅证明velocity loss拟合，不能称为几何记忆成功。
-- 正式connector500步：train16 loss0.9658027→0.6386403，完整128val loss0.9231679→0.6159285。最佳探针0.6408666；不是从overfit初始化。random加载同一connector_initial.pt。
-- CPU源网格首seed参照：F-score@0.05 add0.604/remove0.833；删除集需关注被删区域残留。正式三seed基线仍待运行。
-- Matplotlib3.10.7已补入专用Shape环境，pip check再通过；缓存设置在本工作区，初步训练曲线已生成。
+## 固定环境与数据
+- 唯一工作区：/root/userdata/zc/hunyuan3d-buffalo-1.0-editing；ssh -o BatchMode=yes h100。本地仅AI/SSH操作，不存放实验产物。
+- 官方Hunyuan3D2.1源码固定82920d643c0dc2f7bfd7255f45f62d386edfe60c，src/Hunyuan3D-2.1干净无补丁。
+- environment/venvs/shape与vlm为专用Conda prefix；torch2.5.1+cu124，Transformers4.46.0/4.51.3，pip检查和依赖锁已保存。
+- 模型/数据权重验证、固定revision与112收据在logs/downloads/；HF直连不可用时用了固定revision镜像和官方备用来源，网络中继已关闭。
+- Nano3D3000候选，1798独立add配对通过自动QC。train1024条=512配对正反向，val128条=64独立配对正反向；test为Edit3D-Bench40另物体(add20/remove20)。无跨split几何哈希交集。
+- 源/目标共用源导出坐标归一化，无独立归一化/ICP。AI检查46候选、排除16，最终30对有视觉观察，其余482训练对仅自动QC。
 
-## 方法与边界
-- Qwen2.5-VL-7B-Instruct：四视角源几何+指令，抽取所有有效输入token最后层hidden，不生成回答。
-- MLP3584→1024→1024/GELU，pool至1370 tokens；源Shape-VAE latent固定，与4096×64 noisy target按token拼接，只取target预测。
-- 冻结VLM/VAE/DiT主干；LoRA attention rank8/alpha16，同时训练MLP。训练10%no-op。
-- 缓存/编辑解码使用FP32 VAE权重与输入+FP16 autocast，DiT BF16、adapters FP32。
-- 9评估模式source/vae/native/random/connector/lora/no_source/noop/shuffled，3seeds、50步。edited无CFG，native使用默认CFG5、源单视角、不输入指令；不是完全对等的指令模型。
-- 每模式最多3500秒、runner硬限3600秒，可能部分覆盖，必须报告attempted/expected。交替add/remove，先覆盖所有物体首seed；shuffled保持原manifest循环映射。
-- CD/F-score基于共同坐标、16384表面点，无对齐优化。变化区域指标是ground-truth辅助表面proxy，不是真实人工part mask。
-- 模式比较按共同样本及物体级三seed均值计算1000次bootstrap；只比较有效对，同时报告无效比例。不能给无效网格填0距离。
-- 本实验是开源替代机制检验，不能宣称官方Buffalo模型/指标复现。
+## 方法与checkpoint
+- Qwen2.5-VL-7B：源四视角+指令，最后层全部有效输入token hidden，不生成文本回答。
+- MLP3584→1024→1024/GELU，pool1370。源Shape-VAE4096×64 token与噪声目标拼接，只预测目标速度。
+- 冻结VLM/VAE/DiT原权重；LoRA attention rank8/alpha16，与连接器联合训练，10%noop任务。
+- VAE FP32权重与输入+FP16 autocast；DiT BF16/adapters FP32。
+- overfit_best step200；connector_best step500；LoRA训练2000步但评估lora_best step1920。校验见checkpoint_integrity.json。
+- 3seeds、50Euler步、编辑guidance1；native源单视角官方DINO条件/CFG5/无指令，并非同等输入的编辑模型。
+- CD/F-score基于16384表面点，source-derived共同坐标；变化区域指标为ground-truth辅助距离proxy，不是部件mask。
+- source/vae/native/random/connector/lora/no_source/noop/shuffled详细含义见results/summaries/evaluation_modes.md。
 
-## 证据入口
-- environment/run_state.json：逐阶段命令/提交/时间/GPU/退出码/累计预算。
-- results/summaries/：完整原始/最终清单、视觉决策、完整缓存审计、训练报告、源参照。
-- environment/training_overfit.json、training_connector.json；training_lora.json仅在该阶段结束后生成。
-- results/checkpoints/：initial/best/latest adapters。大文件不入Git。
-- logs/train_*.jsonl、stage_*.log；合成box纯FP16失败和EGL全黑帧失败均保留。
-- 全量train render第999条曾全黑，重启新进程续缓存成功，失败时间已入预算，不删除此数据。
-- environment/method_notes.md：全部方法差异；environment/README.md：环境操作。
+## 实测结论
+- velocity loss：connector full128val0.923168→0.615929；LoRA0.615929→0.427614，表示速度场训练有所拟合。
+- 先前8样本gate仅要求velocity loss下降10%，未在扩大训练前验证几何记忆，是原执行验收限制；本轮补做几何检查，不改写原历史。
+- 8对训练几何(单seed)：源baseline F-score0.964831；overfit0.959653；LoRA0.918637。两checkpoint均0/8对F-score优于源。不能认定几何过拟合成功。
+- 未见benchmark：源F-score0.718601，random0.704222，connector0.656865，LoRA0.663540，shuffled0.665361。
+- LoRA vs源F-score差-0.055060，物体bootstrap95%CI[-0.080108,-0.032240]；LoRA vs shuffled差-0.001821，CI[-0.004245,+0.000254]。正确指令无可辨认优势。
+- 预选6benchmark及全部8训练例子已由AI看四视角，观察见benchmark_visual_observations.json和training_geometry_visual_observations.json；不是用户本人审核，不构成全体语义准确率。
+- 网格有效率只保证加载/坐标/索引有效，仍可能孔洞、碎片或部件未编辑。本实验不能宣称官方Buffalo编辑复现成功。
 
-## 下一步
-1. 观察当前LoRA到结束，核对完整128val结果和实际steps。
-2. runner自动串行完成9个benchmark对照；检查错误、完整性以及实际生成几何。
-3. 仅CPU执行：
-   environment/venvs/shape/bin/python scripts/compare_evaluations.py
-   environment/venvs/shape/bin/python scripts/analyze_instruction_sensitivity.py
-   environment/venvs/shape/bin/python scripts/build_comparison_sheets.py
-   environment/venvs/shape/bin/python scripts/plot_training.py
-   environment/venvs/shape/bin/python scripts/summarize_pilot.py
-4. 实际查看比较图，记录AI观察和例子，严格区分接口通过、velocity拟合、未见编辑。
-5. 完成最终报告、文档、Git提交，检查本实验后台结束。当前仓库无Git remote。
+## 恢复记录
+- 原shuffled39/120处退出-6(SIGABRT)，此前EGL全黑帧失败；没有足够日志锁定原生崩溃根因。
+- scripts/recover_experiment.py用同一pilot锁与24h预算，保留39条metrics，仅生成缺失条目。
+- --skip-render将生成和EGL分离；scripts/repair_result_renders.py每网格独立子进程，共检查336组、补齐26组，剩余缺图0。
+- 原报告旧overfit缺final_validation_entries字段导致失败；修复为按历史实际16条处理，原始训练记录保持不变。
+- 原状态与失败收尾完整快照environment/recovery_before.json；原日志追加保留。恢复完成后正确/打乱输出相似度F-score0.989973(120样本)。
 
-## 恢复
-- 先读取agent.md与本文件，git status，检查/proc和run_state；尚在运行时只观察。
-- 失败后修复实现问题，保留原日志/预算，确认runner退出后再运行environment/venvs/shape/bin/python scripts/run_pilot.py；成功阶段自动跳过。
-- 已发布清单为权威；不要重划分已复核数据。data_review.json批准的是固定manifest SHA。
-- 正式权重、VAE gate或8样本拟合失败停止扩大；connector完整val无提升不继续LoRA；预算不可绕过。
+## 查看与证据
+- results/summaries/final_report.md：完整报告；evaluation_modes.md：模式说明。
+- results/visual_comparisons/：40张benchmark图，行source/target/vae/native/random/connector/lora/no_source/noop/shuffled。
+- results/training_geometry_comparisons/：8张source/target/overfit/LoRA图。
+- results/evaluation/<mode>/：GLB、首seed四视角、metrics.jsonl、summary.json、protocol.json。
+- results/training_geometry/<checkpoint>/：训练样本GLB、四视角与metrics。
+- results/summaries/evaluation_integrity.json：1080评估全部120/120、有效且无重复；checkpoint_integrity.json：adapter哈希/冻结权重检查。
+- controlled_comparisons.json：同样本/物体级bootstrap；instruction_sensitivity.json：正确/错误/保持不变输出相似性。
+- training_geometry_audit.json：8对逐样本几何检查、GLB哈希与变化proxy。
+- environment/run_state.json：命令、开始/结束、GPU、退出码、累计预算；environment/recovery_status.json和finalization_status.json：CPU收尾退出码。
+- logs/stage_*.log、train_*.jsonl、recovery_*.log保存所有运行记录。
 
-## 追加训练几何诊断
-主流程完成后运行environment/venvs/shape/bin/python scripts/run_training_geometry.py，使用同一pilot锁和GPU累计预算，对overfit_best和lora_best各生成8个原始独立add训练样本（单seed/50步）。这是几何拟合检查，不修改已通过的velocity-loss gate，也不替代独立benchmark。
-
-## 自动收尾进程
-- environment/finalizer_pid.txt记录scripts/finalize_experiment.py进程；等待pilot退出后才执行。不会同时运行GPU。
-- 收尾包含预算内训练几何诊断、CPU检查点/评估审计、模式比较、指令敏感性、比较图、训练曲线和final_report.md。AI视觉解释和最终Git提交仍需主agent完成。
+## 再运行与后续
+- 先读取agent.md和本交接，git status、检查本实验PID，不能与现有runner并行。
+- 固定样本/权重/随机种子不要重划分。无Git remote；只在远端本地Git维护。
+- 收尾恢复：environment/venvs/shape/bin/python scripts/recover_experiment.py，成功GPU阶段跳过；CPU脚本可独立重复。
+- 不追加训练或扩大数据。本轮只完成既定收尾；如继续研究，应先诊断源token复制偏置、指令连接器利用和训练几何失败，再决定方法或数据变化。

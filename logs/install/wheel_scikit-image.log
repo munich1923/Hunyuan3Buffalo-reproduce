@@ -1,0 +1,29 @@
+[#77dfc1 448KiB/14MiB(3%) CN:3 DL:0.9MiB ETA:13s]
+[#77dfc1 1.4MiB/14MiB(10%) CN:3 DL:1.0MiB ETA:12s]
+[#77dfc1 3.7MiB/14MiB(26%) CN:3 DL:1.5MiB ETA:6s]
+[#77dfc1 4.9MiB/14MiB(34%) CN:3 DL:1.4MiB ETA:6s]
+[#77dfc1 6.1MiB/14MiB(43%) CN:3 DL:1.3MiB ETA:5s]
+[#77dfc1 6.8MiB/14MiB(48%) CN:3 DL:1.2MiB ETA:5s]
+[#77dfc1 7.6MiB/14MiB(53%) CN:3 DL:1.1MiB ETA:5s]
+[#77dfc1 8.7MiB/14MiB(61%) CN:2 DL:1.1MiB ETA:4s]
+[#77dfc1 9.5MiB/14MiB(67%) CN:2 DL:1.1MiB ETA:4s]
+[#77dfc1 9.9MiB/14MiB(69%) CN:2 DL:1.0MiB ETA:4s]
+[#77dfc1 10MiB/14MiB(72%) CN:2 DL:0.9MiB ETA:3s]
+[#77dfc1 10MiB/14MiB(75%) CN:2 DL:855KiB ETA:4s]
+[#77dfc1 11MiB/14MiB(78%) CN:2 DL:715KiB ETA:4s]
+[#77dfc1 11MiB/14MiB(80%) CN:2 DL:610KiB ETA:4s]
+[#77dfc1 11MiB/14MiB(81%) CN:2 DL:536KiB ETA:4s]
+[#77dfc1 11MiB/14MiB(83%) CN:2 DL:470KiB ETA:5s]
+[#77dfc1 12MiB/14MiB(85%) CN:2 DL:392KiB ETA:5s]
+[#77dfc1 12MiB/14MiB(88%) CN:2 DL:344KiB ETA:4s]
+[#77dfc1 13MiB/14MiB(92%) CN:2 DL:346KiB ETA:3s]
+[#77dfc1 13MiB/14MiB(94%) CN:1 DL:329KiB ETA:2s]
+[#77dfc1 13MiB/14MiB(97%) CN:1 DL:336KiB ETA:1s]
+
+Download Results:
+gid   |stat|avg speed  |path/URI
+======+====+===========+=======================================================
+77dfc1|OK  |   673KiB/s|/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/.cache/wheels/scikit_image-0.24.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+
+Status Legend:
+(OK):download completed.

@@ -1,0 +1,11 @@
+2026-10-13 14:19:01,521 - hy3dgen.shapgen - INFO - Try to load model from local path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1/hunyuan3d-dit-v2-1
+2026-10-13 14:19:01,528 - hy3dgen.shapgen - INFO - Loading model from /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1/hunyuan3d-dit-v2-1/model.fp16.ckpt
+/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/lib/python3.10/contextlib.py:103: FutureWarning: `torch.backends.cuda.sdp_kernel()` is deprecated. In the future, this context manager will be removed. Please see `torch.nn.attention.sdpa_kernel()` for the new context manager, with updated signature.
+  self.gen = func(*args, **kwds)
+using moe
+using moe
+using moe
+using moe
+using moe
+using moe
+{"pred_shape": [1, 4096, 64], "loss": 0.973000168800354, "connector_gradient": true, "backbone_frozen": true, "synthetic": true, "note": "Random connector, interface pass only."}

@@ -1,0 +1,18 @@
+{
+  "note": "CPU identity-source baseline at first seed; final 3-seed benchmark is separate.",
+  "count": 40,
+  "by_operation": {
+    "add": {
+      "cd_squared_sum": 0.02318034818466576,
+      "fscore_005": 0.6039973488342808
+    },
+    "remove": {
+      "cd_squared_sum": 0.005155285005734466,
+      "fscore_005": 0.8334587167230951
+    },
+    "all": {
+      "cd_squared_sum": 0.014167816595200111,
+      "fscore_005": 0.718728032778688
+    }
+  }
+}

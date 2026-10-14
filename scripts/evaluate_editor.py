@@ -16,7 +16,7 @@ def decode(vae,z,scale):
         meshes=vae.latents2mesh(decoded,bounds=1.01,mc_level=0,num_chunks=10000,octree_resolution=256,mc_algo="mc",enable_pbar=False)
     return export_to_trimesh(meshes)[0]
 def main():
-    p=argparse.ArgumentParser();p.add_argument("--mode",choices=["source","vae","native","random","connector","lora","no_source","noop","shuffled"],required=True);p.add_argument("--seconds",type=float,default=3600);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument("--mode",choices=["source","vae","native","random","connector","lora","no_source","noop","shuffled"],required=True);p.add_argument("--seconds",type=float,default=3600);p.add_argument("--skip-render",action="store_true",help="Defer EGL renders to isolated processes");a=p.parse_args()
     start=time.monotonic()
     rows=load_records("test");out=ROOT/"results/evaluation"/a.mode;out.mkdir(parents=True,exist_ok=True)
     random.seed(20261013);torch.manual_seed(20261013)
@@ -77,7 +77,7 @@ def main():
                 pred.export(path)
                 target=trimesh.load(row["target_normalized"],force="mesh");source_mesh=trimesh.load(row["source_normalized"],force="mesh")
                 record.update(valid=True,path=str(path),target_metrics=compare(pred,target,seed),source_metrics=compare(pred,source_mesh,seed),preservation_metrics=preservation(pred,source_mesh,target,seed))
-                if seed==20261013:
+                if seed==20261013 and not a.skip_render:
                     from render_views import render
                     try:render(pred,out/(row["id"]+"_views"))
                     except Exception as render_error:

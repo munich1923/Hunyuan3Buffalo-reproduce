@@ -9,7 +9,7 @@ from metrics import compare,preservation
 from render_views import render
 configure()
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument("--checkpoint",choices=["overfit","lora"],required=True);parser.add_argument("--seconds",type=float,default=1500);a=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument("--checkpoint",choices=["overfit","lora"],required=True);parser.add_argument("--seconds",type=float,default=1500);parser.add_argument("--skip-render",action="store_true");a=parser.parse_args()
     start=time.monotonic()
     rows=[x for x in load_records("train") if x["operation"]=="add"][:8]
     assert len({x["group"] for x in rows})==8
@@ -36,8 +36,9 @@ def main():
             if pred is None or len(pred.faces)==0 or not np.isfinite(pred.vertices).all():raise ValueError("Invalid generated mesh")
             path=out/(row["id"]+".glb");pred.export(path)
             record.update(valid=True,path=str(path),target_metrics=compare(pred,target_mesh),source_metrics=compare(pred,source_mesh),preservation_metrics=preservation(pred,source_mesh,target_mesh))
-            try:render(pred,out/(row["id"]+"_views"))
-            except Exception as e:record["render_error"]=repr(e)
+            if not a.skip_render:
+                try:render(pred,out/(row["id"]+"_views"))
+                except Exception as e:record["render_error"]=repr(e)
         except Exception as e:
             record.update(valid=False,error=repr(e))
             if isinstance(e,torch.cuda.OutOfMemoryError):raise

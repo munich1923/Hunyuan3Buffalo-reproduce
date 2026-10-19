@@ -1,0 +1,87 @@
+{
+  "code_status": "implemented_cpu_verified_gpu_pending",
+  "cpu_tests": {
+    "tests": 18,
+    "failures": 0,
+    "errors": 0,
+    "passed": true,
+    "cuda_initialized": false,
+    "utc": "2026-10-19T12:56:18.964585+00:00",
+    "asia_shanghai": "2026-10-19T20:56:18.964585+08:00"
+  },
+  "token_selection_audit": {
+    "count": 17000,
+    "valid": 17000,
+    "errors": [],
+    "selected_length": {
+      "min": 44,
+      "median": 92.0,
+      "p95": 123.0,
+      "max": 186
+    },
+    "utc": "2026-10-19T12:50:17.773272+00:00",
+    "asia_shanghai": "2026-10-19T20:50:17.773272+08:00"
+  },
+  "vae_checkpoint_interface": {
+    "parts": {
+      "encoder": {
+        "state_tensors": 144,
+        "parameter_elements": 113533312,
+        "missing": [],
+        "shape_mismatches": []
+      },
+      "decoder": {
+        "state_tensors": 266,
+        "parameter_elements": 214212865,
+        "missing": [],
+        "shape_mismatches": []
+      }
+    },
+    "mmap": true,
+    "meta_construction": true,
+    "cuda_initialized": false,
+    "utc": "2026-10-19T12:50:03.491841+00:00",
+    "asia_shanghai": "2026-10-19T20:50:03.491841+08:00"
+  },
+  "dataset_status": {
+    "state": "running",
+    "pid": 3328725,
+    "command": [
+      "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python3.10",
+      "-B",
+      "-u",
+      "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/scripts/prepare_stage2.py",
+      "--config",
+      "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/configs/stage2_nano10k.yaml"
+    ],
+    "utc": "2026-10-19T12:46:39.065361+00:00",
+    "asia_shanghai": "2026-10-19T20:46:39.065361+08:00"
+  },
+  "dataset_ready": false,
+  "tensorboard": {
+    "pid": 3324949,
+    "port": 6006,
+    "host": "127.0.0.1",
+    "command": [
+      "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/environment/venvs/shape/bin/python",
+      "-B",
+      "-m",
+      "tensorboard.main",
+      "--logdir",
+      "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/stage2_nano10k",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "6006"
+    ],
+    "utc": "2026-10-19T12:39:18.629574+00:00",
+    "asia_shanghai": "2026-10-19T20:39:18.629574+08:00"
+  },
+  "tensorboard_remote_http": 200,
+  "gpu_stages_started": false,
+  "upstream_dirty": false,
+  "dependencies_pip_check": "passed",
+  "local_tunnel": "not_started; automatic approval rejected hidden process launch (blocked by policy)",
+  "utc": "2026-10-19T12:56:39.682519+00:00",
+  "asia_shanghai": "2026-10-19T20:56:39.682519+08:00"
+}

@@ -1,0 +1,21 @@
+{
+  "parts": {
+    "encoder": {
+      "state_tensors": 144,
+      "parameter_elements": 113533312,
+      "missing": [],
+      "shape_mismatches": []
+    },
+    "decoder": {
+      "state_tensors": 266,
+      "parameter_elements": 214212865,
+      "missing": [],
+      "shape_mismatches": []
+    }
+  },
+  "mmap": true,
+  "meta_construction": true,
+  "cuda_initialized": false,
+  "utc": "2026-10-19T12:50:03.491841+00:00",
+  "asia_shanghai": "2026-10-19T20:50:03.491841+08:00"
+}

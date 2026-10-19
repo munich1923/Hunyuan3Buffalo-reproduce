@@ -1,3 +1,7 @@
+# 当前 Stage 2 授权（2026-10-19）
+
+用户已授权实施 docs/stage2_nano10k.md 与 configs/stage2_nano10k.yaml：纯文本VLM条件适配完整2.1 DiT。允许新代码、userdata内依赖/TensorBoard、固定17分片CPU数据准备。GPU缓存/gate/probe须明确独占GPU；正式训练还须资源测量后由用户确认新预算。旧编辑预算与历史保留。以下旧实验目标、固定划分、不追加训练等限制仅适用于旧编辑实验，不限制新授权的Stage 2；不得据此复用旧编辑缓存或启动旧runner。所有文件仍限远端工作区，禁止干扰其他任务。
+
 # 实验与 AI 工作约定
 
 ## 目标与当前授权范围

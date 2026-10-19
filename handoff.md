@@ -1,3 +1,17 @@
+# 当前 Stage 2 实施交接（2026-10-19）
+
+用户已授权实施纯文本条件生成Stage 2近似实验。详见docs/stage2_nano10k.md、configs/stage2_nano10k.yaml和results/summaries/stage2_implementation.md。
+
+代码已实现，18项CPU测试通过，CUDA未初始化；17000条候选prompt选择审计通过。上游固定提交仍干净。TensorBoard在远端127.0.0.1:6006运行，没有训练曲线。本地自动SSH转发被审批拒绝，需手动转发。
+
+CPU数据准备仍在后台运行，状态为results/stage2_nano10k/preparation/dataset_status.json，进程记录dataset_process.json。它仅获取固定17分片、做源mesh检查去重并划分10000/500/500；不自动启动GPU阶段。运行时不要再启动另一个准备器，锁会拒绝并行。最终ready.json尚未生成，不能声称数据准备已完成。
+
+无可独占GPU，未做GPU缓存/VAE gate/probe/训练。正式训练须当前数据缓存和VAE gate通过、独占GPU、资源probe通过，并由用户确认新预算。预算模板默认未批准。旧实验预算和下方历史记录保持不变。生成阶段使用decoder-only VAE，不构造encoder。
+
+checkpoint每500更新保存且全部保留，最终1565额外保存；loss每100更新记录。所有新增产物/环境缓存/临时目录在远端userdata内。
+
+---
+
 # 实验交接
 
 更新时间：2026-10-14T11:09:55.057885+08:00（Asia/Shanghai）。

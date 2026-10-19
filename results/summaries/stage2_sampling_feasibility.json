@@ -1,0 +1,47 @@
+{
+  "candidate_metadata_count": 17000,
+  "allocations_before_geometry_qc": {
+    "train": {
+      "Animal": 1019,
+      "Building": 901,
+      "Electronic Device": 528,
+      "Food": 362,
+      "Furniture": 1044,
+      "Human": 2475,
+      "Musical Instrument": 159,
+      "Personal Item": 1028,
+      "Plant": 444,
+      "Vehicle": 938,
+      "Weapon": 1102
+    },
+    "val": {
+      "Animal": 51,
+      "Building": 45,
+      "Electronic Device": 27,
+      "Food": 18,
+      "Furniture": 52,
+      "Human": 124,
+      "Musical Instrument": 8,
+      "Personal Item": 51,
+      "Plant": 22,
+      "Vehicle": 47,
+      "Weapon": 55
+    },
+    "test": {
+      "Animal": 51,
+      "Building": 45,
+      "Electronic Device": 27,
+      "Food": 18,
+      "Furniture": 52,
+      "Human": 124,
+      "Musical Instrument": 8,
+      "Personal Item": 51,
+      "Plant": 22,
+      "Vehicle": 47,
+      "Weapon": 55
+    }
+  },
+  "note": "CPU metadata feasibility only; not final accepted objects or manifests",
+  "utc": "2026-10-19T12:55:20.372620+00:00",
+  "asia_shanghai": "2026-10-19T20:55:20.372620+08:00"
+}

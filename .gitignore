@@ -45,3 +45,9 @@ logs/downloads/*.lock
 logs/downloads/*.log
 
 !results/summaries/*.jsonl
+
+# Stage 2 runtime caches, temporary files and live process metadata
+environment/cache/
+environment/tmp/
+environment/stage2_*process.json
+environment/stage2_budget_approval.json

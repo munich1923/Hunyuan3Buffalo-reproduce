@@ -1,0 +1,9 @@
+{
+  "tests": 18,
+  "failures": 0,
+  "errors": 0,
+  "passed": true,
+  "cuda_initialized": false,
+  "utc": "2026-10-19T12:56:18.964585+00:00",
+  "asia_shanghai": "2026-10-19T20:56:18.964585+08:00"
+}

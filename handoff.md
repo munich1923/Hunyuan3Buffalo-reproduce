@@ -87,3 +87,5 @@ checkpoint每500更新保存且全部保留，最终1565额外保存；loss每10
 23:35:43 +08:00 最终part099整包SHA256 3142975cc46c2faf0a366175d117bd5e90b2de1e7acc3c8df74c3253d317a3c0通过，5327786711字节，17分片已全部校验。下载故障已解决，非仅进程存活。前16分片16000源mesh已提取；099提取及全量QC/split仍运行，不等同训练ready。
 
 23:39 CPU QC加速：17包源mesh全部17000提取完成，QC单任务改为4个spawn进程，pool.map维持原UID顺序/原始去重代表和split种子，已完成检查记录复用。新runner3801512；4例串行/并行输出完全一致专项检查通过。下载相关6项检查重跑通过。最新QC 1360 条，ready尚待。
+
+2026-10-20 23:49:02 +08:00 CPU数据准备完成：17包下载及固定SHA通过、17000源mesh提取、17000候选基础QC通过（未发现哈希重复，不等同语义质量人工审核）。ready.json生成，10000/500/500固定划分完成；逐split文件SHA、UID和geometry_hash跨集合无交集、源mesh存在及userdata路径已复核。证据results/summaries/stage2_dataset_integrity.json。prepare runner3801512正常exit0，后续不应再重启下载器。GPU缓存/VAE gate/probe/训练未执行，仍须明确GPU和预算授权。

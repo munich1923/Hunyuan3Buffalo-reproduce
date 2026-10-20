@@ -27,5 +27,38 @@
   "extracted_source_count": 1590,
   "runner_pid": 3781857,
   "extractor_pid": 3781858,
-  "gpu_used": false
+  "gpu_used": false,
+  "observed_final_download": {
+    "file": "v1_100k/editing_assets/part_099.tar.gz",
+    "completed_chunks": 1271,
+    "total_chunks": 1271,
+    "downloaded_bytes": 5327786711,
+    "expected_bytes": 5327786711,
+    "utc": "2026-10-20T15:34:51.908070+00:00",
+    "asia_shanghai": "2026-10-20T23:34:51.908070+08:00"
+  },
+  "observed_throughput_MiB_s": [
+    3.4,
+    3.7,
+    4.7,
+    5.89,
+    5.2,
+    2.3,
+    2.34,
+    3.75,
+    3.9,
+    3.79
+  ],
+  "extracted_prior_shards": 16,
+  "final_checksum_status": "passed",
+  "updated_utc": "2026-10-20T15:35:51.893562+00:00",
+  "final_archive_receipt": {
+    "file": "v1_100k/editing_assets/part_099.tar.gz",
+    "revision": "d6686ff82ea14c2dfa4fdd55db332309a0241495",
+    "sha256": "3142975cc46c2faf0a366175d117bd5e90b2de1e7acc3c8df74c3253d317a3c0",
+    "bytes": 5327786711,
+    "mtime_ns": 1792510534384906484,
+    "utc": "2026-10-20T15:35:43.831346+00:00",
+    "asia_shanghai": "2026-10-20T23:35:43.831346+08:00"
+  }
 }

@@ -1,0 +1,15 @@
+{
+  "uid": "uid_35482",
+  "shape": [
+    89,
+    3584
+  ],
+  "dtype": "torch.bfloat16",
+  "finite": true,
+  "fingerprint_matches": true,
+  "token_indices": 89,
+  "text_files_at_check": 6931,
+  "cuda_initialized": false,
+  "utc": "2026-10-20T16:17:17.911606+00:00",
+  "asia_shanghai": "2026-10-21T00:17:17.911606+08:00"
+}

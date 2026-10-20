@@ -13,21 +13,39 @@ def download_command(partial, url):
             "--allow-overwrite=true", "--auto-file-renaming=false", "--file-allocation=none",
             "--max-connection-per-server=1", "--split=1", "--max-tries=3",
             "--retry-wait=30", "--connect-timeout=20", "--timeout=60",
-            "--lowest-speed-limit=1K", "--summary-interval=30", "--console-log-level=warn",
+            "--lowest-speed-limit=64K", "--summary-interval=30", "--console-log-level=warn",
             "--dir", str(partial.parent), "--out", partial.name, url]
+
+
+def download_rate(log_file, offset):
+    """Last measured network rate for this attempt, never sparse file length."""
+    with log_file.open("rb") as stream:
+        stream.seek(0, 2)
+        stream.seek(max(offset, stream.tell() - 16384))
+        text = stream.read().decode(errors="replace")
+    rates = re.findall(r"DL:([0-9.]+)([KMGT]?i?B)", text)
+    if not rates:
+        return None
+    value, unit = rates[-1]
+    powers = {"B": 0, "KiB": 1, "MiB": 2, "GiB": 3, "TiB": 4,
+              "KB": 1, "MB": 2, "GB": 3, "TB": 4}
+    return float(value) * (1024 ** powers[unit])
 
 
 def download_archive(cfg, name, partial, size, receipts):
     log_file = receipts / (name.rsplit("/", 1)[-1] + ".log")
     # Keep aria2 control files: file length alone can include sparse holes.
     for endpoint in ["https://hf-mirror.com", "https://huggingface.co"]:
-        url = f"{endpoint}/datasets/{cfg['dataset']['repo']}/resolve/{cfg['dataset']['revision']}/{name}"
+        base_url = f"{endpoint}/datasets/{cfg['dataset']['repo']}/resolve/{cfg['dataset']['revision']}/{name}"
         for attempt in range(8):
+            url = base_url + "?download=true&stage2_resume=" + str(time.time_ns())
             append(receipts / "events.jsonl", {"event": "download_attempt", "file": name,
-                   "endpoint": endpoint, "attempt": attempt + 1, "policy": "serial-resume-v2"})
+                   "endpoint": endpoint, "attempt": attempt + 1, "policy": "low-speed-recovery-v3"})
             with log_file.open("a") as log:
-                log.write(f"\nSTAGE2_RESUME_V2 endpoint={endpoint} attempt={attempt + 1}\n")
+                log.write(f"\nSTAGE2_RESUME_V3 endpoint={endpoint} attempt={attempt + 1}\n")
                 log.flush()
+                offset = log.tell()
+                slow_since = None
                 process = subprocess.Popen(download_command(partial, url), stdout=log,
                                            stderr=subprocess.STDOUT)
                 try:
@@ -37,10 +55,19 @@ def download_archive(cfg, name, partial, size, receipts):
                             break
                         except subprocess.TimeoutExpired:
                             stat = partial.stat() if partial.exists() else None
+                            rate = download_rate(log_file, offset)
+                            now = time.monotonic()
+                            slow_since = (slow_since if slow_since is not None else now) if rate is not None and rate < 128 * 1024 else None
                             append(receipts / "events.jsonl", {"event": "download_heartbeat",
                                    "file": name, "pid": process.pid, "expected_bytes": size,
+                                   "download_Bps": rate,
                                    "file_bytes": stat.st_size if stat else 0,
                                    "allocated_bytes": stat.st_blocks * 512 if stat else 0})
+                            if slow_since is not None and now - slow_since >= 120:
+                                append(receipts / "events.jsonl", {"event": "download_slow_restart",
+                                       "file": name, "download_Bps": rate, "slow_seconds": now - slow_since})
+                                code = 75
+                                break
                 finally:
                     if process.poll() is None:
                         process.terminate()

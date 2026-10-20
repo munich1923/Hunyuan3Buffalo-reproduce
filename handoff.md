@@ -6,6 +6,8 @@
 
 CPU数据准备于2026-10-19 21:11:59 +08:00失败（镜像429限流、备用直连不可达）。2026-10-20 10:38:33 +08:00已修复并续跑，runner PID 3468366：下载改为串行单连接、失败指数退避、禁止IPv6、取消每90秒强制重启；保留已校验包和aria2断点文件。实测014分片恢复至约62%，约6.4 MiB/s，尚未完成。原失败状态已归档为preparation/dataset_status.json.before_recovery_*。恢复证据见results/summaries/stage2_download_recovery.json。
 
+2026-10-20 18:16左右低速恢复：原连接持续6–10 KiB/s。固定同文件range实测原请求122800 B/s，加download参数1010187 B/s，新请求1162154 B/s。下载器已加入每次续传新请求参数、64KiB/s aria2最低速、低于128KiB/s持续120秒的看门狗（以日志网络速率衡量，不依赖稀疏文件长度）；保留串行单连接及指数退避。4项下载测试通过，含持续低速终止/保留断点/恢复。旧准备器受控停止，归档状态before_lowspeed_*，新runner PID 3625244。实时速度见逐包日志，尚未宣称全部下载完成。证据results/summaries/stage2_lowspeed_recovery.json。
+
 实时状态为results/stage2_nano10k/preparation/dataset_status.json，进程记录dataset_process.json，逐包日志和心跳位于assets/manifests/stage2_nano10k/downloads/。它仅获取固定17分片、做源mesh检查去重并划分10000/500/500；不自动启动GPU阶段。不要重复启动准备器；锁会拒绝并行。最终ready.json尚未生成，不能声称数据准备已完成。
 
 无可独占GPU，未做GPU缓存/VAE gate/probe/训练。正式训练须当前数据缓存和VAE gate通过、独占GPU、资源probe通过，并由用户确认新预算。预算模板默认未批准。旧实验预算和下方历史记录保持不变。生成阶段使用decoder-only VAE，不构造encoder。

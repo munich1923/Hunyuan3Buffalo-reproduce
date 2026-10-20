@@ -21,5 +21,15 @@
   },
   "runner_pid": 3625244,
   "gpu_used": false,
-  "state": "restarted_waiting_observation"
+  "state": "resumed_with_observed_progress",
+  "observed": {
+    "asia_shanghai": "2026-10-20T18:17:03+08:00",
+    "shard": "091",
+    "percent": 73,
+    "recent_KiB_s": [
+      334,
+      802
+    ],
+    "caveat": "speed variable; not all data downloaded"
+  }
 }

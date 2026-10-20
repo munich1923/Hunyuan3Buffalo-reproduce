@@ -1,3 +1,5 @@
+2026-10-21 00:23:30 +08:00 GPU2已实际完成首批posterior编码42条，抽查mean/logvar FP32各[4096,64]、有限值及指纹通过，编码阶段整卡占用25054MiB（含其他进程），本阶段尚未等于训练显存探测。runner继续全量posterior→VAE gate→5更新probe，正式训练0更新。posterior抽查证据results/summaries/stage2_gpu2_posterior_spotcheck.json。
+
 2026-10-21 00:19:54 +08:00 text缓存完整完成11000条（train10000/val500/test500），所选token长度44至186，无全序列池化。00:19:55已切换posterior缓存PID3822637，尚在加载/权重校验时不能称posterior完成。4共享测试和18CPU回归最终均通过，原始回归日志gpu2_readiness_20261021/cpu_regression.log。
 
 2026-10-21编码复现性补充：发现固定上游encoder内部仍调用randperm及random-start FPS；在尚无posterior缓存时加入逐UID派生encoder seed与fork_rng，同时升级shape contract指纹，不修改上游或已生成文本缓存。

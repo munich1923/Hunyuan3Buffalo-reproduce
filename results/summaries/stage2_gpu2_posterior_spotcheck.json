@@ -1,0 +1,19 @@
+{
+  "uid": "uid_35482",
+  "mean_shape": [
+    4096,
+    64
+  ],
+  "logvar_shape": [
+    4096,
+    64
+  ],
+  "dtype": "torch.float32",
+  "finite": true,
+  "fingerprint_matches": true,
+  "encoder_seed": 341061291,
+  "files_at_check": 42,
+  "cuda_initialized": false,
+  "utc": "2026-10-20T16:23:29.964676+00:00",
+  "asia_shanghai": "2026-10-21T00:23:29.964676+08:00"
+}

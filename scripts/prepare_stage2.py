@@ -1,6 +1,8 @@
 """Pinned Nano3D source-only acquisition, resumable CPU QC and immutable splits."""
 from stage2_runtime import *
 import re
+import concurrent.futures
+import multiprocessing
 import shutil
 import tarfile
 import urllib.parse
@@ -162,6 +164,38 @@ def extract_sources(cfg, base):
     return destination
 
 
+def check_candidate(task):
+    from stage2_data import load_mesh,normalize,geometry_hash
+    cfg,destination,qc_dir,row=task
+    uid=row["uid"]
+    file=path(destination/uid/"src_mesh.glb")
+    record_file=qc_dir/(uid+".json")
+    sha=digest(file)
+    contract=fingerprint({"mesh":sha,"version":cfg["dataset"]["geometry_version"],
+                          "extent":cfg["dataset"]["normalized_extent"]})
+    if record_file.exists() and read_json(record_file).get("qc_contract")==contract:
+        result=read_json(record_file)
+    else:
+        try:
+            if not isinstance(row.get("prompt"),str) or not row["prompt"].strip():
+                raise ValueError("Empty original prompt")
+            mesh=load_mesh(file)
+            normalized, center, scale=normalize(mesh,cfg["dataset"]["normalized_extent"])
+            result={"accepted":True,"uid":uid,"prompt":row["prompt"],
+                    "category":row["category"].strip(),"mesh":str(file),
+                    "mesh_sha256":sha,"geometry_hash":geometry_hash(mesh),
+                    "normalization":{"center":center,"scale":scale,
+                      "version":cfg["dataset"]["geometry_version"],
+                      "extent":cfg["dataset"]["normalized_extent"]},
+                    "surface_seed":seed(cfg["seed"],"surface",uid),
+                    "vertices":len(mesh.vertices),"faces":len(mesh.faces)}
+        except Exception as exc:
+            result={"accepted":False,"uid":uid,"reason":repr(exc)}
+        result["qc_contract"]=contract
+        atomic_json(record_file,result)
+    return result
+
+
 def prepare(cfg, offline=False):
     root = manifest_root(cfg)
     root.mkdir(parents=True,exist_ok=True)
@@ -182,43 +216,19 @@ def prepare(cfg, offline=False):
     accepted, rejected, seen = [], [], {}
     qc_dir = root/"qc"
     qc_dir.mkdir(parents=True,exist_ok=True)
-    for index, row in enumerate(sorted(candidates,key=lambda r:r["uid"])):
-        uid=row["uid"]
-        file=path(destination/uid/"src_mesh.glb")
-        record_file=qc_dir/(uid+".json")
-        sha=digest(file)
-        contract=fingerprint({"mesh":sha,"version":cfg["dataset"]["geometry_version"],
-                              "extent":cfg["dataset"]["normalized_extent"]})
-        if record_file.exists() and read_json(record_file).get("qc_contract")==contract:
-            result=read_json(record_file)
-        else:
-            try:
-                if not isinstance(row.get("prompt"),str) or not row["prompt"].strip():
-                    raise ValueError("Empty original prompt")
-                mesh=load_mesh(file)
-                normalized, center, scale=normalize(mesh,cfg["dataset"]["normalized_extent"])
-                result={"accepted":True,"uid":uid,"prompt":row["prompt"],
-                        "category":row["category"].strip(),"mesh":str(file),
-                        "mesh_sha256":sha,"geometry_hash":geometry_hash(mesh),
-                        "normalization":{"center":center,"scale":scale,
-                          "version":cfg["dataset"]["geometry_version"],
-                          "extent":cfg["dataset"]["normalized_extent"]},
-                        "surface_seed":seed(cfg["seed"],"surface",uid),
-                        "vertices":len(mesh.vertices),"faces":len(mesh.faces)}
-            except Exception as exc:
-                result={"accepted":False,"uid":uid,"reason":repr(exc)}
-            result["qc_contract"]=contract
-            atomic_json(record_file,result)
-        if not result["accepted"]:
-            rejected.append(result)
-        elif result["geometry_hash"] in seen:
-            rejected.append({"uid":uid,"reason":"duplicate_geometry",
-                             "representative":seen[result["geometry_hash"]]})
-        else:
-            seen[result["geometry_hash"]]=uid
-            accepted.append(result)
-        if (index+1)%100==0:
-            print("QC",index+1,"accepted",len(accepted),"rejected",len(rejected),flush=True)
+    tasks=((cfg,destination,qc_dir,row) for row in sorted(candidates,key=lambda r:r["uid"]))
+    with concurrent.futures.ProcessPoolExecutor(max_workers=4,mp_context=multiprocessing.get_context("spawn")) as pool:
+        for index,result in enumerate(pool.map(check_candidate,tasks,chunksize=4)):
+            if not result["accepted"]:
+                rejected.append(result)
+            elif result["geometry_hash"] in seen:
+                rejected.append({"uid":result["uid"],"reason":"duplicate_geometry",
+                                 "representative":seen[result["geometry_hash"]]})
+            else:
+                seen[result["geometry_hash"]]=result["uid"]
+                accepted.append(result)
+            if (index+1)%100==0:
+                print("QC",index+1,"accepted",len(accepted),"rejected",len(rejected),flush=True)
     atomic_lines(root/"accepted.jsonl",accepted)
     atomic_lines(root/"rejected.jsonl",rejected)
     atomic_json(root/"qc_report.json",{"candidate_count":len(candidates),

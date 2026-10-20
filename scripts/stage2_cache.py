@@ -17,7 +17,7 @@ def shape_contract(cfg,identity):
             "extent":cfg["dataset"]["normalized_extent"],
             "sample_points":cfg["dataset"]["sample_points"],
             "latent_shape":cfg["cache"]["latent_shape"],"scale":cfg["cache"]["scale"],
-            "logvar_clamp":[-30.0,20.0]}
+            "logvar_clamp":[-30.0,20.0],"encoder_randomness":"per-surface-seed-fork-rng-v1"}
 
 
 def cache_base(cfg,kind,create=False):

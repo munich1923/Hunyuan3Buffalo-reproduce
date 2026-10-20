@@ -37,7 +37,11 @@ def main():
                 mesh.vertices=(mesh.vertices-np.asarray(norm["center"]))*norm["scale"]
                 points=torch.from_numpy(surface(mesh,cfg["dataset"]["sample_points"],
                                                  row["surface_seed"]))[None].cuda()
-                with torch.inference_mode(),torch.autocast("cuda",dtype=torch.float16):
+                # Upstream encoder uses randperm and randomized FPS in addition to surface sampling.
+                encoder_seed=seed(row["surface_seed"],"vae_encoder")
+                with torch.random.fork_rng(devices=[0]),torch.inference_mode(),torch.autocast("cuda",dtype=torch.float16):
+                    torch.manual_seed(encoder_seed)
+                    torch.cuda.manual_seed(encoder_seed)
                     latents,_=vae.encoder(points[:,:,:3],points[:,:,3:])
                     moments=vae.pre_kl(latents)
                     posterior=DiagonalGaussianDistribution(moments,feat_dim=-1)
@@ -48,7 +52,7 @@ def main():
                     raise RuntimeError("Invalid VAE posterior")
                 save_tensor(target,{"uid":row["uid"],"mean":mean,"logvar":logvar,
                     "scale":cfg["cache"]["scale"],"fingerprint":expected,"contract":key,
-                    "surface_seed":row["surface_seed"]})
+                    "surface_seed":row["surface_seed"],"encoder_seed":encoder_seed})
                 processed+=1
                 if (index+1)%100==0: print("SHAPE",split,index+1,flush=True)
         atomic_json(base/"progress.json",{"newly_processed":processed,

@@ -1,12 +1,60 @@
 """Pinned Nano3D source-only acquisition, resumable CPU QC and immutable splits."""
 from stage2_runtime import *
 import re
-import concurrent.futures
 import shutil
 import tarfile
 import urllib.parse
 import urllib.request
 from collections import Counter
+
+
+def download_command(partial, url):
+    return ["aria2c", "--async-dns=false", "--disable-ipv6=true", "--continue=true",
+            "--allow-overwrite=true", "--auto-file-renaming=false", "--file-allocation=none",
+            "--max-connection-per-server=1", "--split=1", "--max-tries=3",
+            "--retry-wait=30", "--connect-timeout=20", "--timeout=60",
+            "--lowest-speed-limit=1K", "--summary-interval=30", "--console-log-level=warn",
+            "--dir", str(partial.parent), "--out", partial.name, url]
+
+
+def download_archive(cfg, name, partial, size, receipts):
+    log_file = receipts / (name.rsplit("/", 1)[-1] + ".log")
+    # Keep aria2 control files: file length alone can include sparse holes.
+    for endpoint in ["https://hf-mirror.com", "https://huggingface.co"]:
+        url = f"{endpoint}/datasets/{cfg['dataset']['repo']}/resolve/{cfg['dataset']['revision']}/{name}"
+        for attempt in range(8):
+            append(receipts / "events.jsonl", {"event": "download_attempt", "file": name,
+                   "endpoint": endpoint, "attempt": attempt + 1, "policy": "serial-resume-v2"})
+            with log_file.open("a") as log:
+                log.write(f"\nSTAGE2_RESUME_V2 endpoint={endpoint} attempt={attempt + 1}\n")
+                log.flush()
+                process = subprocess.Popen(download_command(partial, url), stdout=log,
+                                           stderr=subprocess.STDOUT)
+                try:
+                    while True:
+                        try:
+                            code = process.wait(timeout=30)
+                            break
+                        except subprocess.TimeoutExpired:
+                            stat = partial.stat() if partial.exists() else None
+                            append(receipts / "events.jsonl", {"event": "download_heartbeat",
+                                   "file": name, "pid": process.pid, "expected_bytes": size,
+                                   "file_bytes": stat.st_size if stat else 0,
+                                   "allocated_bytes": stat.st_blocks * 512 if stat else 0})
+                finally:
+                    if process.poll() is None:
+                        process.terminate()
+                        try: process.wait(timeout=15)
+                        except subprocess.TimeoutExpired: process.kill(); process.wait()
+            if code == 0 and partial.exists() and partial.stat().st_size == size:
+                return
+            delay = min(60 * 2 ** attempt, 300)
+            append(receipts / "events.jsonl", {"event": "download_backoff", "file": name,
+                   "endpoint": endpoint, "exit_code": code, "seconds": delay})
+            print("DOWNLOAD_RETRY", name, "exit", code, "backoff", delay, flush=True)
+            if attempt < 7:
+                time.sleep(delay)
+    raise RuntimeError("Download failed; partial and transfer logs retained: " + name)
 
 
 def acquire(cfg, offline=False):
@@ -34,35 +82,7 @@ def acquire(cfg, offline=False):
             if offline: raise RuntimeError("Missing archive: "+name)
             target.parent.mkdir(parents=True, exist_ok=True)
             partial = target.with_name(target.name+".partial")
-            completed=False
-            for endpoint in ["https://hf-mirror.com","https://huggingface.co"]:
-                url = f"{endpoint}/datasets/{cfg['dataset']['repo']}/resolve/{cfg['dataset']['revision']}/{name}"
-                log_file=receipts/(target.name+".log")
-                log_file.parent.mkdir(parents=True,exist_ok=True)
-                for attempt in range(360):
-                    command=["aria2c","--async-dns=false","--continue=true",
-                      "--allow-overwrite=true","--auto-file-renaming=false","--file-allocation=none",
-                      "--max-connection-per-server=4","--split=4","--min-split-size=16M",
-                      "--max-tries=3","--retry-wait=5","--connect-timeout=20","--timeout=60",
-                      "--summary-interval=30","--console-log-level=warn",
-                      "--dir",str(partial.parent),"--out",partial.name,url]
-                    append(receipts/"events.jsonl",{"event":"download_attempt","file":name,
-                          "endpoint":endpoint,"attempt":attempt+1})
-                    with log_file.open("a") as log:
-                        process=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT)
-                        try:
-                            code=process.wait(timeout=90)
-                        except subprocess.TimeoutExpired:
-                            process.terminate()
-                            try: process.wait(timeout=15)
-                            except subprocess.TimeoutExpired: process.kill();process.wait()
-                            continue
-                    if code==0 and partial.exists() and partial.stat().st_size==size:
-                        completed=True;break
-                    if attempt>=4 and code!=0: break
-                if completed: break
-            if not completed:
-                raise RuntimeError("Download failed; partial and transfer logs retained: "+name)
+            download_archive(cfg, name, partial, size, receipts)
             if digest(partial)!=expected:
                 raise RuntimeError("Archive checksum mismatch: "+name)
             os.replace(partial,target)
@@ -71,8 +91,9 @@ def acquire(cfg, offline=False):
         atomic_json(receipt,{"file":name,"revision":meta["sha"],"sha256":expected,
                              "bytes":size,"mtime_ns":target.stat().st_mtime_ns,**clock()})
         print("VERIFIED",name,flush=True)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
-        list(pool.map(acquire_shard,cfg["dataset"]["shards"]))
+    # Serialize transfers to reduce resolver/CDN rate-limit pressure.
+    for number in cfg["dataset"]["shards"]:
+        acquire_shard(number)
     return base
 
 

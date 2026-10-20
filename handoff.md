@@ -4,7 +4,9 @@
 
 代码已实现，18项CPU测试通过，CUDA未初始化；17000条候选prompt选择审计通过。上游固定提交仍干净。TensorBoard在远端127.0.0.1:6006运行，没有训练曲线。本地自动SSH转发被审批拒绝，需手动转发。
 
-CPU数据准备仍在后台运行，状态为results/stage2_nano10k/preparation/dataset_status.json，进程记录dataset_process.json。它仅获取固定17分片、做源mesh检查去重并划分10000/500/500；不自动启动GPU阶段。运行时不要再启动另一个准备器，锁会拒绝并行。最终ready.json尚未生成，不能声称数据准备已完成。
+CPU数据准备于2026-10-19 21:11:59 +08:00失败（镜像429限流、备用直连不可达）。2026-10-20 10:38:33 +08:00已修复并续跑，runner PID 3468366：下载改为串行单连接、失败指数退避、禁止IPv6、取消每90秒强制重启；保留已校验包和aria2断点文件。实测014分片恢复至约62%，约6.4 MiB/s，尚未完成。原失败状态已归档为preparation/dataset_status.json.before_recovery_*。恢复证据见results/summaries/stage2_download_recovery.json。
+
+实时状态为results/stage2_nano10k/preparation/dataset_status.json，进程记录dataset_process.json，逐包日志和心跳位于assets/manifests/stage2_nano10k/downloads/。它仅获取固定17分片、做源mesh检查去重并划分10000/500/500；不自动启动GPU阶段。不要重复启动准备器；锁会拒绝并行。最终ready.json尚未生成，不能声称数据准备已完成。
 
 无可独占GPU，未做GPU缓存/VAE gate/probe/训练。正式训练须当前数据缓存和VAE gate通过、独占GPU、资源probe通过，并由用户确认新预算。预算模板默认未批准。旧实验预算和下方历史记录保持不变。生成阶段使用decoder-only VAE，不构造encoder。
 

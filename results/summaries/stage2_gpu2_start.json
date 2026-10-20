@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-20T16:13:13.352448+00:00",
+  "asia_shanghai": "2026-10-21T00:13:13.352448+08:00",
+  "shared_admission_tests_passed": 4,
+  "stage2_cpu_regression_tests_passed": 18,
+  "cpu_regression_seconds": 22.846,
+  "gpu": 2,
+  "formal_training_authorized": false,
+  "pipeline": "text cache -> posterior cache -> VAE gate -> 5-update resource probe",
+  "initial_free_mib": 59005,
+  "pytorch_allocator_limit_mib": 53104,
+  "reserve_scope": "90% of free memory at each stage admission, not 90% of full card",
+  "limitation": "Allocator cap does not reserve physical GPU memory or prevent other jobs from growing",
+  "initial_test_issue": "CPU admission test used live lock; isolated test locks and updated mock query fields, full rerun passed"
+}

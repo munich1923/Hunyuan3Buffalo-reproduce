@@ -1,4 +1,4 @@
-"""Frozen text-only Qwen hidden cache. GPU must be explicitly assigned and empty."""
+"""Frozen text-only Qwen hidden cache. GPU must be explicitly assigned; shared use is explicit and memory-capped."""
 from stage2_runtime import *
 from stage2_cache import cache_base,text_key,tokenize_condition
 

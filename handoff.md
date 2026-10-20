@@ -1,3 +1,7 @@
+# 共享GPU2准备与资源探测（2026-10-21）
+
+用户已明确取消独占要求并授权GPU2执行资源探测。已加入显式STAGE2_ALLOW_SHARED_GPU=2准入；仅约束本实验PyTorch allocator为每阶段启动空闲显存的90%，不限制或操作其他进程，不能保证其他任务未来不会增长。4项CPU共享准入测试及18项完整CPU回归通过；CPU测试锁与真实任务锁隔离。runner PID3816750，首阶段text缓存PID3816761，状态results/stage2_nano10k/gpu2_readiness_20261021/status.json。串行text→posterior→110例VAE gate→5更新资源probe；失败即停止，不自动启动正式训练，预算仍未批准。原始数据ready在2026-10-20 23:49已完成。下方较早的未ready/独占描述是历史状态。
+
 # 当前 Stage 2 实施交接（2026-10-19）
 
 用户已授权实施纯文本条件生成Stage 2近似实验。详见docs/stage2_nano10k.md、configs/stage2_nano10k.yaml和results/summaries/stage2_implementation.md。

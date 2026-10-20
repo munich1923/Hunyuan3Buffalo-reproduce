@@ -149,7 +149,7 @@ def parser(description, gpu=False):
     p.add_argument("--config", default="configs/stage2_nano10k.yaml")
     if gpu:
         p.add_argument("--gpu", type=int, required=True,
-                       help="Physical GPU explicitly assigned for this stage; must be empty")
+                       help="Physical GPU explicitly assigned; shared use requires explicit environment opt-in")
     return p
 
 
@@ -165,6 +165,12 @@ def lock(name):
         yield
 
 
+def shared_memory_limit(total_mib, free_mib, reserve_fraction=0.1):
+    if not 0 < free_mib <= total_mib or not 0 < reserve_fraction < 1:
+        raise ValueError("Invalid shared GPU memory budget")
+    return int(free_mib * (1-reserve_fraction))
+
+
 @contextlib.contextmanager
 def gpu_lease(index, run=None):
     if "torch" in sys.modules and sys.modules["torch"].cuda.is_initialized():
@@ -172,28 +178,35 @@ def gpu_lease(index, run=None):
     with lock("environment/stage2_gpu.lock"), lock(f"environment/gpu_{index}.lock"):
         line = subprocess.check_output([
             "nvidia-smi", f"--id={index}",
-            "--query-gpu=uuid,memory.used,memory.total,utilization.gpu",
+            "--query-gpu=uuid,memory.used,memory.total,memory.free,utilization.gpu",
             "--format=csv,noheader,nounits"], text=True).strip().split(",")
-        uuid, used, total, utilization = [x.strip() for x in line]
+        uuid, used, total, free, utilization = [x.strip() for x in line]
         processes = subprocess.check_output([
             "nvidia-smi", "--query-compute-apps=gpu_uuid,pid",
             "--format=csv,noheader"], text=True)
-        if float(used) > 1024 or float(utilization) > 0 or any(
-                x.split(",")[0].strip() == uuid for x in processes.splitlines()):
+        shared = os.environ.get("STAGE2_ALLOW_SHARED_GPU") == str(index)
+        if not shared and (float(used) > 1024 or float(utilization) > 0 or any(
+                x.split(",")[0].strip() == uuid for x in processes.splitlines())):
             raise RuntimeError(f"GPU {index} is occupied: {','.join(line)}; no work started")
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = uuid
+        details = {"physical_gpu": index, "uuid": uuid, "total_mib": float(total),
+                   "initial_free_mib":float(free), "initial_used_mib":float(used),
+                   "initial_utilization":float(utilization), "shared":shared}
+        if shared:
+            limit=shared_memory_limit(float(total),float(free))
+            if limit < 4096: raise RuntimeError("Insufficient shared GPU memory budget")
+            import torch
+            torch.cuda.set_per_process_memory_fraction(limit/float(total),device=0)
+            details.update(process_memory_limit_mib=limit,reserve_fraction=0.1)
         started = time.monotonic()
-        if run:
-            append(path(run) / "gpu_usage.jsonl",
-                   {"event": "start", "gpu": index, "uuid": uuid})
+        details["leased_at_monotonic"] = started
+        if run: append(path(run)/"gpu_usage.jsonl",{"event":"start",**details})
         try:
-            yield {"physical_gpu": index, "uuid": uuid, "total_mib": float(total),
-                   "leased_at_monotonic": started}
+            yield details
         finally:
-            if run:
-                append(path(run) / "gpu_usage.jsonl", {
-                    "event": "end", "gpu": index, "allocated_seconds": time.monotonic()-started})
+            if run: append(path(run)/"gpu_usage.jsonl",{
+                "event":"end","gpu":index,"allocated_seconds":time.monotonic()-started})
 
 
 def provenance(cfg):

@@ -243,8 +243,8 @@ class Contracts(unittest.TestCase):
             atomic_json(approval,{"approved":False})
             with self.assertRaisesRegex(RuntimeError,"not been approved"):
                 validate_budget(cfg,Path(folder),{},approval)
-        responses=["GPU-test, 39575, 81559, 0", "GPU-test, 1234"]
-        with patch("stage2_runtime.subprocess.check_output",side_effect=responses):
+        responses=["GPU-test, 39575, 81559, 41505, 0", "GPU-test, 1234"]
+        with patch("stage2_runtime.lock",side_effect=lambda _: contextlib.nullcontext()), patch("stage2_runtime.subprocess.check_output",side_effect=responses):
             with self.assertRaisesRegex(RuntimeError,"occupied"):
                 with gpu_lease(999): self.fail("Occupied device was admitted")
 

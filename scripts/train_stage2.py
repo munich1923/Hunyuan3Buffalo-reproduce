@@ -158,6 +158,11 @@ def train(cfg,args,run,bases,splits,gpu):
                     position.update(epoch=epoch+1,offset=0)
                 if args.probe_only:
                     probe_times.append(elapsed)
+                    append(run/"probe_updates.jsonl",{"update":step,"seconds":elapsed,
+                        "flow_mse":mse_sum/len(batch),"moe_aux":aux_sum/len(batch),
+                        "peak_allocated_bytes":torch.cuda.max_memory_allocated(),
+                        "peak_reserved_bytes":torch.cuda.max_memory_reserved()})
+                    print("PROBE_UPDATE",step,elapsed,flush=True)
                     if len(probe_times)>=settings["probe_updates"]:
                         io=save_checkpoint(run/"probe_checkpoint",model,optimizer,position,contract,
                                            generator,{"probe_only":True})
@@ -184,7 +189,7 @@ def train(cfg,args,run,bases,splits,gpu):
                           "accumulation":settings["accumulation"],"condition_uid":longest["uid"],
                           "update_seconds":probe_times,"peak_allocated_bytes":memory,
                           "peak_reserved_bytes":reserved,"total_device_bytes":total_memory,
-                          "reserve_passed":reserved<=total_memory*(1-settings["reserve_fraction"]),
+                          "reserve_passed":reserved<=(gpu["process_memory_limit_mib"]*1024**2 if gpu.get("shared") else total_memory*(1-settings["reserve_fraction"])),
                           "cpu_peak_rss_kib":resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
                           "checkpoint_io":io,"sampling_seconds_one_long_condition":sample_seconds,
                           "decode_seconds_one_sample":decode_seconds,

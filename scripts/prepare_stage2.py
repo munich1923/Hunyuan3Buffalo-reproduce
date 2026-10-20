@@ -257,4 +257,11 @@ def main():
             atomic_json(manifest_root(cfg)/"inventory.json",report); print(report)
         else: prepare(cfg,args.offline)
 
-if __name__=="__main__": main()
+if __name__=="__main__":
+    try:
+        main()
+    except RuntimeError as exc:
+        if str(exc).startswith("Download failed; partial and transfer logs retained:"):
+            print("RETRYABLE_DOWNLOAD_FAILURE", str(exc), flush=True)
+            raise SystemExit(75)
+        raise

@@ -81,3 +81,5 @@ checkpoint每500更新保存且全部保留，最终1565额外保存；loss每10
 - 固定样本/权重/随机种子不要重划分。无Git remote；只在远端本地Git维护。
 - 收尾恢复：environment/venvs/shape/bin/python scripts/recover_experiment.py，成功GPU阶段跳过；CPU脚本可独立重复。
 - 不追加训练或扩大数据。本轮只完成既定收尾；如继续研究，应先诊断源token复制偏置、指令连接器利用和训练几何失败，再决定方法或数据变化。
+
+23:20并发资源观测：确认4路持续新增约0.8至1.3MiB/s、无429后增加为8路Range，新runner3787799，extractor3781858不变。原始partial经91块独立对照及全前缀gzip结构检查后复用309块/1296039936字节，仍要求最终SHA。详见stage2_old_prefix_validation.json；不能把复用跳跃计作网络吞吐。

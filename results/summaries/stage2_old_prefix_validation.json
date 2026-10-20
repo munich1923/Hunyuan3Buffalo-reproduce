@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-20T15:17:37.015062+00:00",
+  "seeded_complete_chunks": 309,
+  "seeded_bytes": 1296039936,
+  "source_bytes": 1836609643,
+  "validation": [
+    "91 independent freshly fetched complete chunks match old prefix",
+    "zlib gzip decompression traversed entire old prefix without error"
+  ],
+  "final_sha256_required": true,
+  "original_preserved": true
+}

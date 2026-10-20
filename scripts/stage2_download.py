@@ -47,8 +47,10 @@ def chunked_download(cfg,name,partial,size,receipts):
     def summary():
         completed=list(directory.glob('*.done'))
         byte_count=sum(x.stat().st_size for x in completed)+sum(x.stat().st_size for x in directory.glob('*.part'))
-        atomic_json(progress,{"file":name,"completed_chunks":len(completed),"total_chunks":total,
-                             "downloaded_bytes":byte_count,"expected_bytes":size,**clock()})
+        record={"file":name,"completed_chunks":len(completed),"total_chunks":total,
+                "downloaded_bytes":byte_count,"expected_bytes":size,**clock()}
+        atomic_json(progress,record)
+        append(receipts/'chunk_progress.jsonl',record)
     def worker(index):
         begin=index*CHUNK;end=min(begin+CHUNK,size)-1
         piece=directory/f'{index:06d}.part';done=directory/f'{index:06d}.done'
@@ -87,7 +89,7 @@ def chunked_download(cfg,name,partial,size,receipts):
                     if temp.exists():temp.unlink()
     summary()
     try:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
             futures=[pool.submit(worker,i) for i in range(total)]
             for f in concurrent.futures.as_completed(futures):f.result()
     except BaseException:

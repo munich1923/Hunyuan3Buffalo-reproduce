@@ -109,7 +109,8 @@ def acquire(cfg, offline=False):
             if offline: raise RuntimeError("Missing archive: "+name)
             target.parent.mkdir(parents=True, exist_ok=True)
             partial = target.with_name(target.name+".partial")
-            download_archive(cfg, name, partial, size, receipts)
+            from stage2_download import chunked_download
+            chunked_download(cfg, name, partial, size, receipts)
             if digest(partial)!=expected:
                 raise RuntimeError("Archive checksum mismatch: "+name)
             os.replace(partial,target)
@@ -169,7 +170,8 @@ def prepare(cfg, offline=False):
         print("Immutable manifests already prepared",flush=True)
         return
     base = acquire(cfg,offline)
-    destination = extract_sources(cfg,base)
+    with lock("environment/stage2_extract.lock"):
+        destination = extract_sources(cfg,base)
     from stage2_data import load_mesh,normalize,geometry_hash,stratify,protocol
     metadata = read_lines(base/"v1_100k/info/v1_100k_info.jsonl")
     if len(metadata)!=100000 or len({r["uid"] for r in metadata})!=100000:

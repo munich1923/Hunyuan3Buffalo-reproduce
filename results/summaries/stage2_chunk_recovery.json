@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-20T15:13:57.500272+00:00",
+  "problem": [
+    "dead HF endpoint retried despite zero progress",
+    "aria2 low-speed threshold repeatedly destroyed useful mirror connections",
+    "extraction globally blocked by final archive"
+  ],
+  "solution": [
+    "4 workers with 4MiB Range requests to resolved mirror CDN",
+    "verify Content-Range and length before accepting every response",
+    "retain partial response bytes after curl deadline",
+    "persistent per-chunk files and progress counters",
+    "final archive SHA256 remains mandatory",
+    "keep old aria2 partial unchanged; not assumed contiguous",
+    "extract 16 verified archives concurrently under separate lock"
+  ],
+  "tests_passed": 2,
+  "observed_progress": {
+    "file": "v1_100k/editing_assets/part_099.tar.gz",
+    "completed_chunks": 39,
+    "total_chunks": 1271,
+    "downloaded_bytes": 163577856,
+    "expected_bytes": 5327786711,
+    "utc": "2026-10-20T15:13:56.222932+00:00",
+    "asia_shanghai": "2026-10-20T23:13:56.222932+08:00"
+  },
+  "extracted_source_count": 1590,
+  "runner_pid": 3781857,
+  "extractor_pid": 3781858,
+  "gpu_used": false
+}

@@ -10,6 +10,8 @@ CPU数据准备于2026-10-19 21:11:59 +08:00失败（镜像429限流、备用直
 
 2026-10-20 持久恢复：用户明确要求Luna xhigh子agent实时监控，不使用schedule。子agent /root/nano_live_monitor 已启动。新guardian PID 3665265 等现有runner 3661216 自然退出后接管，保留当前下载连接。网络失败使用exit75并无限退避重试（60至300秒），校验/QC/配置错误仍明确failed并由监控报告。6项专项测试通过。guardian状态/进程见preparation/guardian_status.json及guardian_process.json；不自动启动GPU。
 
+2026-10-20 23:12替换下载机制：旧guardian3665265及worker3736124已受控停止，仅操作本实验进程。旧aria2 partial（1836609643字节）保留且不假定为连续已验证前缀。新runner3781857/worker3781869调用stage2_download.py：4路4MiB Range，校验Content-Range再接受数据；40秒请求超时仍保留已验证响应前缀，逐块持久化，直接复用短期CDN签名链接（不写日志），不再循环不可达HF端点。最终整包SHA仍必须通过。实测23:13:21已确认121634816新字节且无chunk错误。并行提取器3781858提前处理16个校验包，已写出1000个src_mesh；未完成首包收据，不能声称完成质检。证据results/summaries/stage2_chunk_recovery.json，实时progress位于downloads/part_099.tar.gz.progress.json；只读监控agent已通知。没有使用GPU或schedule。
+
 实时状态为results/stage2_nano10k/preparation/dataset_status.json，进程记录dataset_process.json，逐包日志和心跳位于assets/manifests/stage2_nano10k/downloads/。它仅获取固定17分片、做源mesh检查去重并划分10000/500/500；不自动启动GPU阶段。不要重复启动准备器；锁会拒绝并行。最终ready.json尚未生成，不能声称数据准备已完成。
 
 无可独占GPU，未做GPU缓存/VAE gate/probe/训练。正式训练须当前数据缓存和VAE gate通过、独占GPU、资源probe通过，并由用户确认新预算。预算模板默认未批准。旧实验预算和下方历史记录保持不变。生成阶段使用decoder-only VAE，不构造encoder。

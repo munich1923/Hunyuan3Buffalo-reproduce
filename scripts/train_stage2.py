@@ -5,14 +5,17 @@ import random
 import resource
 
 
-def preflight(cfg):
+def preflight(cfg,condition_lengths=None):
     from stage2_cache import cache_base,load_cached
     bases={kind:cache_base(cfg,kind) for kind in ["text","shape"]}
     splits={split:manifests(cfg,split) for split in ["train","val","test"]}
     for split,rows in splits.items():
         if len(rows)!=cfg["dataset"]["counts"][split]:
             raise RuntimeError("Unexpected split size")
-        for row in rows: load_cached(cfg,row,split,bases)
+        for row in rows:
+            hidden,_,_=load_cached(cfg,row,split,bases)
+            if condition_lengths is not None and split=="train":
+                condition_lengths[row["uid"]]=int(hidden.shape[1])
     gate=read_json(manifest_root(cfg)/"vae_gate.json")
     if (not gate.get("passed") or gate["shape_contract"]!=bases["shape"][1] or
         gate.get("evaluation_contract")!=fingerprint(cfg["evaluation"])):
@@ -87,6 +90,8 @@ def train(cfg,args,run,bases,splits,gpu):
         del state
     writer=SummaryWriter(str(run/"tensorboard"),purge_step=step+1 if args.resume else None)
     atomic_json(run/"provenance.json",provenance(cfg))
+    atomic_json(run/"status.json",{"state":"running","mode":"resource_probe" if args.probe_only
+                                  else "training",**clock()})
     if not (run/"improvement_review.json").exists():
         atomic_json(run/"improvement_review.json",{
             "reviewer":None,"train_generation_improved":None,"val_generation_improved":None,
@@ -97,8 +102,7 @@ def train(cfg,args,run,bases,splits,gpu):
     budget_deadline=(started+budget["gpu_budget_seconds"]-initial_used) if budget else None
     probe_times=[];longest=None
     if args.probe_only:
-        longest=max(splits["train"],key=lambda row: load_cached(
-            cfg,row,"train",bases)[0].shape[1])
+        longest=next(row for row in splits["train"] if row["uid"]==args.probe_condition_uid)
     def monitor(label):
         state=rng_state()
         move_optimizer(optimizer,"cpu")
@@ -201,6 +205,9 @@ def train(cfg,args,run,bases,splits,gpu):
                           "estimate_excludes":"cache encoding, validation, sampling, decoding, review and checkpoint overhead",
                           **clock()}
                         atomic_json(run/"probe_report.json",report)
+                        atomic_json(run/"status.json",{"state":"probe_complete_waiting_budget",
+                                    "updates":step,"reserve_passed":report["reserve_passed"],
+                                    "formal_training_started":False,**clock()})
                         print(canonical(report),flush=True)
                         return
                     continue
@@ -254,7 +261,12 @@ def main():
     p.add_argument("--resume")
     p.add_argument("--preflight-only",action="store_true")
     args=p.parse_args();cfg=config(args.config);run=run_path(cfg,args.run_id)
-    bases,splits=preflight(cfg)
+    condition_lengths={}
+    bases,splits=preflight(cfg,condition_lengths if args.probe_only else None)
+    if args.probe_only:
+        args.probe_condition_uid=max(condition_lengths,key=condition_lengths.get)
+        print("PREFLIGHT_OK",len(condition_lengths),"LONGEST",
+              args.probe_condition_uid,condition_lengths[args.probe_condition_uid],flush=True)
     if args.preflight_only:
         print("PREFLIGHT_OK");return
     if not args.probe_only:

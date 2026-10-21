@@ -1,0 +1,11 @@
+{
+  "state": "gpu_adamw_probe_failed",
+  "failed_at": "2026-10-21T06:18:56.275883+08:00",
+  "completed_updates": 1,
+  "first_update_seconds": 28.3014434609795,
+  "next": "CPU optimizer-state offload resource probe, separate config and run",
+  "formal_training_updates": 0,
+  "vae_gate_passed": true,
+  "text_count": 11000,
+  "shape_count": 11000
+}

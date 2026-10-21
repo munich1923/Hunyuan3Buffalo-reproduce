@@ -1,0 +1,120 @@
+schema_version: 1
+name: stage2_nano10k_fsdp
+seed: 20261019
+source_commit: 82920d643c0dc2f7bfd7255f45f62d386edfe60c
+dataset:
+  repo: yejunliang23/Nano3D-Edit-100k
+  revision: d6686ff82ea14c2dfa4fdd55db332309a0241495
+  base: assets/Nano3D-Edit-100k
+  shards:
+  - 0
+  - 7
+  - 14
+  - 21
+  - 28
+  - 33
+  - 35
+  - 42
+  - 49
+  - 56
+  - 63
+  - 66
+  - 70
+  - 77
+  - 84
+  - 91
+  - 99
+  counts:
+    train: 10000
+    val: 500
+    test: 500
+  manifest_dir: assets/manifests/stage2_nano10k
+  normalized_extent: 1.5
+  geometry_version: scene-transform-center-longest-side-v1
+  sample_points: 81920
+cache:
+  root: assets/cache/stage2_nano10k
+  version: 1
+  hidden_dim: 3584
+  context_dim: 1024
+  latent_shape:
+  - 4096
+  - 64
+  scale: 1.0039506158752403
+  selection: user-body-plus-final-assistant-prefix-token-v1
+models:
+  vlm: models/Qwen2.5-VL-7B-Instruct
+  vlm_revision: cc594898137f460bfe9f0759e9844b3ce807cfb5
+  shape: models/Hunyuan3D-2.1
+  shape_revision: 0b94677654c57bb9a6b6845cd7b704ccf551d327
+training:
+  epochs: 5
+  microbatch: 1
+  accumulation: 16
+  dit_lr: 1.0e-05
+  connector_lr: 0.0001
+  betas:
+  - 0.9
+  - 0.99
+  eps: 1.0e-06
+  weight_decay: 0.01
+  clip_norm: 1.0
+  warmup_updates: 80
+  minimum_lr_factor: 0.1
+  activation_checkpointing: true
+  optimizer: adamw
+  log_every: 100
+  checkpoint_every: 500
+  probe_updates: 5
+  reserve_fraction: 0.1
+  global_batch: 32
+  tail_accumulation: 8
+  world_size: 2
+  deterministic_algorithms: true
+  cublas_workspace_config: ":4096:8"
+  ema: false
+  cfg: false
+  cpu_offload: false
+evaluation:
+  monitor_train: 16
+  monitor_val: 16
+  monitor_wrong: 8
+  heldout_count: 100
+  pairs_cross: 10
+  pairs_same: 10
+  empty_diagnostics: 8
+  vae_per_category: 10
+  inference_steps: 50
+  bounds: 1.01
+  mc_level: 0.0
+  octree_resolution: 256
+  num_chunks: 10000
+  mc_algo: mc
+  metric_points: 16384
+  vae_valid_min: 0.95
+  vae_fscore_median_min: 0.8
+  generated_valid_min: 0.95
+  subject_min: 0.8
+  structure_min: 0.7
+  condition_pairs_min: 15
+output_root: results/stage2_nano10k
+fsdp:
+  sharding: FULL_SHARD
+  use_orig_params: true
+  wrapping: block-unit-root-v1
+  min_headroom_bytes: 2147483648
+  allocator: max_split_size_mb:256
+  prefetch_update_batches: 1
+orchestration:
+  save_updates:
+  - 500
+  - 1000
+  - 1500
+  - 1565
+  verify_updates: 20
+  verify_next_update: 21
+  phase_minimum_seconds:
+    train: 120
+    sample: 240
+    decode: 600
+  budget_ledger: results/stage2_nano10k/stage2_fsdp_budget_20261021.json

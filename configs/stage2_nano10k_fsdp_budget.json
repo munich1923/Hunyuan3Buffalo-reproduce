@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "approved": true,
+  "approved_by": "user instruction 2026-10-21: execute supplied Stage 2 plan",
+  "gpu_budget_seconds": 57600,
+  "scope": [
+    "new_gpu_verification",
+    "formal_training_after_separate_start_confirmation",
+    "process_monitoring"
+  ],
+  "formal_start_authorized": false,
+  "ledger": "results/stage2_nano10k/stage2_fsdp_budget_20261021.json",
+  "historical_probes_excluded": true,
+  "final_evaluation_authorized": false,
+  "verification_report": "results/summaries/stage2_fsdp_readiness.json",
+  "verification_note": "v4 numerical core unchanged; supervisor-only refinements independently CPU-tested, exact differences audited"
+}

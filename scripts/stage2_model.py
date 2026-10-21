@@ -102,10 +102,11 @@ def load_model(cfg,device="cuda"):
 
 
 def flow(mean,logvar,scale,generator):
-    eta=torch.randn(mean.shape,device=mean.device,dtype=torch.float32,generator=generator)
+    streams=generator if isinstance(generator,dict) else {k:generator for k in ["posterior","noise","time"]}
+    eta=torch.randn(mean.shape,device=mean.device,dtype=torch.float32,generator=streams["posterior"])
     target=scale*(mean.float()+torch.exp(0.5*logvar.float())*eta)
-    noise=torch.randn(target.shape,device=target.device,dtype=torch.float32,generator=generator)
-    t=torch.rand(target.shape[0],device=target.device,dtype=torch.float32,generator=generator)
+    noise=torch.randn(target.shape,device=target.device,dtype=torch.float32,generator=streams["noise"])
+    t=torch.rand(target.shape[0],device=target.device,dtype=torch.float32,generator=streams["time"])
     noisy=(1-t[:,None,None])*noise+t[:,None,None]*target
     return noisy,t,target-noise
 

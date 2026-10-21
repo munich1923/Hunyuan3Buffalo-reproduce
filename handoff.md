@@ -1,3 +1,23 @@
+# 当前交接：Stage 2 FSDP实现与独立验证完成（2026-10-21T16:05:26.037893+08:00）
+
+- 正式训练0更新；formal_start_authorized=false，最终候选/测试评估未授权；EMA/CFG关闭。用户计划第6.4节要求资源结果后单独正式启动确认。
+- v4已成功退出：results/stage2_nano10k/stage2_nano10k_fsdp_verify_v4/status.json，状态verification_complete_waiting_formal_start。原始verification_report.json保留当时合同。
+- 20次真实不同UID更新共640唯一物体，最长条件uid_91425覆盖；均值16.2694秒/更新（第2–20次，含I/O、确定性计算）。
+- tiny实际MoE/activation checkpoint参考通过；tiny及完整3B新进程下一更新全部本地参数和Adam逐元素比较最大误差0，loss/UID/position/RNG一致。3B两rank检查4583219602与4583219256元素，容差保持atol1e-6/rtol1e-5。
+- 保存、退出、独立两卡采样、GPU2 decoder-only两例有效mesh、无GPU CPU指标及8张四视图、完整恢复闭环通过。两例仅验证实现，不证明语义能力；审核表仍pending。
+- 所有GPU阶段余量≥2GiB，最小GPU5训练2.4274GiB。真实CUDA总量换算cap，未调高共享90%限额；保存/恢复CPU分片峰值通过。
+- v4后父调度边界修复经11项CPU回归通过。只改parent/test；当前数值核心/配置/数据/缓存与v4完全相同。组合readiness绑定当前合同，详细差异及来源：results/summaries/stage2_fsdp_readiness.json、stage2_fsdp_contract_audit.json。不得将原始GPU报告改写成新调度代码全量GPU重验。
+- 预算账本results/stage2_nano10k/stage2_fsdp_budget_20261021.json无running条目；已用2.1811，余13.8189GPU小时。完整正式流程估约18.075GPU小时；仅更新约14.145GPU小时，剩余额度不足按当前实测完成5epoch。详情stage2_fsdp_training_resources.md/json。不延长、不降低验收、不增临时保存点。
+- v1/v2接口失败、v3默认BF16 SDPA反向不确定导致Adam比较失败均保留。有限诊断后固定deterministic_algorithms=True、CUBLAS_WORKSPACE_CONFIG=:4096:8及TF32关闭，v4通过；不放宽容差。
+- 正式入口scripts/run_stage2_fsdp_training.py；配置configs/stage2_nano10k_fsdp.yaml和stage2_nano10k_fsdp_budget.json。文档docs/stage2_nano10k_fsdp.md完整描述执行与停止规则。正式启动须用户确认后只改授权标志；正式模型从原始预训练DiT＋新Connector开始，绝不加载verify/probe checkpoint。
+- 固定上游82920d643c0dc2f7bfd7255f45f62d386edfe60c保持干净，无.codegraph/，不建立索引。未重复下载、缓存、VAE gate。userdata个人配额仍未知，不能用共享df总空闲替代。
+
+以下为历史阶段记录，以本节为当前状态。
+
+2026-10-21T15:05:57.041223+08:00 独立verify_v3未通过3B全量下一更新比较：恢复后flow/aux/total loss与参考一致，但Adam exp_avg某tensor超过atol1e-6/rtol1e-5，gradient norm 0.1123358384 vs 0.1123401150。两个rank已退出；正式训练0更新。不放宽容差，正在有限BF16 SDPA反向重复性诊断。已通过：20次真实不同UID更新、tiny全参数及Adam新进程完全一致、DCP完整保存、model-only采样、GPU2 decoder-only两例有效mesh、CPU指标及4视角、所有已测阶段至少2GiB余量（最小GPU5训练2.740GiB）。3B精确续跑尚未通过，不可启动正式训练。所有失败和诊断计入共享16GPUh账本。
+
+2026-10-21T14:31:28.789134+08:00 正式FSDP入口已初步实现，独立verify_v3执行中；正式训练0更新，EMA/CFG关闭。18旧CPU回归、5新CPU回归及比较文件分帧回归通过。v1/v2失败及费用保留在共享16GPUh账本；未把失败写成通过。详见results/summaries/stage2_fsdp_training_implementation.md。不要并发启动另一个GPU任务。
+
 补充显存口径：GPU5全流程reserved42.494GiB，按CUDA总量换算实际allocator上限约42.527GiB，仅余33.2MiB；名义预算43805MiB不能当成实际字节上限。训练本身reserved36.75GiB，最大allocated全流程32.37GiB。正式FSDP训练前须优化并验证保存/恢复/采样阶段缓存及临时张量峰值；本轮仅记录限制，未宣称长期显存余量充分。
 
 2026-10-21 11:50:35 +08:00 两卡FSDP probe完整成功退出0，GPU2＋GPU5已释放。5更新13.9201/13.1108/13.3773/13.9416/13.3264秒，后4均值13.4390秒，全局batch32。训练reserved36.82/36.75GiB，全流程45.43/42.49GiB。完整分片checkpoint36.674GB保存60.04秒、恢复73.60秒；8验证1.87秒；50步采样8.53秒；解码7.05秒有效mesh。小MoE恢复后下一更新完全一致；实际3B做了文件SHA、严格DCP加载和各tensor前4值比较，未做新进程下一步全参数比较。证据results/summaries/stage2_resource_comparison.md与stage2_fsdp_probe.json。正式训练0更新；FSDP目前仅probe入口，后续正式分布式入口仍需补齐日志、epoch调度、每500保存及评估，预算确认后才能启动。

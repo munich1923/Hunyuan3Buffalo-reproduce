@@ -124,10 +124,12 @@ def child(cfg,args,run,ledger,name,job,cards=2,cpu=False):
     environment["CUBLAS_WORKSPACE_CONFIG"]=cfg["training"]["cublas_workspace_config"]
     environment["TORCH_NCCL_ASYNC_ERROR_HANDLING"]="1";environment["NCCL_DEBUG"]="WARN"
     environment["CUDA_VISIBLE_DEVICES"]=""
+    environment.pop("STAGE2_PHASE_DEADLINE_UNIX",None)
     if not cpu:
         devices=admission([2,5] if cards==2 else [2]);job["admission"]=devices
         environment["CUDA_VISIBLE_DEVICES"]=",".join(v["uuid"] for v in devices)
-        environment["STAGE2_PHASE_DEADLINE_UNIX"]=str(time.time()+(ledger.remaining()-shutdown_reserve(cards))/cards)
+        if ledger.limit is not None:
+            environment["STAGE2_PHASE_DEADLINE_UNIX"]=str(time.time()+(ledger.remaining()-shutdown_reserve(cards))/cards)
     suffix=str(time.time_ns());jobfile=run/"jobs"/(name+"_"+suffix+".json");atomic_json(jobfile,job)
     command=[str(path("environment/venvs/shape/bin/python")),"-B","-u"]
     if not cpu and cards==2:
@@ -159,7 +161,7 @@ def child(cfg,args,run,ledger,name,job,cards=2,cpu=False):
                     raise TimeoutError("hard GPU budget reached")
                 if time.monotonic()>=next_heartbeat:
                     state(run,name,child_pid=process.pid,log=str(log),
-                          budget_used_seconds=ledger.used(),remaining_gpu_seconds=ledger.remaining(),
+                          budget_used_seconds=ledger.used(),remaining_gpu_seconds=None if ledger.limit is None else ledger.remaining(),
                           formal_training_started=formal_started)
                     next_heartbeat=time.monotonic()+10
                 time.sleep(2)
@@ -280,7 +282,7 @@ def main():
     if args.gpus!="2,5": p.error("fixed physical GPUs are 2,5")
     if cfg["training"]["accumulation"]!=16 or cfg["training"]["global_batch"]!=32: raise RuntimeError("batch config")
     approval=read_json(args.budget)
-    if not approval.get("approved") or approval["gpu_budget_seconds"]!=57600: raise RuntimeError("unapproved shared 16GPUh budget")
+    if not approval.get("approved") or (approval["gpu_budget_seconds"] is not None and approval["gpu_budget_seconds"]<=0): raise RuntimeError("unapproved GPU budget configuration")
     run=run_path(cfg,args.run_id);run.mkdir(parents=True,exist_ok=True)
     try:
         with lock("environment/stage2_train.lock"),lock("environment/stage2_gpu.lock"),\

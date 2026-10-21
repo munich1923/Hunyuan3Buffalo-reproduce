@@ -1,3 +1,5 @@
+2026-10-21 用户已授权CPU卸载probe结束后进行GPU2＋GPU5两卡FULL_SHARD探测并要求持续监控。新增stage2_fsdp.py / probe_stage2_fsdp.py / run_stage2_fsdp_probe.py；先小尺寸实际上游MoE的梯度更新及分片恢复一致性，再完整3B五更新、真实checkpoint恢复、验证8例、50步采样和解码。代码尚待实际GPU验证，不将语法通过当资源成功。CPU卸载probe已完成首更新63.1769秒，peak allocated29.94GiB/reserved32.11GiB。
+
 2026-10-21 11:09:17 +08:00 CPU优化器卸载探测已启动，supervisor70224/worker70232；独立配置configs/stage2_nano10k_cpuoffload.yaml仅optimizer改为cpu_adamw，其余参数保持一致；从原始初始化重新做5更新，不续接旧失败的未保存更新。状态和日志results/stage2_nano10k/gpu2_cpuoffload_20261021/，run结果probe_gpu2_cpuoffload_20261021/。18CPU回归再次通过。共享GPU2 cap继续保留；正式训练仍未启动。
 
 2026-10-21 11:05状态核查：text和posterior各11000条完整完成；VAE gate于05:50通过，mean有效110/110且Fscore005中位0.9757215，posterior有效110/110且中位1.0。GPU AdamW probe于06:18:56第二更新forward触发进程显存cap OOM（首更新32micro完成28.301秒，peak allocated49.53GiB/reserved50.77GiB；当时进程约52.28GiB，卡仍余5.34GiB），没有完成5更新，也没有正式训练。旧失败全部保留。按已批准备用方案，准备独立cpu_adamw config/run做GPU2 CPU状态卸载探测；正式训练仍未获预算授权。probe最长条件改为复用CPU preflight已验证长度，避免分配GPU后再无谓重复读取全部posterior。

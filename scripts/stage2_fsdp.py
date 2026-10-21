@@ -47,14 +47,16 @@ def checkpoint_state(model,optimizer):
 
 def save_sharded(folder,model,optimizer,metadata,rank_state=None):
     import torch.distributed.checkpoint as dcp
-    from stage2_checkpoint import rng_state
+    import random,numpy as np
     rank=dist.get_rank();folder=path(folder);temporary=folder.with_name(folder.name+".pending")
     if rank==0:
         if folder.exists() or temporary.exists(): raise FileExistsError(str(folder))
         temporary.mkdir(parents=True)
     dist.barrier();started=time.monotonic()
     dcp.save(checkpoint_state(model,optimizer),checkpoint_id=temporary/"distributed")
-    save_tensor(temporary/f"rank_{rank}.pt",{"metadata":metadata,"rng":rng_state(),"rank_state":rank_state})
+    save_tensor(temporary/f"rank_{rank}.pt",{"metadata":metadata,"rank_state":rank_state,
+                "rng":{"python":random.getstate(),"numpy":np.random.get_state(),
+                       "torch":torch.get_rng_state(),"cuda":torch.cuda.get_rng_state()}})
     dist.barrier()
     if rank==0:
         payload={str(p.relative_to(temporary)):{"bytes":p.stat().st_size,"sha256":digest(p)}
@@ -69,7 +71,7 @@ def save_sharded(folder,model,optimizer,metadata,rank_state=None):
 def load_sharded(folder,model,optimizer,metadata):
     import torch.distributed.checkpoint as dcp
     from torch.distributed.checkpoint.state_dict import set_state_dict,StateDictOptions
-    from stage2_checkpoint import restore_rng
+    import random,numpy as np
     folder=path(folder);complete=read_json(folder/"complete.json")
     if complete["metadata"]!=metadata or complete["world_size"]!=dist.get_world_size():
         raise RuntimeError("FSDP checkpoint contract mismatch")
@@ -82,7 +84,9 @@ def load_sharded(folder,model,optimizer,metadata):
     set_state_dict(model,optimizer,model_state_dict=state["model"],
                    optim_state_dict=state["optimizer"],options=StateDictOptions(cpu_offload=True))
     local=torch.load(folder/f"rank_{dist.get_rank()}.pt",map_location="cpu",weights_only=False)
-    restore_rng(local["rng"])
+    state=local["rng"]
+    random.setstate(state["python"]);np.random.set_state(state["numpy"])
+    torch.set_rng_state(state["torch"]);torch.cuda.set_rng_state(state["cuda"])
     dist.barrier()
     return local["rank_state"]
 

@@ -1,3 +1,13 @@
+# 正式训练已获授权，无GPU时间预算上限（2026-10-21T17:02:49.264690+08:00）
+
+用户明确指示“不要设置预算，直接开始启动训练，没有任何预算限制”，覆盖此前16 GPU小时上限及单独启动确认。formal_start_authorized=true，gpu_budget_seconds=null。实际GPU用量继续记录在原账本，历史验证费用不清零；不再按时长停止。仍执行既定5epoch/1565更新及过程监控，EMA/CFG关闭；最终候选/测试评估未自动扩展。
+
+正式run为results/stage2_nano10k/stage2_nano10k_fsdp_r1/，父进程PID405547，启动时使用GPU2＋5。当前阶段sample_initial：先执行初始化40例监控，然后自动进入train_to_500；不加载probe/verify权重。父调度独立后台运行。账本limit_gpu_seconds已迁移为null，保留历史费用和限额变更记录。
+
+无限预算改动仅Ledger记账/父调度deadline与授权门控/CPU测试；12项CPU回归通过，AST与SHA审计证明sampler、随机流、模型、优化器、worker、FSDP、DCP及配置/数据/缓存未变，复用已完成GPU验证。组合报告results/summaries/stage2_fsdp_unlimited_readiness.json。不得在运行期间修改*stage2*.py。OOM/非有限值等失败处理、物理GPU映射、共享显存与2GiB余量检查继续执行，不干扰其他实验。
+
+以下为历史状态；预算及正式启动权限以本节和最新用户指示为准。
+
 # 当前Stage 2 FSDP实施授权与状态（2026-10-21T16:05:26.037893+08:00）
 
 用户已要求执行其Nano3D 10k双卡FSDP完整计划。新增验证、正式训练和过程监控共享16 GPU小时，物理GPU2＋GPU5允许共享；预算账本不得清零，历史probe和旧编辑预算独立保留。用户计划第6.4节明确正式启动在验证和资源估算之后另行确认，当前formal_start_authorized=false，正式训练0更新，最终候选/测试评估未授权。

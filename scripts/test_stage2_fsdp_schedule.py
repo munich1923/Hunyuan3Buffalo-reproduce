@@ -107,7 +107,7 @@ class Tests(unittest.TestCase):
             cfg={"fsdp":{"allocator":"max_split_size_mb:256"},
                  "training":{"cublas_workspace_config":":4096:8"},
                  "orchestration":{"phase_minimum_seconds":{"train":120,"sample":240}}}
-            ledger=SimpleNamespace(file=run/"ledger.json",remaining=lambda:539.)
+            ledger=SimpleNamespace(file=run/"ledger.json",limit=57600,remaining=lambda:539.)
             with mock.patch.object(parent,"admission",return_value=[{"uuid":"a"},{"uuid":"b"}]),                 mock.patch.object(parent.subprocess,"Popen") as spawn:
                 with self.assertRaisesRegex(TimeoutError,"shutdown reserve"):
                     parent.child(cfg,args,run,ledger,"sample",{"phase":"sample"})
@@ -122,7 +122,7 @@ class Tests(unittest.TestCase):
             cfg={"fsdp":{"allocator":"max_split_size_mb:256"},
                  "training":{"cublas_workspace_config":":4096:8"},
                  "orchestration":{"phase_minimum_seconds":{}}}
-            ledger=SimpleNamespace(file=run/"ledger.json",used=lambda:0.,remaining=lambda:1000.)
+            ledger=SimpleNamespace(file=run/"ledger.json",limit=57600,used=lambda:0.,remaining=lambda:1000.)
             process=SimpleNamespace(pid=7654321,returncode=None)
             process.poll=lambda:process.returncode
             def waited(**kwargs): process.returncode=-15;return -15
@@ -135,6 +135,27 @@ class Tests(unittest.TestCase):
             self.assertFalse(read_json(run/"status.json")["formal_training_started"])
             atomic_json(run/"formal_started.json",{"test":True});parent.state(run,"sample")
             self.assertTrue(read_json(run/"status.json")["formal_training_started"])
+
+    def test_unlimited_budget_keeps_historical_usage(self):
+        import math
+        with tempfile.TemporaryDirectory(dir=path("environment/tmp/stage2")) as temp:
+            file=Path(temp)/"ledger.json"
+            with mock.patch("stage2_schedule.time.time",return_value=100.):
+                book=Ledger(file,57600);item=book.start("verify","dual",2)
+            with mock.patch("stage2_schedule.time.time",return_value=110.):
+                book.end(item,0)
+                unlimited=Ledger(file,None)
+                self.assertEqual(unlimited.used(),20.)
+                self.assertTrue(math.isinf(unlimited.remaining()))
+                self.assertIsNone(unlimited.data["limit_gpu_seconds"])
+                self.assertEqual(unlimited.data["limit_amendments"][0]["old_limit_gpu_seconds"],57600)
+                item=unlimited.start("formal","train",2,minimum=999999)
+            with mock.patch("stage2_schedule.time.time",return_value=100000.):
+                unlimited.end(item,0)
+                restored=Ledger(file,None)
+                self.assertGreater(restored.used(),57600)
+                self.assertTrue(math.isinf(restored.remaining()))
+                self.assertEqual(len(restored.data["limit_amendments"]),1)
 
     def test_independent_flow_streams(self):
         import torch

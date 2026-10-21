@@ -101,3 +101,9 @@ loss、几何、条件使用分别报告；固定16384点，不独立重缩放�
 父调度预留60 GPU秒关闭余量，worker截止时间同步提前；SIGTERM沿finally清理本实验进程组。formal_started.json持久记录正式启动，阶段切换不会误报未开始。合同变化拒绝旧run；预算失败/中断计费不重置。
 
 正式训练仅在用户按计划第6.4节明确确认后，将预算文件formal_start_authorized置true并执行上文stage2_nano10k_fsdp_r1命令。确认若仍坚持现有剩余预算，按上限停止、保留最近完整保存点，预计不能完成全5epoch；不得追加临时checkpoint。最终候选/测试不自动执行。
+
+## 最新授权：取消GPU时间预算上限并启动正式训练
+
+用户于2026-10-21明确授权立即正式训练并取消全部GPU小时/墙钟预算限制。当前预算配置gpu_budget_seconds=null、formal_start_authorized=true；原16GPU小时上限仅为历史记录。Ledger继续累计费用并保留旧记录，不设置deadline、不按用量停止。既定训练仍是5epoch、1565更新和四个checkpoint，EMA/CFG关闭，最终候选/测试不自动执行。
+
+运行目录results/stage2_nano10k/stage2_nano10k_fsdp_r1/。初始化40例监控后自动训练到500，按原阶段流程继续至1565；当前无限预算合同见results/summaries/stage2_fsdp_unlimited_readiness.json。GPU数值核心未改，额外12项CPU回归及AST审计通过。

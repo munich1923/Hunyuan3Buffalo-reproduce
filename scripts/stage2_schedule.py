@@ -49,10 +49,14 @@ class Prefetch:
 class Ledger:
     """Single supervisor owns the file and lock; restarts never reset usage."""
     def __init__(self,file,limit):
-        self.file=path(file);self.limit=float(limit)
+        self.file=path(file);self.limit=None if limit is None else float(limit)
         self.data=read_json(self.file) if self.file.exists() else {
             "schema":1,"limit_gpu_seconds":self.limit,"phases":[]}
-        if self.data["limit_gpu_seconds"]!=self.limit: raise RuntimeError("budget limit changed")
+        if self.data["limit_gpu_seconds"]!=self.limit:
+            if self.limit is not None: raise RuntimeError("budget limit changed")
+            self.data.setdefault("limit_amendments",[]).append({"old_limit_gpu_seconds":self.data["limit_gpu_seconds"],
+                "new_limit_gpu_seconds":None,"authorization":"user explicitly removed GPU budget and authorized formal start",**clock()})
+            self.data["limit_gpu_seconds"]=None
         active=[x for x in self.data["phases"] if x["state"]=="running"]
         for item in active:
             # A previous parent must not remain alive, and its process group
@@ -71,7 +75,7 @@ class Ledger:
     def used(self):
         return sum(x.get("gpu_seconds",max(0,time.time()-x["started_unix"])*x["gpu_count"])
                    for x in self.data["phases"])
-    def remaining(self): return max(0,self.limit-self.used())
+    def remaining(self): return float("inf") if self.limit is None else max(0,self.limit-self.used())
     def start(self,run,phase,cards,minimum=0):
         if self.remaining()<max(minimum*cards,10): raise TimeoutError("insufficient remaining GPU budget for phase")
         item={"id":uuid.uuid4().hex,"run":str(run),"phase":phase,"gpu_count":cards,

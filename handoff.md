@@ -1,3 +1,9 @@
+补充显存口径：GPU5全流程reserved42.494GiB，按CUDA总量换算实际allocator上限约42.527GiB，仅余33.2MiB；名义预算43805MiB不能当成实际字节上限。训练本身reserved36.75GiB，最大allocated全流程32.37GiB。正式FSDP训练前须优化并验证保存/恢复/采样阶段缓存及临时张量峰值；本轮仅记录限制，未宣称长期显存余量充分。
+
+2026-10-21 11:50:35 +08:00 两卡FSDP probe完整成功退出0，GPU2＋GPU5已释放。5更新13.9201/13.1108/13.3773/13.9416/13.3264秒，后4均值13.4390秒，全局batch32。训练reserved36.82/36.75GiB，全流程45.43/42.49GiB。完整分片checkpoint36.674GB保存60.04秒、恢复73.60秒；8验证1.87秒；50步采样8.53秒；解码7.05秒有效mesh。小MoE恢复后下一更新完全一致；实际3B做了文件SHA、严格DCP加载和各tensor前4值比较，未做新进程下一步全参数比较。证据results/summaries/stage2_resource_comparison.md与stage2_fsdp_probe.json。正式训练0更新；FSDP目前仅probe入口，后续正式分布式入口仍需补齐日志、epoch调度、每500保存及评估，预算确认后才能启动。
+
+2026-10-21 11:32:50 +08:00 CPU卸载probe完整成功退出0：5次更新63.1769/48.7252/51.5700/55.0728/58.7723秒，后4次平均53.5351秒；peak allocated32144878080B/reserved34477178880B；CPU peak RSS51340376KiB。完整checkpoint36666710331B，写入与校验63.5738秒；8验证2.7109秒；50步生成6.6968秒；VAE解码7.4901秒且有效mesh。证据probe_gpu2_cpuoffload_20261021/probe_report.json、summaries/stage2_cpuoffload_probe.json。仅资源可行，未评价语义成功；正式训练0更新。FSDP supervisor88432正在CPU缓存复核，GPU部分尚未启动，持续监控。
+
 2026-10-21 用户已授权CPU卸载probe结束后进行GPU2＋GPU5两卡FULL_SHARD探测并要求持续监控。新增stage2_fsdp.py / probe_stage2_fsdp.py / run_stage2_fsdp_probe.py；先小尺寸实际上游MoE的梯度更新及分片恢复一致性，再完整3B五更新、真实checkpoint恢复、验证8例、50步采样和解码。代码尚待实际GPU验证，不将语法通过当资源成功。CPU卸载probe已完成首更新63.1769秒，peak allocated29.94GiB/reserved32.11GiB。
 
 2026-10-21 11:09:17 +08:00 CPU优化器卸载探测已启动，supervisor70224/worker70232；独立配置configs/stage2_nano10k_cpuoffload.yaml仅optimizer改为cpu_adamw，其余参数保持一致；从原始初始化重新做5更新，不续接旧失败的未保存更新。状态和日志results/stage2_nano10k/gpu2_cpuoffload_20261021/，run结果probe_gpu2_cpuoffload_20261021/。18CPU回归再次通过。共享GPU2 cap继续保留；正式训练仍未启动。

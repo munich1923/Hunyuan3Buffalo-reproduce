@@ -1,0 +1,11 @@
+{
+  "repo_id": "facebook/dinov2-large",
+  "revision": "47b73eefe95e8d44ec3623f8890bd894b6ea2d6c",
+  "transport": "hf-mirror.com mirror of Hugging Face repository",
+  "weight_sha256": "399fba97a95f22c36834418bc69373364a99af3a1153da1c0fb31db567c92e23",
+  "weight_bytes": 1217522888,
+  "config_sha256": "12df51c069a2dc1305e34ba71ef58bc2407ea553b75f4722a1715c1bce3bbed0",
+  "verified_against": "Hugging Face X-Linked-Etag at pinned revision",
+  "time": "2026-11-02T08:48:24.805853+00:00",
+  "gpu_used": false
+}

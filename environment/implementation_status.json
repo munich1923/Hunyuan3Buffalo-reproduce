@@ -1,8 +1,0 @@
-{
-  "source_pinned": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
-  "python_scripts_compile": true,
-  "data_contract_tests_base_environment": "passed; rerun in experiment environment before dataset preparation",
-  "full_model_tests": "pending",
-  "training": "not started",
-  "gpu_seconds": 0
-}

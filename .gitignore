@@ -1,53 +1,31 @@
-# Secrets
 .env
 .env.*
 !.env.example
 *.pem
 *.key
 
-# Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
 venv/
 
-# Dedicated runtime, upstream checkouts, inputs and weights
-environment/venvs/*
-!environment/venvs/.gitkeep
-src/*
-!src/.gitkeep
-models/*
-!models/.gitkeep
-assets/*
-!assets/.gitkeep
-
-# Generated outputs: track only summaries and placeholder
-results/*
-!results/.gitkeep
-!results/README.md
-!results/summaries/
-results/summaries/*
-!results/summaries/.gitkeep
-!results/summaries/*.md
-!results/summaries/*.json
-!results/summaries/*.csv
-
-# Temporary and caches
-.cache/
-tmp/
-*.tmp
-
-# Runtime process and lock state
-environment/*_pid.txt
-environment/*.lock
-logs/downloads/*.lock
-logs/downloads/*.log
-
-!results/summaries/*.jsonl
-
-# Stage 2 runtime caches, temporary files and live process metadata
+environment/venvs/
 environment/cache/
 environment/tmp/
-environment/stage2_*process.json
-environment/stage2_budget_approval.json
+tmp/
+.cache/
+
+assets/abo_hssd_v1/raw/
+assets/abo_hssd_v1/processed/
+assets/abo_hssd_v1/renders_original/
+assets/abo_hssd_v1/metadata/
+assets/abo_hssd_v1/manifests/
+
+models/*
+!models/dinov2-large/
+models/dinov2-large/*
+!models/dinov2-large/provenance.json
+
+results/*
+logs/*

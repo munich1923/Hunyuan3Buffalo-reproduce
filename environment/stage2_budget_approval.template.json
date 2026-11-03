@@ -1,9 +1,0 @@
-{
-  "approved": false,
-  "approved_by": null,
-  "gpu_budget_seconds": null,
-  "config_fingerprint": null,
-  "probe_report": "results/stage2_nano10k/probe_20261019/probe_report.json",
-  "probe_sha256": null,
-  "note": "Only populate approval after explicit human confirmation of the new Stage 2 budget. Never alter the old editing GPU ledger."
-}

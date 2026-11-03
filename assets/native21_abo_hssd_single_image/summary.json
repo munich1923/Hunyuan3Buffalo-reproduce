@@ -1,0 +1,34 @@
+{
+  "original_counts": {
+    "train": 8634,
+    "val": 480,
+    "test": 479
+  },
+  "counts": {
+    "train": 8626,
+    "val": 479,
+    "test": 479
+  },
+  "rejected": 9,
+  "reasons": {
+    "missing_same_uid_image": 9
+  },
+  "sources": {
+    "train": {
+      "ABO": 3434,
+      "HSSD": 5192
+    },
+    "val": {
+      "ABO": 191,
+      "HSSD": 288
+    },
+    "test": {
+      "ABO": 191,
+      "HSSD": 288
+    }
+  },
+  "aliases_used": false,
+  "coordinate_rule": "official_surface_npz_unit_box_no_extra_transform",
+  "gpu_used": false,
+  "geometry_recomputed": false
+}

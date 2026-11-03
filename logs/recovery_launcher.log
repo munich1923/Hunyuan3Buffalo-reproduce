@@ -1,8 +1,0 @@
-START eval_shuffled GPU 0
-END eval_shuffled 0
-START train_geometry_overfit GPU 0
-END train_geometry_overfit 0
-START train_geometry_lora GPU 0
-END train_geometry_lora 0
-START repair_result_renders GPU 0
-END repair_result_renders 0

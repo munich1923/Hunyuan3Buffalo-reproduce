@@ -1,0 +1,102 @@
+# Official main.py remains the real process entry; no copied/custom train loop.
+# Official VAE/DiT from_pretrained and DINO AutoModel.from_pretrained use local folders.
+# Keep official pipeline cuda/float16 defaults; record actual optimizer dtypes.
+# Data are sampled with replacement from accepted original-train geometry only.
+# Checkpoints are saved every3000 updates; no automatic mesh evaluation is configured.
+# ckpt_path omitted intentionally: official merge_cfg otherwise masks CLI resume.
+name: ABO HSSD single-image-conditioned finetuning through the unmodified official main.py
+training:
+  steps: 1000000000
+  use_amp: true
+  amp_type: bf16
+  base_lr: 1.0e-05
+  gradient_clip_val: 1.0
+  gradient_clip_algorithm: norm
+  every_n_train_steps: 3000
+  val_check_interval: 3000
+  limit_val_batches: 0
+  monitor: train/total_loss
+  log_every_n_steps: 500
+  output_dir: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/native21_official_abo_hssd_1b_reproduction_20261103
+  seed: 20261101
+  num_nodes: 1
+  num_gpus: 1
+  update_every: 8
+  scale_lr: false
+dataset:
+  target: scripts.native_21dit.native21_official.data.ABOHSSDDataModule
+  params:
+    paired_index_root: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/native21_abo_hssd_single_image
+    batch_size: 1
+    num_workers: 0
+    val_num_workers: 0
+    seed: 20261101
+    image_size: 518
+    pc_size: 81920
+    padding_ratio: 1.15
+model:
+  target: hy3dshape.models.diffusion.flow_matching_sit.Diffuser
+  params:
+    first_stage_key: surface
+    cond_stage_key: image
+    scale_by_std: false
+    z_scale_factor: 1.0039506158752403
+    torch_compile: false
+    first_stage_config:
+      target: hy3dshape.models.autoencoders.ShapeVAE
+      from_pretrained: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1
+    cond_stage_config:
+      target: hy3dshape.models.conditioner.SingleImageEncoder
+      params:
+        drop_ratio: 0.1
+        main_image_encoder:
+          type: DinoImageEncoder
+          kwargs:
+            version: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/dinov2-large
+            image_size: 518
+            use_cls_token: true
+    denoiser_cfg:
+      target: hy3dshape.models.denoisers.hunyuandit.HunYuanDiTPlain
+      from_pretrained: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1
+    scheduler_cfg:
+      transport:
+        target: hy3dshape.models.diffusion.transport.create_transport
+        params:
+          path_type: Linear
+          prediction: velocity
+      sampler:
+        target: hy3dshape.models.diffusion.transport.Sampler
+        params: {}
+        ode_params:
+          sampling_method: euler
+          num_steps: 50
+    optimizer_cfg:
+      optimizer:
+        target: torch.optim.AdamW
+        params:
+          betas:
+          - 0.9
+          - 0.99
+          eps: 1.0e-06
+          weight_decay: 0.01
+      scheduler:
+        target: hy3dshape.utils.trainings.lr_scheduler.LambdaWarmUpCosineFactorScheduler
+        params:
+          warm_up_steps: 50
+          f_start: 1.0e-06
+          f_min: 0.001
+          f_max: 1.0
+    pipeline_cfg:
+      target: hy3dshape.pipelines.Hunyuan3DDiTFlowMatchingPipeline
+    image_processor_cfg:
+      target: hy3dshape.preprocessors.ImageProcessorV2
+      params: {}
+callbacks:
+  run_state:
+    target: scripts.native_21dit.native21_official.callbacks.RunStateCallback
+    params:
+      settings_path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/configs/native21_official_abo_hssd_1b_20261103.json
+  update_scalars:
+    target: scripts.native_21dit.native21_official.monitoring.UpdateScalarCallback
+    params:
+      every_n_updates: 500

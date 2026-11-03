@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "dataset_kind": "abo_hssd",
+  "counts": {
+    "train": 8626,
+    "val": 479,
+    "test": 479
+  },
+  "count": 8626,
+  "rejected_count": 8,
+  "total_rejected": 9,
+  "coordinate_rule": "official_surface_npz_unit_box_no_extra_transform",
+  "source_files": {
+    "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/abo_hssd_v1/manifests/abo_hssd_v1/ready.json": "98901d4565f659fdf8be04c1d39be92a360a5a23b8d2537563ba5952ad8f004f",
+    "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/abo_hssd_v1/renders_original/paired_index.jsonl": "35c6a0012805eb6a170d0f8b147d86c4c576ff48511f0b7eb3e4cd12c9a4625e",
+    "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/abo_hssd_v1/renders_original/migration_complete.json": "2658f20ec514cd2a5e3900c87cc1917c9737c5c33e99d4abe41184c32b84d8ee",
+    "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/abo_hssd_v1/manifests/abo_hssd_v1/train.jsonl": "0c5d97502bae285b8826eabd1f71ef216356a71615eb0a26f8a50ff9a0f971d6",
+    "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/abo_hssd_v1/manifests/abo_hssd_v1/val.jsonl": "64d4051190be271fa482aa1cf744f0017ff36824a12bbba0509a195606e0d3a4",
+    "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/abo_hssd_v1/manifests/abo_hssd_v1/test.jsonl": "3e86f355454bf161fccfe3293e99ff5fadfa1ad3478df122755103fe9ad6fcb5"
+  },
+  "files": {
+    "rejected.jsonl": "ac1eae80980c6b99e712451379d01546ffa37b5b143f245a25a34cfdeeb8e8fa",
+    "summary.json": "bcab32461db3991ce8c10ee15fadbf51fcb2f6dff0b4ac13a47fa751ee8714b0",
+    "test.jsonl": "e442956115da12c71f5f067554898e0febc40a4e82b3bd53309c2323acd1a8b3",
+    "train.jsonl": "5a663a3af3533b23db7decab51deecc618ef60ee09f648d235010684207d96df",
+    "val.jsonl": "0d6103de9d0cfe2cad4182b32b94ea4f2705e1b9f464c154f5f142697b3c61d8"
+  },
+  "upstream_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+  "image_preprocessing": "accepted NanoAdapter RGB/RGBA padding1.15 resize518",
+  "validation": "all paired original NPZ arrays finite; image decode and payload hashes checked",
+  "builder_sha256": "ca519c52c147dd8eba6cbc64fe16f8f325d61ddbb839e1f46620f7f3a97e15de",
+  "gpu_used": false,
+  "training_started": false
+}

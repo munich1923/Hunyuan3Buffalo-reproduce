@@ -1,33 +1,47 @@
-# Hunyuan3Buffalo-reproduce
+# Hunyuan3D-2.1 ABO/HSSD Training Reproduction
 
-Hunyuan3D Buffalo 的项目侧近似复现实验。当前工作是 Stage 2 条件生成：原始文本 → 冻结 Qwen2.5-VL → 新 Connector → 预训练 Hunyuan3D-2.1 完整 DiT，从纯高斯噪声生成三维几何。
+[中文版](README.zh-CN.md)
 
-目前缺少完成 Buffalo Stage 1 后的 VLM 权重，因此称为 **Stage 2 近似实验**，不宣称完整复现或官方训练实现。
+This repository contains the project code and fixed configuration for the ABO/HSSD single-image-conditioned Hunyuan3D-2.1 training experiment. The official Hunyuan3D-2.1 source is pinned as a Git submodule at commit `82920d643c0dc2f7bfd7255f45f62d386edfe60c`.
 
-## 当前状态
+## Reproduction inputs
 
-- 正式双卡 FSDP 入口及独立验证已完成，正式训练尚未启动。
-- 20 次真实更新覆盖 640 个唯一 UID；完整 3B 模型新进程续跑的全部本地参数及 Adam 状态比较最大误差为 0。
-- EMA、CFG、LoRA 和 CPU 优化器卸载关闭。
-- 训练预算与最终候选/测试评估预算分开；正式启动及预算决定见交接记录。
+The repository tracks source code, split and pairing manifests, and configuration. It does not track model weights or image and geometry payloads. The paired payloads used by the experiment total about 35.3 GB; the Hunyuan3D-2.1 DiT/VAE and DINO weights total about 8.6 GB. Obtain them from their licensed sources, place them at the paths in the configuration, and verify the recorded SHA256 values before training.
 
-执行方案：[docs/stage2_nano10k_fsdp.md](docs/stage2_nano10k_fsdp.md)。
-验证报告：[results/summaries/stage2_fsdp_training_implementation.md](results/summaries/stage2_fsdp_training_implementation.md)。
-资源估算：[results/summaries/stage2_fsdp_training_resources.md](results/summaries/stage2_fsdp_training_resources.md)。
-最新状态及工作约定：[handoff.md](handoff.md)、[agent.md](agent.md)。
+The split manifests contain records for 8,626 training pairs, 479 validation pairs, and 479 test pairs. They preserve the original split and same-UID image/geometry pairing. Their recorded payload paths refer to the H100 workspace used for the experiment; update the paths and regenerate the index readiness receipt when deploying elsewhere.
 
-## 代码与实验环境
+## What is official and what is project-specific
 
-服务器实验工作区：`/root/userdata/zc/hunyuan3d-buffalo-1.0-editing`。
+- The upstream project provides `hy3dshape/main.py`, the model, loss, optimizer, image encoder, and official surface-point sampling.
+- `scripts/native_21dit/Abo_Hssd_datapre/` contains the ABO/HSSD metadata, geometry and image preparation workflow. `prepare_geometry.py` calls the pinned upstream renderer and `watertight_and_sample.py`.
+- `scripts/native_21dit/native21_official/` contains the ABO/HSSD paired-data adapter, immutable-index validation, checkpoint data/RNG state, and update-aligned TensorBoard scalars. The adapter is needed because the official loader expects a different WebDataset directory layout.
+- `configs/` records the data-preparation settings and the one-billion-update official `main.py` training settings.
 
-本仓库保存项目代码、配置、环境定义和小型实验报告。模型权重、数据、缓存、虚拟环境及大型 checkpoint 留在服务器，由 `.gitignore` 排除。
+The current training config initializes from official pretrained weights, uses microbatch 1 with accumulation 8, saves every 3,000 optimizer updates, and records loss plus pre-clip DiT gradient norm every 500 updates. It does not configure automatic mesh evaluation or automatic stopping.
 
-固定上游为 [Tencent-Hunyuan/Hunyuan3D-2.1](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1)，提交 `82920d643c0dc2f7bfd7255f45f62d386edfe60c`。`src/Hunyuan3D-2.1/` 保持独立仓库，目前按既有规则排除在主仓库之外，尚未注册为 submodule。
+The ABO/HSSD source assets were assembled on a separate data host and the H100 workspace. The repository's metadata downloader does not fetch the 35.3 GB image and geometry payloads from a public endpoint. The existing prepared payloads remain on the H100; reproducing the data build elsewhere requires access to the same licensed source assets and their preparation receipts.
 
-本地代码副本通过 SSH 获取服务器提交，再使用本地 GitHub 认证推送；服务器不保存 GitHub 凭据，不转发 SSH agent。
+## Upstream checkout
 
-## 历史编辑实验
+Clone with submodules:
 
-此前编辑近似实验未证明可靠的未见物体指令编辑能力，与当前 Stage 2 条件生成实验分别报告。
+```powershell
+git clone --recurse-submodules https://github.com/munich1923/Hunyuan3Buffalo-reproduce.git
+```
 
-历史报告：[results/summaries/final_report.md](results/summaries/final_report.md)；模式说明：[results/summaries/evaluation_modes.md](results/summaries/evaluation_modes.md)。大型网格和对比图保存在服务器。
+To initialize the upstream checkout after a regular clone:
+
+```powershell
+git submodule update --init --recursive
+```
+
+Training runs on the configured Linux/CUDA environment. The checked-in configuration preserves the experiment's H100 workspace paths; it is not directly runnable from Windows.
+
+## Current reproduction config
+
+- `configs/native21_official_abo_hssd_1b_20261103.yaml`
+- `configs/native21_official_abo_hssd_1b_20261103.json`
+
+`configs/abo_hssd_v1.json` configures data identification and preparation. It pins metadata/upstream revisions, split and geometry rules, and preparation paths; it is not the Hunyuan3D training config. See [dataset layout](docs/ABO_HSSD_DATA_LAYOUT.md) for the paired file format.
+
+The config is assigned a new output directory so it cannot overwrite the active server run. The clean project starts a fresh experiment from official pretrained weights. It is not compatible with resuming the active run's checkpoint because the cleaned source set has a different source-contract hash.

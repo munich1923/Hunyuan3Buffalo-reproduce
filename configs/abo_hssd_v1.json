@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "name": "abo_hssd_v1",
+  "seed": 20261027,
+  "upstream_commit": "82920d643c0dc2f7bfd7255f45f62d386edfe60c",
+  "trellis_commit": "193e0502b5cb3eb5997ec457d5340e95d09b158e",
+  "metadata_revision": "288b06111bc4d06800293ab087989f852a632af2",
+  "hssd_revision": "208ea6bc22d863bbc1cbaef1829b3e646600dfb6",
+  "assets": "assets/abo_hssd_v1",
+  "results": "results/abo_hssd_v1",
+  "runtime": "environment/venvs/abo_hssd",
+  "blender": "environment/tools/abo_hssd/blender-4.1.1-linux-x64/blender",
+  "workers": 2,
+  "max_workers": 2,
+  "sources": [
+    "ABO",
+    "HSSD"
+  ],
+  "split_ratios": [
+    0.9,
+    0.05,
+    0.05
+  ],
+  "caption_policy": "all-original-nonempty-no-semantic-filter",
+  "caption_selection": "sha256(master,epoch,global_position,uid)-uniform-independent-v1",
+  "evaluation_caption": "first-nonempty",
+  "geometry": {
+    "grid_res": 256,
+    "epsilon": 0.0078125,
+    "surface_count": 124928,
+    "vae_extent": 1.9998,
+    "vae_points": 81920,
+    "views": 0,
+    "geometry_timeout_seconds": 7200
+  },
+  "models": {
+    "vlm": "models/Qwen2.5-VL-7B-Instruct",
+    "vlm_revision": "cc594898137f460bfe9f0759e9844b3ce807cfb5",
+    "shape": "models/Hunyuan3D-2.1",
+    "shape_revision": "0b94677654c57bb9a6b6845cd7b704ccf551d327"
+  },
+  "gate": {
+    "per_source_train": 44,
+    "per_source_val": 11,
+    "valid_min": 0.95,
+    "fscore_median_min": 0.8,
+    "points": 16384,
+    "bounds": 1.01,
+    "resolution": 256,
+    "chunks": 10000
+  },
+  "training_authorized": false
+}

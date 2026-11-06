@@ -2,6 +2,10 @@
 
 [中文版](README.zh-CN.md)
 
+The separate text-only Qwen3-VL Stage2 implementation is documented in
+[Qwen3-VL Stage2](docs/QWEN3VL_STAGE2.md). It replaces the image conditioner while
+retaining the official shape training implementation. H100 validation is pending.
+
 This repository contains the project code and fixed configuration for the ABO/HSSD single-image-conditioned Hunyuan3D-2.1 training experiment. The official Hunyuan3D-2.1 source is pinned as a Git submodule at commit `82920d643c0dc2f7bfd7255f45f62d386edfe60c`.
 
 ## Reproduction inputs

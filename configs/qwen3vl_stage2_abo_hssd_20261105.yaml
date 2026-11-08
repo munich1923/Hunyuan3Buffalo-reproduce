@@ -1,5 +1,5 @@
 # Local implementation only. Provision/check on H100 before separately authorized training.
-# The official Diffuser, DiT, VAE, loss, optimizer and main.py remain unchanged.
+# Upstream stays pinned; a local DiT subclass adds only condition padding masks.
 name: ABO HSSD text-only Qwen3-VL conditioner stage2
 training:
   steps: 1000000000
@@ -53,7 +53,7 @@ model:
         drop_ratio: 0.1
         disable_drop: true
     denoiser_cfg:
-      target: hy3dshape.models.denoisers.hunyuandit.HunYuanDiTPlain
+      target: scripts.native_21dit.qwen3vl_stage2.denoiser.MaskedHunYuanDiTPlain
       from_pretrained: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1
     scheduler_cfg:
       transport:

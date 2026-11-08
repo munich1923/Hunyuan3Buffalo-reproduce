@@ -3,7 +3,8 @@
 [English](README.md)
 
 新增的纯文本 Qwen3-VL Stage2 实现见[条件端说明](docs/QWEN3VL_STAGE2.zh-CN.md)：
-替换图片 conditioner，保留官方形状训练实现，真实 H100 验证尚待进行。
+替换图片 conditioner，并在本地扩展 DiT 条件 padding mask；保留官方训练入口、损失和
+优化器，真实 H100 验证尚待进行。
 
 本仓库保存 ABO/HSSD 单图条件 Hunyuan3D-2.1 训练实验所需的项目代码和固定配置。官方 Hunyuan3D-2.1 源码以 Git submodule 形式固定在提交 `82920d643c0dc2f7bfd7255f45f62d386edfe60c`。
 

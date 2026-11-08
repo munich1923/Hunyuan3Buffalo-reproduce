@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "name": "qwen3vl_stage2_abo_hssd_20261105",
   "root": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing",
   "run_dir": "/root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/qwen3vl_stage2_abo_hssd_20261105",
@@ -16,8 +16,6 @@
   "dataset_kind": "abo_hssd_text",
   "train_count": 8626,
   "max_updates": 1000000000,
-  "microbatch": 1,
-  "accumulation": 8,
   "checkpoint_every": 3000,
   "lr": 1e-5,
   "initialize_from": "official_pretrained",

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import yaml
 
-from scripts.native_21dit.native21_official.shared import ROOT, read, verify_upstream
+from .shared import ROOT, batch_settings, read, verify_upstream
 from .text import MODEL_ID, MODEL_REVISION, sha
 
 
@@ -32,16 +32,24 @@ def qwen_files(model_path, revision=MODEL_REVISION):
     return files
 
 
+def source_hashes():
+    return {str(path.relative_to(ROOT)): sha(path)
+            for path in sorted(Path(__file__).parent.glob("*.py"))}
+
+
 def integration_contract(config):
     from .data import accepted_rows
 
-    training = yaml.safe_load(Path(config["training_yaml"]).read_text())
+    training = yaml.safe_load(Path(config["training_yaml"]).read_text(encoding="utf-8"))
+    batching = batch_settings(training)
+    if training["dataset"]["target"] != "scripts.native_21dit.qwen3vl_stage2.data.ABOHSSDTextDataModule":
+        raise ValueError("Use the independent text data module")
     model = training["model"]["params"]
     if training["model"]["target"] != "hy3dshape.models.diffusion.flow_matching_sit.Diffuser":
         raise ValueError("The official Diffuser must remain unchanged")
     expected = {
         "cond_stage_config": "scripts.native_21dit.qwen3vl_stage2.conditioner.Qwen3VLTextConditioner",
-        "denoiser_cfg": "hy3dshape.models.denoisers.hunyuandit.HunYuanDiTPlain",
+        "denoiser_cfg": "scripts.native_21dit.qwen3vl_stage2.denoiser.MaskedHunYuanDiTPlain",
         "first_stage_config": "hy3dshape.models.autoencoders.ShapeVAE",
     }
     for key, target in expected.items():
@@ -54,6 +62,8 @@ def integration_contract(config):
         raise ValueError("YAML/settings max_steps differ")
     if training["training"]["output_dir"] != config["run_dir"]:
         raise ValueError("YAML/settings output directory differs")
+    if training["training"]["every_n_train_steps"] != config["checkpoint_every"]:
+        raise ValueError("YAML/settings checkpoint interval differs")
     verify_upstream(config)
     files = {}
     for key, model_key, subfolder, digest_key in (
@@ -69,8 +79,8 @@ def integration_contract(config):
         files[key + "_config"] = sha(folder / "config.yaml")
         if key == "dit":
             params = yaml.safe_load((folder / "config.yaml").read_text())["model"]["params"]
-            if params["context_dim"] != 1024 or params["use_attention_pooling"]:
-                raise ValueError("Expected official DiT context_dim=1024 and no fixed-length pooling")
+            if params["context_dim"] != 1024 or params["use_attention_pooling"] or params.get("with_decoupled_ca", False):
+                raise ValueError("Expected DiT context_dim=1024, no pooling or decoupled condition")
     cond = model["cond_stage_config"]["params"]
     vlm_files = qwen_files(cond["model_path"], cond["revision"])
     rows, ready = accepted_rows(config["paired_index_root"], check_geometry=False)
@@ -80,14 +90,11 @@ def integration_contract(config):
     metadata = Path(dataset["metadata_path"])
     if dataset["paired_index_root"] != config["paired_index_root"]:
         raise ValueError("YAML/settings paired index differs")
-    code = {}
-    for directory in ("native21_official", "qwen3vl_stage2"):
-        for path in sorted((ROOT / "scripts/native_21dit" / directory).glob("*.py")):
-            code[str(path.relative_to(ROOT))] = sha(path)
     return {
-        "kind": "abo_hssd_text_stage2_v1", "upstream_commit": config["upstream_commit"],
+        "kind": "abo_hssd_text_stage2_v2", "upstream_commit": config["upstream_commit"],
         "settings_sha256": sha(config["_settings_path"]),
-        "yaml_sha256": sha(config["training_yaml"]), "scripts": code,
+        "yaml_sha256": sha(config["training_yaml"]), "scripts": source_hashes(),
+        "batching": batching, "condition_mask": "main_mask_bool_true_is_valid",
         "paired_ready_sha256": sha(Path(config["paired_index_root"]) / "ready.json"),
         "paired_files": ready["files"], "accepted_count": len(rows),
         "metadata_sha256": sha(metadata), "dataset": dataset,

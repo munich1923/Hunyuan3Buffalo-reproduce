@@ -12,11 +12,20 @@ performed as part of the local implementation.
 The original single-image baseline, its configuration, and the pinned upstream
 submodule remain intact. New code lives in `scripts/native_21dit/qwen3vl_stage2/`.
 The training entry remains upstream `hy3dshape/main.py`, using the unchanged
-Diffuser, DiT, VAE, flow-matching loss, AdamW construction and LR scheduler.
+Diffuser, VAE, flow-matching loss, AdamW construction and LR scheduler. A local
+`MaskedHunYuanDiTPlain` subclass adds condition padding-mask support while retaining
+the official parameter names, shapes and pretrained-weight loader. No upstream
+source is edited and the extension adds no trainable parameters.
+
+This experiment has its own Dataset, DataModule, callbacks, scalar logging and
+utilities. It neither imports `native21_official` nor includes that experiment's
+scripts in its recovery contract. The accepted data manifests, geometry and
+pinned upstream implementation remain shared inputs.
 
 ```text
 original metadata caption -> optional fixed prefix -> Qwen text hidden states
-    -> trainable 4096 -> 1024 -> 1024 MLP -> contexts["main"] -> official DiT
+    -> trainable 4096 -> 1024 -> 1024 MLP -> contexts["main"] -> DiT
+tokenizer attention_mask -> contexts["main_mask"] -> each cross-attention layer
 official surface NPZ -> frozen official VAE (sample_posterior=True) -> shape target
 ```
 
@@ -84,6 +93,20 @@ instead of truncating them. This is a project default, not a Buffalo requirement
 Official DiT has `context_dim=1024` and `use_attention_pooling=false`, so its
 `text_len=1370` does not require resampling this context to 1370 tokens.
 
+For a batch of different-length captions, tokenization uses left padding without
+truncation. Qwen receives its attention mask. `encode_text()` returns the padded
+hidden tensor `[B,L_max,4096]` and a boolean valid-token mask `[B,L_max]`. The MLP
+produces `[B,L_max,1024]`; padded entries are zeroed and the mask is returned as
+`main_mask`. The local DiT passes it through every block to SDPA cross-attention,
+where boolean `True` means allowed. Qwen's causal attention and DiT's shape
+self-attention are unchanged. Padding values and counts must not affect valid
+conditions. All-masked samples and malformed masks are rejected.
+
+The masked cross-attention allows PyTorch to choose its backend, including a math
+fallback when fused kernels do not support the mask. Actual H100 backend behavior,
+memory use and throughput still require a separately requested check. There is
+no fixed-length pooling/resampler and no generated-answer tokens in conditioning.
+
 ## Parameters, precision and checkpoints
 
 Qwen is frozen in eval mode with BF16 weights. A wrapper preserves the backbone's
@@ -100,8 +123,17 @@ biases have decay `0`, and DiT inherits decay `0.01`. Both groups share the exis
 50-update warmup/cosine curve with total `1e9` updates. Condition dropping remains
 disabled with the existing `drop_ratio=0.1` attribute.
 
-Microbatch 1, accumulation 8, checkpoints every 3,000 updates and scalars every
-500 updates remain unchanged. The existing `train/grad_norm_l2_pre_clip` measures
+The supplied YAML still defaults to microbatch 1 and accumulation 8. Any positive
+integer `dataset.params.batch_size` is accepted by the DataModule and passed to
+DataLoader; `training.update_every` sets accumulation independently. On the
+authorized single GPU, effective batch is their product; neither value is inferred
+or adjusted by Trainer. For example, batch 2 with accumulation 4 gives effective
+batch 8. These values have one source in the YAML and are not duplicated in the
+JSON settings. `num_workers=0` remains required by the committed sampler recovery
+mechanism; this is separate from batch size.
+
+Checkpoints every 3,000 updates and scalars every 500 updates remain unchanged.
+The existing `train/grad_norm_l2_pre_clip` measures
 DiT only; `train/connector_grad_norm_l2_pre_clip` is separate. The latter is also
 written to `connector_scalar_updates.jsonl`; the effective-batch/window losses
 remain in `scalar_updates.jsonl`. Both norms are measured after accumulation and
@@ -112,7 +144,13 @@ scheduler, scalar windows and committed data/RNG state. Consequently frozen Qwen
 adds approximately 17.5 GB of weight data to **each** full checkpoint; it is not
 excluded by custom save hooks. Resume requires matching metadata, configuration,
 code and model-file hashes. Image-baseline and abandoned checkpoints are rejected.
-The new experiment has its own output directory.
+The new experiment has its own output directory. Recovery state version 2 stores
+consumed samples and consumed DataLoader batches separately. Checkpoint loop
+cursors count batches; data RNG snapshots count samples. On this fixed-batch,
+single-GPU stream, after U updates these are `U*A` batches and `U*A*B` samples.
+Only committed states are saved, so prefetched samples are replayed after restore.
+Changing batch/accumulation settings is not an exact resume of an existing run.
+The earlier local text checkpoint format is also intentionally incompatible.
 
 ## Local verification and later H100 review
 
@@ -123,10 +161,14 @@ Run without pretrained weights:
 python -B tests/test_qwen3vl_stage2.py -v
 ```
 
-Tests exercise image rejection, variable text lengths, MLP gradients, frozen Qwen,
-dtype protection, exact-UID metadata joins, unchanged geometry/UID streams,
-prefetch recovery, official optimizer grouping and independent-process Lightning
-checkpoint recovery. A tiny randomly initialized Qwen architecture also checks the
+Tests exercise mixed-length text batches, image rejection, MLP gradients, frozen
+Qwen, dtype protection, exact-UID metadata joins, unchanged official geometry/UID
+streams, prefetch recovery and official optimizer grouping. Masked batched DiT
+outputs and gradients are compared against individually unpadded official calls;
+strict pretrained-key loading and padding invariance are checked. Independent
+processes compare continuous versus checkpoint/resumed execution for batch and
+accumulation pairs (1,8), (2,3), and (8,1). Imports of the image experiment are
+blocked in an isolation probe. A tiny randomly initialized Qwen also checks the
 Transformers text-only API. They do not establish real-model numerical stability
 or shape generation quality.
 

@@ -52,6 +52,10 @@ class Qwen3VLTextConditioner(nn.Module):
             raise ValueError("Qwen weights must be BF16 before wrapping")
         self.backbone = _FrozenBF16(backbone)
         self.tokenizer = tokenizer
+        # Left padding supports causal language generation in the separate probe.
+        self.tokenizer.padding_side = "left"
+        if self.tokenizer.pad_token_id is None:
+            raise ValueError("The pinned Qwen tokenizer must define a pad token")
         self.connector = nn.Sequential(nn.Linear(4096, 1024), nn.GELU(), nn.Linear(1024, 1024))
         self.task_prefix = task_prefix
         self.max_length = int(max_length)
@@ -60,26 +64,32 @@ class Qwen3VLTextConditioner(nn.Module):
         self.drop_ratio = float(drop_ratio)
         self.disable_drop = bool(disable_drop)
         self.last_token_count = None
+        self.last_attention_mask = None
 
     @property
     def vlm(self):
         return self.backbone.model
 
     def tokenize_text(self, text):
-        if not isinstance(text, str):
-            if not isinstance(text, (list, tuple)) or len(text) != 1:
-                raise ValueError("Text-only stage2 requires microbatch=1")
-            text = text[0]
+        texts = [text] if isinstance(text, str) else text
+        if not isinstance(texts, (list, tuple)) or not texts:
+            raise ValueError("Expected a nonempty batch of caption strings")
+        messages = [messages_for(item, self.task_prefix) for item in texts]
         inputs = self.tokenizer.apply_chat_template(
-            messages_for(text, self.task_prefix), tokenize=True,
+            messages, tokenize=True, padding=True, truncation=False,
             add_generation_prompt=True, return_dict=True, return_tensors="pt")
         allowed = {"input_ids", "attention_mask"}
         if set(inputs) - allowed:
             raise ValueError("Unexpected non-text tokenizer inputs")
-        if inputs["input_ids"].shape[1] > self.max_length:
-            raise ValueError("Caption exceeds max_length; review it instead of silently truncating")
         if "attention_mask" not in inputs:
-            inputs["attention_mask"] = torch.ones_like(inputs["input_ids"])
+            raise ValueError("Batched text tokenization must return its padding mask")
+        ids, valid = inputs["input_ids"], inputs["attention_mask"]
+        if ids.ndim != 2 or ids.shape[0] != len(texts) or valid.shape != ids.shape:
+            raise ValueError("Tokenizer returned inconsistent batch/mask shapes")
+        if not bool(((valid == 0) | (valid == 1)).all()) or not bool(valid.bool().any(dim=1).all()):
+            raise ValueError("Every caption must contain valid tokens and a binary mask")
+        if ids.shape[1] > self.max_length:
+            raise ValueError("Caption exceeds max_length; review it instead of silently truncating")
         # Reject multimodal placeholders even if present in a caption string.
         image_ids = [getattr(self.vlm.config, name, None) for name in
                      ("image_token_id", "video_token_id", "vision_start_token_id", "vision_end_token_id")]
@@ -94,26 +104,32 @@ class Qwen3VLTextConditioner(nn.Module):
         # no_grad applies ONLY to Qwen; the connector must retain its graph.
         with torch.no_grad():
             hidden = self.vlm.model(**inputs, use_cache=False, return_dict=True).last_hidden_state
-        hidden = hidden[:, inputs["attention_mask"][0].bool(), :].detach()
-        if hidden.shape[1] == 0 or not bool(torch.isfinite(hidden).all()):
+        valid = inputs["attention_mask"].bool()
+        hidden = hidden.detach().masked_fill(~valid.unsqueeze(-1), 0)
+        if hidden.shape[:2] != valid.shape or not bool(torch.isfinite(hidden).all()):
             raise RuntimeError("Empty/nonfinite Qwen text hidden state")
         self.last_token_count = hidden.shape[1]
-        return hidden
+        self.last_attention_mask = valid.detach().clone()
+        return hidden, valid
 
     def forward(self, image=None, text=None, mask=None, **kwargs):
         if image is not None or mask is not None or kwargs:
             raise ValueError("Only text is allowed in this conditioner")
-        hidden = self.encode_text(text)
+        hidden, valid = self.encode_text(text)
         context = self.connector(hidden.to(self.connector[0].weight))
+        context = context.masked_fill(~valid.unsqueeze(-1), 0)
         if not self.disable_drop:
             keep = torch.rand((context.shape[0], 1, 1), device=context.device) > self.drop_ratio
             context = context * keep
         if not bool(torch.isfinite(context).all()):
             raise RuntimeError("Nonfinite connector output")
-        return {"main": context}
+        return {"main": context, "main_mask": valid}
 
     def unconditional_embedding(self, batch_size, **kwargs):
-        if kwargs or batch_size != 1 or self.last_token_count is None:
-            raise ValueError("Encode one text first to determine unconditional token length")
+        if kwargs or isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size < 1:
+            raise ValueError("Expected a positive unconditional batch size")
+        if self.last_attention_mask is None or self.last_attention_mask.shape[0] not in (1, batch_size):
+            raise ValueError("Encode a matching text batch first to determine unconditional masks")
         weight = self.connector[0].weight
-        return {"main": weight.new_zeros((batch_size, self.last_token_count, 1024))}
+        return {"main": weight.new_zeros((batch_size, self.last_token_count, 1024)),
+                "main_mask": self.last_attention_mask.to(weight.device).expand(batch_size, -1).clone()}

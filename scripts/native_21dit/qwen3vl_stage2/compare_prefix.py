@@ -61,11 +61,11 @@ def main():
         for name, task_prefix in (("without_prefix", ""), ("with_prefix", prefix)):
             cond.task_prefix = task_prefix
             with torch.no_grad(), torch.autocast("cuda", dtype=torch.bfloat16):
-                hidden = cond.encode_text(caption)
+                hidden, valid = cond.encode_text(caption)
                 context = cond.connector(hidden.to(cond.connector[0].weight))
                 inputs = cond.tokenize_text(caption)
                 output = cond.vlm.generate(**inputs, do_sample=False, max_new_tokens=args.max_new_tokens)
-            pooled.append(hidden.float().mean(dim=1).cpu())
+            pooled.append((hidden.float().sum(dim=1) / valid.sum(dim=1, keepdim=True)).cpu())
             report[name] = {
                 "response": cond.tokenizer.decode(output[0, inputs["input_ids"].shape[1]:], skip_special_tokens=True),
                 "hidden": tensor_summary(hidden), "connector": tensor_summary(context),

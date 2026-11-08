@@ -1,5 +1,7 @@
 """CPU-only conditioner and recovery checks. No pretrained weights or servers."""
 import copy
+from contextlib import nullcontext
+import importlib.abc
 import json
 import os
 from pathlib import Path
@@ -25,6 +27,13 @@ shape_package.__path__ = [str(ROOT / "src/Hunyuan3D-2.1/hy3dshape/hy3dshape")]
 shape_package.__spec__ = ModuleSpec("hy3dshape", loader=None, is_package=True)
 sys.modules["hy3dshape"] = shape_package
 
+if "--isolation-probe" in sys.argv:
+    class BlockBaseline(importlib.abc.MetaPathFinder):
+        def find_spec(self, fullname, path=None, target=None):
+            if fullname.startswith("scripts.native_21dit.native21_official"):
+                raise ImportError("Image experiment import is forbidden")
+    sys.meta_path.insert(0, BlockBaseline())
+
 import numpy as np
 import torch
 from torch import nn
@@ -33,26 +42,36 @@ from omegaconf import OmegaConf
 import yaml
 
 from hy3dshape.models.diffusion.flow_matching_sit import Diffuser
-from scripts.native_21dit.native21_official.data import ABOHSSDSurfaceDataset
+from hy3dshape.data.dit_asl import AlignedShapeLatentDataset
+from hy3dshape.models.denoisers.hunyuandit import HunYuanDiTPlain
 from scripts.native_21dit.qwen3vl_stage2.conditioner import Qwen3VLTextConditioner
-from scripts.native_21dit.qwen3vl_stage2.data import ABOHSSDTextDataset, accepted_rows
+from scripts.native_21dit.qwen3vl_stage2.data import ABOHSSDTextDataset, ABOHSSDTextDataModule, accepted_rows
+from scripts.native_21dit.qwen3vl_stage2.denoiser import MaskedHunYuanDiTPlain
 from scripts.native_21dit.qwen3vl_stage2.text import CaptionSampler, load_captions, messages_for, sha
-from scripts.native_21dit.qwen3vl_stage2.callbacks import TextRunStateCallback, check_optimizer
-from scripts.native_21dit.qwen3vl_stage2.contracts import qwen_files
+from scripts.native_21dit.qwen3vl_stage2.callbacks import STATE_KEY, TextRunStateCallback, check_optimizer
+from scripts.native_21dit.qwen3vl_stage2.contracts import qwen_files, source_hashes
+from scripts.native_21dit.qwen3vl_stage2.shared import batch_settings
 from scripts.native_21dit.qwen3vl_stage2.scalars import TextUpdateScalarCallback, grad_norm
 
 torch.set_num_threads(2)
 
 
 class FakeTokenizer:
+    pad_token_id = 0
+
     def apply_chat_template(self, messages, **kwargs):
         self.last_messages = messages
         self.last_kwargs = kwargs
-        text = messages[0]["content"]
-        ids = [1] + [ord(c) % 100 + 3 for c in text] + [2]
-        if "<image>" in text:
-            ids.append(120)
-        return {"input_ids": torch.tensor([ids]), "attention_mask": torch.ones(1, len(ids), dtype=torch.long)}
+        sequences = []
+        for conversation in messages:
+            text = conversation[0]["content"]
+            ids = [1] + [ord(c) % 100 + 3 for c in text] + [2]
+            if "<image>" in text:
+                ids.append(120)
+            sequences.append(ids)
+        length = max(map(len, sequences))
+        return {"input_ids": torch.tensor([[0] * (length - len(ids)) + ids for ids in sequences]),
+                "attention_mask": torch.tensor([[0] * (length - len(ids)) + [1] * len(ids) for ids in sequences])}
 
 
 class FakeCore(nn.Module):
@@ -125,7 +144,8 @@ class ConditionerTests(unittest.TestCase):
         for kwargs in ({"image": torch.zeros(1), "text": "chair"},
                        {"mask": torch.zeros(1), "text": "chair"},
                        {"pixel_values": torch.zeros(1), "text": "chair"},
-                       {"text": "<image>chair"}, {"text": ["chair", "table"]}):
+                       {"text": "<image>chair"}, {"text": []}, {"text": ["chair", 1]},
+                       {"text": ["chair", " "]}):
             with self.assertRaises(ValueError):
                 cond(**kwargs)
         cond.max_length = 3
@@ -147,7 +167,7 @@ class ConditionerTests(unittest.TestCase):
     def test_prefix_can_be_disabled(self):
         cond = conditioner(task_prefix="")
         cond(text="a chair")
-        self.assertEqual(cond.tokenizer.last_messages, [{"role": "user", "content": "a chair"}])
+        self.assertEqual(cond.tokenizer.last_messages, [[{"role": "user", "content": "a chair"}]])
         self.assertIn("\na chair", messages_for("a chair")[0]["content"])
 
     def test_real_qwen_class_accepts_text_without_visual_forward(self):
@@ -165,7 +185,143 @@ class ConditionerTests(unittest.TestCase):
         with patch.object(vlm.model.visual, "forward", side_effect=AssertionError("vision called")):
             output = vlm.model(input_ids=torch.tensor([[1, 2, 3]]),
                                attention_mask=torch.ones(1, 3, dtype=torch.long), use_cache=False, return_dict=True)
+            ids = torch.tensor([[0, 0, 1, 2, 3], [1, 2, 3, 4, 5]])
+            valid = ids != 0
+            batched = vlm.model(input_ids=ids, attention_mask=valid.long(), use_cache=False,
+                                return_dict=True).last_hidden_state
+            for i in range(2):
+                single = vlm.model(input_ids=ids[i:i+1, valid[i]],
+                                   attention_mask=torch.ones(1, int(valid[i].sum()), dtype=torch.long),
+                                   use_cache=False, return_dict=True).last_hidden_state
+                torch.testing.assert_close(batched[i, valid[i]], single[0], atol=1e-5, rtol=1e-4)
         self.assertEqual(output.last_hidden_state.shape, (1, 3, 64))
+
+    def test_real_tokenizer_chat_template_batches_without_truncation(self):
+        from tokenizers import Tokenizer
+        from tokenizers.models import WordLevel
+        from tokenizers.pre_tokenizers import Whitespace
+        from transformers import PreTrainedTokenizerFast
+        backend = Tokenizer(WordLevel({"[UNK]": 0, "[PAD]": 1, "chair": 2,
+                                       "a": 3, "wooden": 4, "table": 5}, unk_token="[UNK]"))
+        backend.pre_tokenizer = Whitespace()
+        tokenizer = PreTrainedTokenizerFast(tokenizer_object=backend, unk_token="[UNK]", pad_token="[PAD]",
+                                            model_input_names=["input_ids", "attention_mask"])
+        tokenizer.chat_template = (
+            "{% for message in messages %}{{ message['role'] + ': ' + message['content'] + '\n' }}{% endfor %}"
+            "{% if add_generation_prompt %}assistant: {% endif %}"
+        )
+        cond = Qwen3VLTextConditioner("unused", task_prefix="", backbone=FakeQwen(), tokenizer=tokenizer)
+        inputs = cond.tokenize_text(["chair", "a wooden table"])
+        self.assertEqual(inputs["input_ids"].shape[0], 2)
+        self.assertEqual(tokenizer.padding_side, "left")
+        self.assertEqual(int(inputs["attention_mask"][0, 0]), 0)
+        result = cond(text=["chair", "a wooden table"])
+        self.assertTrue(torch.equal(result["main_mask"], inputs["attention_mask"].bool()))
+
+    def test_batched_text_masks_and_unconditional_embeddings(self):
+        cond = conditioner(task_prefix="")
+        texts = ["chair", "a tall wooden chair", "table"]
+        result = cond(text=texts)
+        self.assertEqual(result["main"].shape[:2], result["main_mask"].shape)
+        self.assertEqual(result["main_mask"].dtype, torch.bool)
+        self.assertEqual(result["main_mask"].sum(1).tolist(), [len(t) + 2 for t in texts])
+        self.assertTrue(torch.equal(result["main"][~result["main_mask"]], torch.zeros_like(result["main"][~result["main_mask"]])))
+        unconditional = cond.unconditional_embedding(3)
+        self.assertTrue(torch.equal(unconditional["main_mask"], result["main_mask"]))
+        self.assertEqual(unconditional["main"].count_nonzero().item(), 0)
+        with self.assertRaises(ValueError):
+            cond.unconditional_embedding(2)
+        for i, text in enumerate(texts):
+            single = cond(text=text)
+            torch.testing.assert_close(result["main"][i, result["main_mask"][i]], single["main"][0])
+
+
+def tiny_dit(cls=MaskedHunYuanDiTPlain):
+    return cls(input_size=4, in_channels=4, hidden_size=64, context_dim=1024, depth=4,
+               num_heads=4, num_moe_layers=0, use_attention_pooling=False, qk_norm=True)
+
+
+class MaskedDiTTests(unittest.TestCase):
+    def setUp(self):
+        # The official self-attention forces CUDA-only backend flags. On CPU,
+        # exercise the same attention math with default backend selection.
+        guard = patch("torch.backends.cuda.sdp_kernel", new=lambda **kwargs: nullcontext())
+        guard.start()
+        self.addCleanup(guard.stop)
+
+    def test_same_parameter_keys_initialization_and_official_loading(self):
+        torch.manual_seed(101)
+        original = tiny_dit(HunYuanDiTPlain)
+        rng = torch.get_rng_state()
+        torch.manual_seed(101)
+        masked = tiny_dit()
+        self.assertTrue(torch.equal(rng, torch.get_rng_state()))
+        self.assertEqual(original.state_dict().keys(), masked.state_dict().keys())
+        self.assertEqual(sum(p.numel() for p in original.parameters()), sum(p.numel() for p in masked.parameters()))
+        masked.load_state_dict(original.state_dict(), strict=True)
+        for key, value in original.state_dict().items():
+            self.assertTrue(torch.equal(value, masked.state_dict()[key]), key)
+        x, t, cond = torch.randn(2, 4, 4), torch.rand(2), torch.randn(2, 7, 1024)
+        reference = original(x, t, {"main": cond})
+        torch.testing.assert_close(masked(x, t, {"main": cond}), reference, rtol=0, atol=0)
+        torch.testing.assert_close(masked(x, t, {"main": cond, "main_mask": torch.ones(2, 7, dtype=torch.bool)}), reference)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            torch.save(original.state_dict(), root / "model.ckpt")
+            params = {"input_size": 4, "in_channels": 4, "hidden_size": 64, "context_dim": 1024,
+                      "depth": 4, "num_heads": 4, "num_moe_layers": 0, "use_attention_pooling": False, "qk_norm": True}
+            (root / "config.yaml").write_text(yaml.safe_dump({"model": {"params": params}}))
+            loaded = MaskedHunYuanDiTPlain.from_single_file(
+                str(root / "model.ckpt"), str(root / "config.yaml"), device="cpu", dtype=torch.float32)
+            self.assertIsInstance(loaded, MaskedHunYuanDiTPlain)
+            for key, value in original.state_dict().items():
+                self.assertTrue(torch.equal(value, loaded.state_dict()[key]), key)
+
+    def test_masked_batch_matches_unpadded_official_outputs_and_gradients(self):
+        masked, original = tiny_dit(), tiny_dit(HunYuanDiTPlain)
+        original.load_state_dict(masked.state_dict(), strict=True)
+        x = torch.randn(2, 4, 4, requires_grad=True)
+        t = torch.rand(2)
+        cond = torch.randn(2, 7, 1024, requires_grad=True)
+        valid = torch.tensor([[False] * 4 + [True] * 3, [True] * 7])
+        result = masked(x, t, {"main": cond, "main_mask": valid})
+        result.square().mean().backward()
+        single_x = x.detach().clone().requires_grad_()
+        single_cond = cond.detach().clone().requires_grad_()
+        expected = torch.cat([original(single_x[i:i+1], t[i:i+1], {"main": single_cond[i:i+1, valid[i]]})
+                              for i in range(2)])
+        expected.square().mean().backward()
+        torch.testing.assert_close(result, expected)
+        torch.testing.assert_close(x.grad, single_x.grad)
+        torch.testing.assert_close(cond.grad, single_cond.grad)
+        for (name, a), (_, b) in zip(masked.named_parameters(), original.named_parameters()):
+            torch.testing.assert_close(a.grad, b.grad, atol=1e-6, rtol=1e-4, msg=name)
+        changed = cond.detach().clone()
+        changed[~valid] = 1e6
+        torch.testing.assert_close(masked(x, t, {"main": changed, "main_mask": valid}), result)
+        extra = torch.cat([changed, torch.randn(2, 5, 1024) * 1e6], dim=1)
+        extra_valid = torch.cat([valid, torch.zeros(2, 5, dtype=torch.bool)], dim=1)
+        torch.testing.assert_close(masked(x, t, {"main": extra, "main_mask": extra_valid}), result)
+        for bad in (torch.zeros_like(valid), valid.float(), valid[:1]):
+            with self.assertRaises(ValueError):
+                masked(x, t, {"main": cond, "main_mask": bad})
+
+    def test_connector_and_dit_batched_gradients_match_individual_texts(self):
+        cond, model = conditioner(task_prefix=""), tiny_dit()
+        reference_cond, reference_model = copy.deepcopy(cond), copy.deepcopy(model)
+        texts = ["chair", "a wooden table", "lamp"]
+        x, t = torch.randn(3, 4, 4), torch.rand(3)
+        contexts = cond(text=texts)
+        result = model(x, t, contexts)
+        result.square().mean().backward()
+        expected = torch.cat([reference_model(x[i:i+1], t[i:i+1], reference_cond(text=text))
+                              for i, text in enumerate(texts)])
+        expected.square().mean().backward()
+        torch.testing.assert_close(result, expected)
+        for component, reference in ((cond.connector, reference_cond.connector), (model, reference_model)):
+            for (name, a), (_, b) in zip(component.named_parameters(), reference.named_parameters()):
+                torch.testing.assert_close(a.grad, b.grad, atol=1e-6, rtol=2e-4, msg=name)
+        self.assertTrue(all(p.grad is None for p in cond.backbone.parameters()))
 
 
 class DataTests(unittest.TestCase):
@@ -216,20 +372,24 @@ class DataTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     load_captions(path, rows, "rev")
 
-    def test_preserves_baseline_uid_and_surface_stream_without_images(self):
+    def test_preserves_official_uid_and_surface_stream_without_images(self):
         with tempfile.TemporaryDirectory() as directory:
             rows, captions = fixture(Path(directory))
             text = dataset(rows, captions)
-            baseline = ABOHSSDSurfaceDataset(rows, {"metadata_sha256": "toy"})
-            baseline.load_render = lambda paths: (torch.zeros(3, 2, 2), torch.zeros(1, 2, 2))
+            uid_rng = random.Random(20261101)
+            point_rng = np.random.default_rng(20261102)
             with patch("cv2.imread", side_effect=AssertionError("image opened")):
-                for a, b in zip(iter(text), iter(baseline)):
+                for a in iter(text):
                     self.assertNotIn("image", a)
                     self.assertNotIn("mask", a)
-                    self.assertEqual(a["abo_hssd_uid"], b["abo_hssd_uid"])
-                    self.assertTrue(torch.equal(a["surface"], b["surface"]))
+                    uid = rows[uid_rng.randint(0, len(rows) - 1)]["uid"]
+                    self.assertEqual(a["abo_hssd_uid"], uid)
+                    arrays = text.decode(uid)
+                    expected, _ = AlignedShapeLatentDataset.load_surface_sdf_points(
+                        SimpleNamespace(pc_size=81920, pc_sharpedge_size=0, sharpedge_label=True, return_normal=True),
+                        point_rng, arrays["random_surface"], arrays["sharpedge_surface"])
+                    self.assertTrue(torch.equal(a["surface"], expected))
                     commit(text, a)
-                    commit(baseline, b)
                     if text.consumed_samples == 8:
                         break
 
@@ -252,6 +412,25 @@ class DataTests(unittest.TestCase):
                     self.assertEqual(expected[key], actual[key])
                 self.assertTrue(torch.equal(expected["surface"], actual["surface"]))
                 commit(restored, actual)
+
+    def test_data_module_uses_configured_batch_and_has_no_fixed_pending_limit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            rows, captions = fixture(root)
+            for size in (1, 2, 8, 40):
+                module = ABOHSSDTextDataModule(root, root / "metadata.jsonl", "toy", batch_size=size)
+                module.dataset = dataset(rows, captions)
+                loader = module.train_dataloader()
+                self.assertEqual(loader.batch_size, size)
+                batch = next(iter(loader))
+                self.assertEqual(batch["surface"].shape, (size, 81920, 7))
+                self.assertEqual(len(batch["text"]), size)
+                module.commit_batch(batch)
+                self.assertEqual(module.consumed_samples, size)
+                self.assertEqual(module.consumed_batches, 1)
+            for size in (0, -1, True, 1.5):
+                with self.assertRaises(ValueError):
+                    ABOHSSDTextDataModule(root, root / "metadata.jsonl", "toy", batch_size=size)
 
 
 class ToyModel(Diffuser):
@@ -277,10 +456,12 @@ class ToyModel(Diffuser):
         pass  # No EMA in this tiny test model.
 
     def training_step(self, batch, batch_idx, optimizer_idx=0):
-        context = self.cond_stage_model(text=batch["text"])["main"]
+        contexts = self.cond_stage_model(text=batch["text"])
+        context, valid = contexts["main"], contexts["main_mask"]
+        pooled = context.sum(1) / valid.sum(1, keepdim=True)
         noise = random.random() + float(np.random.random()) + float(torch.rand(()))
-        self.samples.append((batch["abo_hssd_uid"][0], int(batch["caption_index"][0]), noise))
-        loss = (self.model(context.mean(1)) - noise).square().mean()
+        self.samples.append((tuple(batch["abo_hssd_uid"]), tuple(batch["caption_index"].tolist()), noise))
+        loss = (self.model(pooled) - noise).square().mean()
         self.log("train/total_loss", loss.detach(), on_step=True, on_epoch=False)
         return loss
 
@@ -333,54 +514,60 @@ class OptimizerTests(unittest.TestCase):
         self.assertEqual(callback.connector_norm[1], grad_norm(model.cond_stage_model.connector))
         self.assertTrue(all(torch.equal(a, b.grad) for a, b in zip(before, [p for p in model.parameters() if p.grad is not None])))
 
-    def test_baseline_configuration_invariants(self):
-        old = yaml.safe_load((ROOT / "configs/native21_official_abo_hssd_1b_20261103.yaml").read_text())
+    def test_configuration_and_batch_settings(self):
         new = yaml.safe_load((ROOT / "configs/qwen3vl_stage2_abo_hssd_20261105.yaml").read_text())
-        for key in ("target",):
-            self.assertEqual(new["model"][key], old["model"][key])
-        a, b = new["model"]["params"], old["model"]["params"]
-        for key in ("first_stage_config", "denoiser_cfg", "scheduler_cfg", "z_scale_factor", "pipeline_cfg"):
-            self.assertEqual(a[key], b[key])
-        for key in ("optimizer", "scheduler"):
-            self.assertEqual(a["optimizer_cfg"][key], b["optimizer_cfg"][key])
-        for key in old["training"]:
-            if key != "output_dir":
-                self.assertEqual(new["training"][key], old["training"][key])
+        self.assertEqual(new["model"]["target"], "hy3dshape.models.diffusion.flow_matching_sit.Diffuser")
+        a = new["model"]["params"]
+        self.assertEqual(a["denoiser_cfg"]["target"], "scripts.native_21dit.qwen3vl_stage2.denoiser.MaskedHunYuanDiTPlain")
+        self.assertEqual(a["first_stage_config"]["target"], "hy3dshape.models.autoencoders.ShapeVAE")
+        self.assertEqual(a["z_scale_factor"], 1.0039506158752403)
+        self.assertEqual(a["optimizer_cfg"]["optimizer"]["target"], "torch.optim.AdamW")
+        self.assertEqual(a["optimizer_cfg"]["optimizer"]["params"], {"betas": [0.9, 0.99], "eps": 1e-6, "weight_decay": 0.01})
+        self.assertEqual(new["training"]["steps"], 1000000000)
+        self.assertEqual(new["training"]["every_n_train_steps"], 3000)
+        self.assertEqual(batch_settings(new), {"batch_size": 1, "accumulation": 8})
+        new["dataset"]["params"]["batch_size"] = 2
+        new["training"]["update_every"] = 3
+        self.assertEqual(batch_settings(new), {"batch_size": 2, "accumulation": 3})
+        for name, path in (("batch_size", new["dataset"]["params"]), ("update_every", new["training"])):
+            with self.subTest(name=name):
+                path[name] = 0
+                with self.assertRaises(ValueError):
+                    batch_settings(new)
+                path[name] = 2
         self.assertIsNone(a["image_processor_cfg"])
+        settings = json.loads((ROOT / "configs/qwen3vl_stage2_abo_hssd_20261105.json").read_text())
+        self.assertNotIn("microbatch", settings)
+        self.assertNotIn("accumulation", settings)
+
+    def test_source_contract_is_independent_of_image_experiment(self):
+        hashes = source_hashes()
+        self.assertTrue(hashes)
+        self.assertTrue(all("qwen3vl_stage2" in name for name in hashes))
+        self.assertFalse(any("native21_official" in name for name in hashes))
+        self.assertFalse(any(name.startswith("scripts.native_21dit.native21_official") for name in sys.modules))
+        # A fresh interpreter with these imports blocked must load every text
+        # runtime module; no test-time pre-import can hide a baseline dependency.
+        result = subprocess.run([sys.executable, "-B", __file__, "--isolation-probe"],
+                                cwd=ROOT, capture_output=True, text=True, timeout=60)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
-class ToyData(pl.LightningDataModule):
-    def __init__(self, root):
-        super().__init__()
+class ToyData(ABOHSSDTextDataModule):
+    def __init__(self, root, batch_size):
+        super().__init__(root, root / "metadata.jsonl", "toy", batch_size=batch_size)
         rows, captions = fixture(root)
         self.dataset = dataset(rows, captions)
 
-    @property
-    def consumed_samples(self):
-        return self.dataset.consumed_samples
 
-    def train_dataloader(self):
-        return torch.utils.data.DataLoader(self.dataset, batch_size=1, num_workers=0,
-                                           generator=torch.Generator().manual_seed(20261103))
-
-    def commit_batch(self, batch):
-        self.dataset.commit_batch(batch)
-
-    def state_dict(self):
-        return self.dataset.state_dict()
-
-    def load_state_dict(self, state):
-        self.dataset.load_state_dict(state)
-
-
-def resume_probe(mode, root):
+def resume_probe(mode, root, batch_size, accumulation):
     from pytorch_lightning.callbacks import ModelCheckpoint
     from pytorch_lightning.loggers import TensorBoardLogger
     root.mkdir(parents=True, exist_ok=True)
     folder = root / mode
     folder.mkdir()
     pl.seed_everything(20261101)
-    dm = ToyData(folder)
+    dm = ToyData(folder, batch_size)
     model = ToyModel()
     callback = object.__new__(TextRunStateCallback)
     callback.c = {"gpu_uuid": "cpu-probe", "training_entry": "unmodified_official_entry"}
@@ -393,7 +580,7 @@ def resume_probe(mode, root):
     checkpoint = ModelCheckpoint(dirpath=folder / "ckpt", filename="{step}", every_n_train_steps=1, save_top_k=-1)
     scalars = TextUpdateScalarCallback(every_n_updates=2)
     trainer = pl.Trainer(max_steps=1 if mode == "first" else 2, accelerator="cpu", devices=1,
-                         accumulate_grad_batches=8, precision=32, callbacks=[callback, scalars, checkpoint],
+                         accumulate_grad_batches=accumulation, precision=32, callbacks=[callback, scalars, checkpoint],
                          logger=TensorBoardLogger(save_dir=str(folder / "log"), name="tensorboard"),
                          enable_progress_bar=False, enable_model_summary=False, limit_val_batches=0,
                          val_check_interval=3000, check_val_every_n_epoch=None, log_every_n_steps=500)
@@ -402,42 +589,51 @@ def resume_probe(mode, root):
     # callbacks and standard Lightning loop/checkpoint in fresh CPU processes.
     with patch.dict(os.environ, {"CUDA_VISIBLE_DEVICES": "cpu-probe"}), patch(
             "scripts.native_21dit.qwen3vl_stage2.callbacks.integration_contract",
-            return_value={"metadata_sha256": "toy", "probe": True}):
+            return_value={"metadata_sha256": "toy", "probe": True,
+                          "batching": {"batch_size": batch_size, "accumulation": accumulation}}):
         trainer.fit(model, datamodule=dm, ckpt_path=resume)
     path = max((folder / "ckpt").glob("*.ckpt"), key=lambda p: p.stat().st_mtime_ns)
     torch.save({"checkpoint": torch.load(path, weights_only=False), "samples": model.samples,
-                "consumed": dm.consumed_samples, "gpu_initialized": torch.cuda.is_initialized()}, folder / "result.pt")
+                "consumed": dm.consumed_samples, "batches": dm.consumed_batches,
+                "gpu_initialized": torch.cuda.is_initialized()}, folder / "result.pt")
 
 
 class RecoveryTests(unittest.TestCase):
     def test_fresh_process_resume_equals_continuous(self):
+        for batch_size, accumulation in ((1, 8), (2, 3), (8, 1)):
+            with self.subTest(batch_size=batch_size, accumulation=accumulation):
+                self.check_recovery(batch_size, accumulation)
+
+    def check_recovery(self, batch_size, accumulation):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for mode in ("continuous", "first", "resume"):
-                result = subprocess.run([sys.executable, "-B", __file__, "--resume-probe", mode, str(root)],
+                result = subprocess.run([sys.executable, "-B", __file__, "--resume-probe", mode, str(root),
+                                         str(batch_size), str(accumulation)],
                                         cwd=ROOT, capture_output=True, text=True, timeout=120)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             continuous = torch.load(root / "continuous/result.pt", weights_only=False)
             first = torch.load(root / "first/result.pt", weights_only=False)
             restored = torch.load(root / "resume/result.pt", weights_only=False)
             self.assertEqual(continuous["samples"], first["samples"] + restored["samples"])
-            self.assertEqual(restored["consumed"], 16)
+            self.assertEqual(restored["consumed"], 2 * batch_size * accumulation)
+            self.assertEqual(restored["batches"], 2 * accumulation)
             self.assertFalse(restored["gpu_initialized"])
-            def same(a, b):
+            def same(a, b, location="checkpoint"):
                 if torch.is_tensor(a):
-                    self.assertTrue(torch.equal(a, b))
+                    self.assertTrue(torch.equal(a, b), location)
                 elif isinstance(a, dict):
-                    self.assertEqual(a.keys(), b.keys())
+                    self.assertEqual(a.keys(), b.keys(), location)
                     for key in a:
-                        same(a[key], b[key])
+                        same(a[key], b[key], location + "." + str(key))
                 elif isinstance(a, (list, tuple)):
-                    self.assertEqual(len(a), len(b))
-                    for x, y in zip(a, b):
-                        same(x, y)
+                    self.assertEqual(len(a), len(b), location)
+                    for i, (x, y) in enumerate(zip(a, b)):
+                        same(x, y, location + "." + str(i))
                 elif isinstance(a, np.ndarray):
                     np.testing.assert_array_equal(a, b)
                 else:
-                    self.assertEqual(a, b)
+                    self.assertEqual(a, b, location)
             for key in ("state_dict", "optimizer_states", "lr_schedulers"):
                 same(continuous["checkpoint"][key], restored["checkpoint"][key])
             # ModelCheckpoint contains intentionally different output paths.
@@ -446,7 +642,16 @@ class RecoveryTests(unittest.TestCase):
             same(continuous["checkpoint"]["callbacks"]["TextUpdateScalarCallback"],
                  restored["checkpoint"]["callbacks"]["TextUpdateScalarCallback"])
             # Same random streams, including independent caption state.
-            same(continuous["checkpoint"]["abo_hssd_run_state"]["rng"], restored["checkpoint"]["abo_hssd_run_state"]["rng"])
+            same(continuous["checkpoint"][STATE_KEY]["rng"], restored["checkpoint"][STATE_KEY]["rng"])
+            # Lightning re-enters epoch hooks after restart, so epoch ready/
+            # started lifecycle counts may differ. Compare the actual batch
+            # and logger cursors that determine the next training update.
+            for key in ("epoch_loop.batch_progress", "epoch_loop.state_dict"):
+                same(continuous["checkpoint"]["loops"]["fit_loop"][key],
+                     restored["checkpoint"]["loops"]["fit_loop"][key], key)
+            self.assertEqual(restored["checkpoint"]["global_step"], 2)
+            self.assertEqual(restored["checkpoint"]["epoch"], continuous["checkpoint"]["epoch"])
+            same(continuous["checkpoint"]["ToyData"], restored["checkpoint"]["ToyData"])
             a = continuous["checkpoint"]["ToyData"]["caption"]
             b = restored["checkpoint"]["ToyData"]["caption"]
             same(a, b)
@@ -454,6 +659,9 @@ class RecoveryTests(unittest.TestCase):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--resume-probe":
-        resume_probe(sys.argv[2], Path(sys.argv[3]))
+        resume_probe(sys.argv[2], Path(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]))
+    elif len(sys.argv) > 1 and sys.argv[1] == "--isolation-probe":
+        for name in ("callbacks", "conditioner", "contracts", "data", "denoiser", "scalars", "shared", "text", "compare_prefix"):
+            __import__("scripts.native_21dit.qwen3vl_stage2." + name)
     else:
         unittest.main()

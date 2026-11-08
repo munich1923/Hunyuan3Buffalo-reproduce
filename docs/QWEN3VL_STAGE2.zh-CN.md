@@ -10,11 +10,18 @@ Hunyuan3D-VLM 权重的复现。本次只在本地实现；没有连接 H100、�
 
 保留原图片基线、其配置和固定版本的上游 submodule。新增模块位于
 `scripts/native_21dit/qwen3vl_stage2/`。继续使用官方 `hy3dshape/main.py`，官方
-Diffuser、DiT、VAE、flow-matching loss、AdamW 构造和 LR scheduler 不变。
+Diffuser、VAE、flow-matching loss、AdamW 构造和 LR scheduler 不变。
+本实验使用本地派生类 `MaskedHunYuanDiTPlain` 扩展条件 padding mask，保留官方参数名称、
+形状和预训练权重加载方式，不新增可训练参数，不修改上游文件。
+
+本目录独立实现 Dataset、DataModule、运行状态 callback、标量记录和工具函数，不导入
+`native21_official`，恢复契约也不包含图片实验脚本。两个实验仅共享已确认的数据清单、
+几何文件和固定版本的上游实现。
 
 ```text
 原始 caption → 可关闭的固定前缀 → 冻结 Qwen 文本隐藏状态
-    → 可训练 4096→1024→1024 MLP → contexts["main"] → 官方 DiT
+    → 可训练 4096→1024→1024 MLP → contexts["main"] → DiT
+tokenizer attention_mask → contexts["main_mask"] → 每层交叉注意力
 官方 surface NPZ → 冻结的官方 VAE（sample_posterior=True）→ 几何目标
 ```
 
@@ -67,6 +74,16 @@ Create a 3D object that faithfully matches the following description:
 规定。官方 DiT 的 `context_dim=1024`、`use_attention_pooling=false`，因此
 `text_len=1370` 不要求把新条件重采样成 1370 个 token。
 
+不同长度的 caption 通过左侧 padding 组成 batch，不截断原文。Qwen 接收对应的
+attention mask；`encode_text()` 返回 `[B,L_max,4096]` 隐藏状态和 `[B,L_max]` 布尔有效
+位置 mask。MLP 输出 `[B,L_max,1024]`，补齐位置清零，并通过 `main_mask` 将有效位置
+逐层传给 DiT 的 SDPA 交叉注意力；布尔 `True` 表示允许关注。Qwen 原有因果注意力和
+DiT 的几何 self-attention 不变。全空 mask 或形状、类型不符会报错。
+
+mask 路径允许 PyTorch 自动选择注意力后端，必要时使用 math 回退。实际 H100 上的后端
+兼容性、显存和速度仍需另行指示后检查。没有加入固定长度池化或 resampler，也不把
+生成回答的 token 加入条件。
+
 ## 训练参数、精度与恢复
 
 Qwen 冻结并保持 eval、BF16。封装层保护父模块 `.to()`/`.half()` 转换中的 backbone
@@ -79,7 +96,13 @@ MLP 加入优化器，冻结的 Qwen 不加入。DiT 和 MLP 初始 LR 均为 `1
 decay 为 `0.05`、bias 为 `0`；DiT 继承 `0.01`。共用原 warmup 50、总步数 `1e9` 的
 cosine 调度。保留 `drop_ratio=0.1` 属性及条件丢弃关闭的既定行为。
 
-microbatch 1、累积 8、每 3000 更新存 checkpoint、每 500 更新记录标量保持不变。
+提供的 YAML 默认仍是 microbatch 1、累积 8，但实现支持任意正整数
+`dataset.params.batch_size`，由 DataModule 直接传给 DataLoader；累积次数通过
+`training.update_every` 独立配置。当前单 GPU 的有效 batch 是两者乘积；Trainer 不会
+自动调整它们。例如 batch 2、累积 4 的有效 batch 也是 8。两个值只在 YAML 中配置，
+JSON 不再重复维护。当前可恢复采样机制仍要求 `num_workers=0`，这与 batch_size 无关。
+
+每 3000 更新存 checkpoint、每 500 更新记录标量保持不变。
 原 `train/grad_norm_l2_pre_clip` 只计算 DiT；新增
 `train/connector_grad_norm_l2_pre_clip` 单独计算 MLP，额外写入
 `connector_scalar_updates.jsonl`。有效 batch/window loss 仍在 `scalar_updates.jsonl`。
@@ -89,6 +112,10 @@ microbatch 1、累积 8、每 3000 更新存 checkpoint、每 500 更新记录�
 窗口和已提交的数据/RNG 状态。因此每份完整 checkpoint 会额外包含约 **17.5 GB** 的冻结
 Qwen 权重，没有自定义裁剪 checkpoint。恢复要求 metadata、配置、代码和模型文件哈希
 匹配。图片基线及已废弃实验的 checkpoint 不兼容；新配置写入独立结果目录。
+恢复状态版本 2 分别记录已消费样本数和 DataLoader batch 数，Lightning 的循环游标
+使用后者。当前固定 batch、单 GPU 下，U 次更新对应 `U*A` 个 batch、`U*A*B` 个样本。
+仅保存已提交的采样状态，因此恢复会重新产生已预取但未消费的样本。改变 batch 或累积
+设置不属于原实验的精确恢复；此前本地文本实现的旧状态格式也不兼容。
 
 ## 本地验证与后续 H100 检查
 
@@ -98,8 +125,11 @@ Qwen 权重，没有自定义裁剪 checkpoint。恢复要求 metadata、配置�
 python -B tests/test_qwen3vl_stage2.py -v
 ```
 
-测试覆盖拒绝图片、变长文本、MLP 梯度、Qwen 冻结、精度保护、同 UID metadata 匹配、
-保持 UID/几何流不变、预取恢复、官方优化器分组以及独立进程 Lightning checkpoint 恢复。
+测试覆盖混合长度文本 batch、拒绝图片、MLP 梯度、Qwen 冻结、精度保护、同 UID metadata
+匹配、保持官方 UID/几何流不变、预取恢复及官方优化器分组。将带 mask 的批量 DiT 输出和
+梯度与逐样本、无 padding 的官方调用对比，检查参数严格加载及 padding 不影响结果。
+独立进程验证 batch/累积组合 `(1,8)`、`(2,3)`、`(8,1)` 的连续执行与 checkpoint 恢复一致，
+并通过禁止导入图片实验模块的独立检查验证隔离。
 另用随机初始化的微型 Qwen 架构验证 Transformers 的纯文本 API。这些检查不能证明真实
 8B 模型数值稳定，也不能证明生成质量。
 

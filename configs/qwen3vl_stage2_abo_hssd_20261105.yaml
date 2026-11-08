@@ -13,7 +13,7 @@ training:
   limit_val_batches: 0
   monitor: train/total_loss
   log_every_n_steps: 500
-  output_dir: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/results/qwen3vl_stage2_abo_hssd_20261105
+  output_dir: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing-git/results/qwen3vl_stage2_abo_hssd_20261105
   seed: 20261101
   num_nodes: 1
   num_gpus: 1
@@ -22,8 +22,8 @@ training:
 dataset:
   target: scripts.native_21dit.qwen3vl_stage2.data.ABOHSSDTextDataModule
   params:
-    paired_index_root: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/native21_abo_hssd_single_image
-    metadata_path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/assets/abo_hssd_v1/metadata/candidates.jsonl
+    paired_index_root: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing-git/assets/native21_abo_hssd_single_image
+    metadata_path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing-git/assets/abo_hssd_v1/metadata/candidates.jsonl
     metadata_revision: 288b06111bc4d06800293ab087989f852a632af2
     caption_seed: 20261027
     batch_size: 1
@@ -41,11 +41,11 @@ model:
     torch_compile: false
     first_stage_config:
       target: hy3dshape.models.autoencoders.ShapeVAE
-      from_pretrained: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1
+      from_pretrained: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing-git/models/Hunyuan3D-2.1
     cond_stage_config:
       target: scripts.native_21dit.qwen3vl_stage2.conditioner.Qwen3VLTextConditioner
       params:
-        model_path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Qwen3-VL-8B-Instruct
+        model_path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing-git/models/Qwen3-VL-8B-Instruct
         revision: 0c351dd01ed87e9c1b53cbc748cba10e6187ff3b
         task_prefix: "Create a 3D object that faithfully matches the following description:"
         max_length: 2048
@@ -54,7 +54,7 @@ model:
         disable_drop: true
     denoiser_cfg:
       target: scripts.native_21dit.qwen3vl_stage2.denoiser.MaskedHunYuanDiTPlain
-      from_pretrained: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/models/Hunyuan3D-2.1
+      from_pretrained: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing-git/models/Hunyuan3D-2.1
     scheduler_cfg:
       transport:
         target: hy3dshape.models.diffusion.transport.create_transport
@@ -90,7 +90,7 @@ callbacks:
   run_state:
     target: scripts.native_21dit.qwen3vl_stage2.callbacks.TextRunStateCallback
     params:
-      settings_path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing/configs/qwen3vl_stage2_abo_hssd_20261105.json
+      settings_path: /root/userdata/zc/hunyuan3d-buffalo-1.0-editing-git/configs/qwen3vl_stage2_abo_hssd_20261105.json
   update_scalars:
     target: scripts.native_21dit.qwen3vl_stage2.scalars.TextUpdateScalarCallback
     params:

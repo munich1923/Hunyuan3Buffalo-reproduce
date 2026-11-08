@@ -5,7 +5,8 @@
 The separate text-only Qwen3-VL Stage2 implementation is documented in
 [Qwen3-VL Stage2](docs/QWEN3VL_STAGE2.md). It replaces the image conditioner and
 adds a local DiT condition-padding-mask extension, retaining the official training
-entry, loss and optimizer. H100 validation is pending.
+entry, loss and optimizer. A small text-only prefix review ran on H100; the chosen
+prefix is configured, but formal training has not started.
 
 This repository contains the project code and fixed configuration for the ABO/HSSD single-image-conditioned Hunyuan3D-2.1 training experiment. The official Hunyuan3D-2.1 source is pinned as a Git submodule at commit `82920d643c0dc2f7bfd7255f45f62d386edfe60c`.
 

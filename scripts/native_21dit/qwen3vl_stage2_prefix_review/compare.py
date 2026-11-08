@@ -1,18 +1,14 @@
-"""Standalone H100 text-only inference comparison; never trains or generates 3D."""
+"""Small text-only H100 prefix comparison; never trains or generates 3D."""
 import argparse
 import json
 import os
 import random
+import sys
 from pathlib import Path
 
 import torch
 import torch.nn.functional as F
 import yaml
-
-from .conditioner import Qwen3VLTextConditioner
-from .contracts import qwen_files
-from .data import accepted_rows
-from .text import MODEL_ID, load_captions, sha
 
 
 def tensor_summary(value):
@@ -36,6 +32,15 @@ def main():
         raise FileExistsError("Choose a new comparison output directory")
     if args.per_source < 1 or args.max_new_tokens < 1:
         raise ValueError("Sample/generation limits must be positive")
+    project_root = Path(__file__).resolve().parents[3]
+    upstream_root = str(project_root / "src/Hunyuan3D-2.1/hy3dshape")
+    if upstream_root not in sys.path:
+        sys.path.insert(0, upstream_root)
+    from scripts.native_21dit.qwen3vl_stage2.conditioner import Qwen3VLTextConditioner
+    from scripts.native_21dit.qwen3vl_stage2.contracts import qwen_files
+    from scripts.native_21dit.qwen3vl_stage2.data import accepted_rows
+    from scripts.native_21dit.qwen3vl_stage2.text import MODEL_ID, load_captions, sha
+
     config = yaml.safe_load(args.config.read_text())
     data = config["dataset"]["params"]
     rows, _ = accepted_rows(data["paired_index_root"], split="val", check_geometry=False)
@@ -74,17 +79,19 @@ def main():
         reports.append(report)
         print(row["uid"], "completed", flush=True)
     result = {
+        "experiment": "small_text_only_prefix_review",
         "model_id": MODEL_ID, "revision": params["revision"], "model_files_sha256": model_hashes,
         "config_sha256": sha(args.config), "metadata_sha256": sha(data["metadata_path"]),
-        "seed": args.seed, "prefix": prefix, "input": "text_only",
+        "seed": args.seed, "per_source": args.per_source, "max_new_tokens": args.max_new_tokens,
+        "prefix": prefix, "input": "text_only",
         "connector": "randomly_initialized_interface_probe_not_a_trained_quality_measure",
         "hidden_selection": "input_sequence_last_layer_no_generated_answer_tokens", "samples": reports,
     }
     args.output.mkdir(parents=True)
     (args.output / "comparison.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    lines = ["# Prefix comparison / 前缀对比", "", "The connector is untrained; review language and interface behavior only.", ""]
+    lines = ["# Prefix comparison / 前缀对比", "", "Small text-only experiment; the connector is untrained.", ""]
     for report in reports:
-        lines.extend(["## " + report["uid"], "", report["caption"], ""])
+        lines.extend(["## " + report["uid"] + " (" + report["source"] + ")", "", report["caption"], ""])
         for name in ("without_prefix", "with_prefix"):
             lines.extend(["### " + name, "", report[name]["response"], ""])
     (args.output / "comparison.md").write_text("\n".join(lines), encoding="utf-8")

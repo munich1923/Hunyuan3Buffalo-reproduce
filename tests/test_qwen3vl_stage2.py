@@ -544,6 +544,7 @@ class OptimizerTests(unittest.TestCase):
         hashes = source_hashes()
         self.assertTrue(hashes)
         self.assertTrue(all("qwen3vl_stage2" in name for name in hashes))
+        self.assertFalse(any("prefix_review" in name for name in hashes))
         self.assertFalse(any("native21_official" in name for name in hashes))
         self.assertFalse(any(name.startswith("scripts.native_21dit.native21_official") for name in sys.modules))
         # A fresh interpreter with these imports blocked must load every text
@@ -551,6 +552,11 @@ class OptimizerTests(unittest.TestCase):
         result = subprocess.run([sys.executable, "-B", __file__, "--isolation-probe"],
                                 cwd=ROOT, capture_output=True, text=True, timeout=60)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        help_result = subprocess.run(
+            [sys.executable, "-B", "-m", "scripts.native_21dit.qwen3vl_stage2_prefix_review.compare", "--help"],
+            cwd=ROOT, capture_output=True, text=True, timeout=60)
+        self.assertEqual(help_result.returncode, 0, help_result.stdout + help_result.stderr)
+        self.assertIn("--output", help_result.stdout)
 
 
 class ToyData(ABOHSSDTextDataModule):
@@ -661,7 +667,8 @@ if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--resume-probe":
         resume_probe(sys.argv[2], Path(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5]))
     elif len(sys.argv) > 1 and sys.argv[1] == "--isolation-probe":
-        for name in ("callbacks", "conditioner", "contracts", "data", "denoiser", "scalars", "shared", "text", "compare_prefix"):
+        for name in ("callbacks", "conditioner", "contracts", "data", "denoiser", "scalars", "shared", "text"):
             __import__("scripts.native_21dit.qwen3vl_stage2." + name)
+        __import__("scripts.native_21dit.qwen3vl_stage2_prefix_review.compare")
     else:
         unittest.main()

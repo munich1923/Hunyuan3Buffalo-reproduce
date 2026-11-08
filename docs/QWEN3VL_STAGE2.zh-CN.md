@@ -3,13 +3,13 @@
 [English](QWEN3VL_STAGE2.md)
 
 这是使用公开 Qwen3-VL 权重实现的 Buffalo 风格隐藏状态注入实验，不是使用官方
-Hunyuan3D-VLM 权重的复现。本次只在本地实现；没有连接 H100、下载真实权重、运行真实
-模型推理或启动训练。
+Hunyuan3D-VLM 权重的复现。已在 H100 完成纯文本前缀小实验并选定当前前缀；正式训练和三维评估尚未运行。
 
 ## 修改范围
 
-保留原图片基线、其配置和固定版本的上游 submodule。新增模块位于
-`scripts/native_21dit/qwen3vl_stage2/`。继续使用官方 `hy3dshape/main.py`，官方
+保留原图片基线、其配置和固定版本的上游 submodule。Stage2 核心代码位于
+`scripts/native_21dit/qwen3vl_stage2/`，独立前缀小实验位于同级的
+`scripts/native_21dit/qwen3vl_stage2_prefix_review/`。继续使用官方 `hy3dshape/main.py`，官方
 Diffuser、VAE、flow-matching loss、AdamW 构造和 LR scheduler 不变。
 本实验使用本地派生类 `MaskedHunYuanDiTPlain` 扩展条件 padding mask，保留官方参数名称、
 形状和预训练权重加载方式，不新增可训练参数，不修改上游文件。
@@ -45,7 +45,7 @@ Qwen 只接受文本。数据集不打开图片、不输出 `image/mask`；condi
 为了固定已接受的 UID 和几何身份，纯文本数据链路不需要访问清单中的图片文件。
 
 默认 caption 来源是原数据准备代码生成的
-`assets/abo_hssd_v1/metadata/candidates.jsonl`；尚未核查 H100 文件现状。相关记录格式：
+`assets/abo_hssd_v1/metadata/candidates.jsonl`。H100 上该文件存在，前缀小实验抽取的记录均通过 UID、来源和原始资产哈希校验。相关记录格式：
 
 ```json
 {"uid":"abo_<sha256>","source":"ABO","raw_sha256":"<sha256>","metadata_revision":"288b06111bc4d06800293ab087989f852a632af2","captions":["a wooden chair","a chair with four legs"]}
@@ -61,7 +61,7 @@ Qwen 只接受文本。数据集不打开图片、不输出 `image/mask`；condi
 不影响 UID、点采样和训练随机流。同一个 UID 多次出现可以抽到不同描述；恢复时可精确
 重放选择，包括已预取但尚未提交的数据。不额外定义 epoch，也不把每个 UID 固定到一句话。
 
-暂定 user 消息为：
+当前采用的 user 消息为：
 
 ```text
 Create a 3D object that faithfully matches the following description:
@@ -133,27 +133,31 @@ python -B tests/test_qwen3vl_stage2.py -v
 另用随机初始化的微型 Qwen 架构验证 Transformers 的纯文本 API。这些检查不能证明真实
 8B 模型数值稳定，也不能证明生成质量。
 
-后续经单独指示在 H100 检查时，需准备 `Qwen/Qwen3-VL-8B-Instruct`，固定 revision 为
+本次 H100 前缀小实验使用 `Qwen/Qwen3-VL-8B-Instruct`，固定 revision 为
 `0c351dd01ed87e9c1b53cbc748cba10e6187ff3b`。保留标准 HF snapshot 目录，或
 `snapshot_download(local_dir=...)` 产生的
 `.cache/huggingface/download/*.metadata` 回执；契约检查 revision 回执并记录使用到的
 权重/tokenizer 文件哈希。加载强制使用本地文件，不配置 `device_map=auto` 或跨 GPU 分发。
 
-获得该推理检查的单独指示后，从项目根目录运行独立工具：
+运行已确定路径的前缀小实验时，只暴露物理 GPU1，并从项目根目录运行同级独立工具；
+将控制台输出捕获到结果目录旁的日志文件：
 
 ```bash
 CUDA_VISIBLE_DEVICES=GPU-47f8e8ad-bf0a-79d9-2e95-645bf2ee0609 \
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
-python -m scripts.native_21dit.qwen3vl_stage2.compare_prefix \
+python -m scripts.native_21dit.qwen3vl_stage2_prefix_review.compare \
   --config configs/qwen3vl_stage2_abo_hssd_20261105.yaml \
-  --output results/qwen3vl_prefix_review
+  --output results/qwen3vl_stage2_abo_hssd_20261105/small_prefix_review_20261108
 ```
+
+控制台日志写入 `results/qwen3vl_stage2_abo_hssd_20261105/small_prefix_review_20261108.log`。
 
 默认取验证集 ABO/HSSD 各 4 个对象，同一个对象使用同一条首个非空 caption 比较有/无
 前缀。JSON 和 Markdown 记录贪心生成的文字、隐藏状态和 connector 输出的形状、有限值、
 token norm 及池化隐藏状态余弦相似度。MLP 尚未训练，其输出仅用于接口检查，不能作为
-训练后效果指标。审阅结果后再决定正式训练前缀。工具不启动训练或三维评估，不挂接训练
-回调。
+训练后效果指标。用户已决定采用当前前缀开展主训练。已完成结果记录在
+`results/qwen3vl_stage2_abo_hssd_20261105/small_prefix_review_20261108/`，
+控制台日志位于旁边的 `small_prefix_review_20261108.log`。工具不启动训练或三维评估，不挂接训练回调。
 
-正式训练仍需单独决定，使用官方 `main.py`、新 YAML 和 seed=`20261101`，只使用授权的
+正式训练尚未启动；入口仍为官方 `main.py`，使用新 YAML 和 seed=`20261101`，只使用授权的
 物理 GPU1。本次没有新增 launcher、supervisor、checkpoint 监视、自动暂停或评估调度。

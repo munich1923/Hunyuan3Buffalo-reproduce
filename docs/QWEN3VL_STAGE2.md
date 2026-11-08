@@ -2,15 +2,17 @@
 
 [中文版](QWEN3VL_STAGE2.zh-CN.md)
 
-This is a local implementation of Buffalo-style VLM hidden-state conditioning,
-using public Qwen3-VL weights. It is not a reproduction of the unavailable
-Hunyuan3D-VLM weights. No H100 job, model download, or real-model inference was
-performed as part of the local implementation.
+This is a Buffalo-style VLM hidden-state conditioning experiment using public
+Qwen3-VL weights, not a reproduction of the unavailable Hunyuan3D-VLM weights.
+A small text-only prefix review has run on H100, and its task prefix is selected
+for training. Formal training and 3D evaluation have not run.
 
 ## Change boundary
 
 The original single-image baseline, its configuration, and the pinned upstream
-submodule remain intact. New code lives in `scripts/native_21dit/qwen3vl_stage2/`.
+submodule remain intact. Stage2 code lives in
+`scripts/native_21dit/qwen3vl_stage2/`; its standalone prefix review is in the
+adjacent `scripts/native_21dit/qwen3vl_stage2_prefix_review/` package.
 The training entry remains upstream `hy3dshape/main.py`, using the unchanged
 Diffuser, VAE, flow-matching loss, AdamW construction and LR scheduler. A local
 `MaskedHunYuanDiTPlain` subclass adds condition padding-mask support while retaining
@@ -59,7 +61,8 @@ payloads are not required by this text-only data path.
 
 The expected caption source is the original
 `assets/abo_hssd_v1/metadata/candidates.jsonl` produced by the existing preparation
-code. H100 file availability has not been checked. A relevant row has this form:
+code. The H100 file was present and selected rows passed UID/source/hash validation
+during the prefix review. A relevant row has this form:
 
 ```json
 {"uid":"abo_<sha256>","source":"ABO","raw_sha256":"<sha256>","metadata_revision":"288b06111bc4d06800293ab087989f852a632af2","captions":["a wooden chair","a chair with four legs"]}
@@ -79,7 +82,7 @@ The same UID can receive different captions on different occurrences. Restore
 replays the choices exactly, including when uncommitted samples were prefetched.
 There is no added epoch or fixed-caption assignment.
 
-The provisional user message is:
+The selected user message is:
 
 ```text
 Create a 3D object that faithfully matches the following description:
@@ -172,33 +175,39 @@ blocked in an isolation probe. A tiny randomly initialized Qwen also checks the
 Transformers text-only API. They do not establish real-model numerical stability
 or shape generation quality.
 
-For a later, separately requested H100 check, provision
-`Qwen/Qwen3-VL-8B-Instruct` at revision
+The small H100 prefix review used `Qwen/Qwen3-VL-8B-Instruct` at revision
 `0c351dd01ed87e9c1b53cbc748cba10e6187ff3b`. Keep the standard HF snapshot directory
 or the `.cache/huggingface/download/*.metadata` receipts written by
 `snapshot_download(local_dir=...)`. The contract verifies the revision receipt and
 hashes all consumed model/tokenizer files. Model loading is local-files-only.
 No `device_map=auto` or multi-GPU dispatch is configured.
 
-After that check is authorized, expose physical GPU1 only and invoke the separate
-tool from the project root:
+For the approved small prefix review, expose physical GPU1 only and invoke the
+separate sibling experiment package from the project root. Capture console output
+to a log beside the result directory:
 
 ```bash
 CUDA_VISIBLE_DEVICES=GPU-47f8e8ad-bf0a-79d9-2e95-645bf2ee0609 \
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
-python -m scripts.native_21dit.qwen3vl_stage2.compare_prefix \
+python -m scripts.native_21dit.qwen3vl_stage2_prefix_review.compare \
   --config configs/qwen3vl_stage2_abo_hssd_20261105.yaml \
-  --output results/qwen3vl_prefix_review
+  --output results/qwen3vl_stage2_abo_hssd_20261105/small_prefix_review_20261108
 ```
+
+Write the command output to
+`results/qwen3vl_stage2_abo_hssd_20261105/small_prefix_review_20261108.log`.
 
 It compares the same first nonempty caption for four validation ABO and four
 validation HSSD objects with/without the prefix. Outputs include greedy language
 responses, hidden-state/context shapes, finite checks, token norms and pooled
 hidden cosine similarity in JSON and Markdown. The MLP is randomly initialized,
 so its output is an interface check, not a learned quality comparison. Review the
-results before deciding the training prefix. The tool does not start training or
-3D evaluation, and is never called by a training callback.
+results; the task prefix has since been selected for the main run. The completed
+review is recorded under
+`results/qwen3vl_stage2_abo_hssd_20261105/small_prefix_review_20261108/`; its
+console log is the adjacent `small_prefix_review_20261108.log`. The tool does not
+start training or 3D evaluation, and is never called by a training callback.
 
-Formal training remains a separate user decision and uses the official `main.py`
-with the new YAML and seed `20261101`, on the authorized GPU only. There is no new
+Formal training has not started. It uses the official `main.py` with the new YAML
+and seed `20261101`, on the authorized GPU only. There is no new
 launcher, supervisor, checkpoint watcher, automatic pause or evaluation schedule.
